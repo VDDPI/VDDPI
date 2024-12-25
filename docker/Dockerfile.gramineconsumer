@@ -1,0 +1,10 @@
+ARG BASEIMAGE
+ARG BASEIMAGE_TAG
+
+FROM ${BASEIMAGE}:${BASEIMAGE_TAG}
+
+COPY gramine_consumer/run.sh /root
+
+WORKDIR /root
+RUN mkdir data
+CMD ["./run.sh"]

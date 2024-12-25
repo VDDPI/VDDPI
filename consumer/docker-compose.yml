@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  gramine-consumer:
+    image: ${GRAMINE_CONSUMER_IMAGE}:${GRAMINE_CONSUMER_IMAGE_TAG}
+    container_name: gramine-consumer
+    environment:
+      - SPID=${SPID}
+      - IS_LINKABLE=${IS_LINKABLE}
+      - PRIVATE_CA=${PRIVATE_CA}
+      - IAS_SUBSCRIPTION_KEY=${IAS_SUBSCRIPTION_KEY}
+      - COUNTRY=${COUNTRY}
+      - CNAME=${CNAME}
+      - HOST_NAME=${CONSUMER_HOST_NAME}
+    volumes:
+      - ./code:/root/code
+    ports:
+      - 443:443
+      - 8001:8001
+      - 8002:8002
+    tty: true
+    devices:
+      - "/dev/isgx:/dev/isgx"

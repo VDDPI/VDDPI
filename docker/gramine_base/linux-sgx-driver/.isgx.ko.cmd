@@ -1,0 +1,1 @@
+cmd_/home/tokuda/tmp/linux-sgx-driver/isgx.ko := ld -r -m elf_x86_64  --build-id  -T ./scripts/module-common.lds -o /home/tokuda/tmp/linux-sgx-driver/isgx.ko /home/tokuda/tmp/linux-sgx-driver/isgx.o /home/tokuda/tmp/linux-sgx-driver/isgx.mod.o;  true

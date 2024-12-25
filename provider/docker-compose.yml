@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  server:
+    image: ${SERVER_PROVIDER_IMAGE}:${SERVER_PROVIDER_IMAGE_TAG}
+    container_name: provider-server
+    tty: true
+    depends_on:
+      - db
+    environment:
+      - SERVER_PORT=${SERVER_PORT}
+      - HOST_NAME=${SERVER_HOST_NAME}
+      - PRIVATE_CA=${PRIVATE_CA}
+    volumes:
+      - ./files:/root/files
+      - ./data:/root/data
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    command: "python3 main.py"
+    networks:
+      provider-net:
+  db:
+    image: ${DB_PROVIDER_IMAGE}:${DB_PROVIDER_IMAGE_TAG}
+    container_name: provider-db
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      provider-net:
+networks:
+  provider-net:
+

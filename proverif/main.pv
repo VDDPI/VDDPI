@@ -1,0 +1,843 @@
+(* Definitions *)
+(* Tags *)
+const TLS_CLIENT_HELLO: bitstring [data].
+const TLS_SERVER_HELLO: bitstring [data].
+const TLS_SERVER_CERTIFICATE: bitstring [data].
+const TLS_CLIENT_CERTIFICATE: bitstring [data].
+const TLS_CERTIFICATE_VERIFY: bitstring [data].
+const TLS_FINISHED: bitstring [data].
+
+const APP_CERT_REQ: bitstring [data].
+const APP_CERT_RES: bitstring [data].
+const APP_PROCESS_REQ: bitstring [data].
+const APP_PROCESS_RES: bitstring [data].
+const APP_CACHE_PROCESS_REQ: bitstring [data].
+const APP_CACHE_PROCESS_RES: bitstring [data].
+
+const MAL_APP_CERT_REQ: bitstring [data].
+const MAL_APP_CERT_RES: bitstring [data].
+const MAL_APP_PROCESS_REQ: bitstring [data].
+const MAL_APP_PROCESS_RES: bitstring [data].
+const MAL_APP_CACHE_PROCESS_REQ: bitstring [data].
+const MAL_APP_CACHE_PROCESS_RES: bitstring [data].
+const MAL_DATA_REQ: bitstring [data].
+const MAL_USAGE_APPLICATION: bitstring [data].
+
+const LA_REQ: bitstring [data].
+const LA_RES: bitstring [data].
+
+const DATA_REQ: bitstring [data].
+const DATA_RES: bitstring [data].
+const USAGE_APPLICATION: bitstring [data].
+
+const CERT_REQ: bitstring [data].
+const CERT_RES: bitstring [data].
+
+const PS_REQ: bitstring [data].
+const PS_RES: bitstring [data].
+
+const APP_RES: bitstring [data].
+
+(* Channels *)
+free c: channel.
+free sc: channel [private].
+free tls: channel [private].
+
+(* Types *)
+type pkey.
+type skey.
+type policy.
+type sealedCert.
+type sealedKey.
+type sealedData.
+
+type G.
+type rv.
+
+(* Public-key crypto *)
+fun pk(skey): pkey.
+fun aenc(bitstring, pkey): bitstring.
+reduc forall m:bitstring, k: skey;
+    adec(aenc(m, pk(k)), k) = m.
+
+(* Symmetric Key Encryption *)
+fun senc(bitstring, G): bitstring.
+reduc forall m: bitstring, k: G;
+    sdec(senc(m, k), k) = m.
+
+(* Digital Signature *)
+fun sign(bitstring, skey): bitstring.
+reduc forall m: bitstring, k: skey;
+    verify(m, sign(m, k), pk(k)) = true.
+
+(* Hash *)
+fun H(bitstring): bitstring.
+fun H2(bitstring, bitstring): bitstring.
+fun HPkey(pkey): bitstring.
+
+fun EGETKEYforReportKey(bitstring): skey.
+
+(* Message Authentication Code *)
+fun MAC(bitstring, skey): bitstring.
+reduc forall message1: bitstring, message2: bitstring, sk: skey;
+    verifyMAC(MAC(H2(message1, message2), sk), message1, message2, sk) = true.
+
+(* Functions *)
+
+fun getDN(bitstring): bitstring.
+
+(* Instruction of generating report *)
+fun EREPORT(bitstring, bitstring, bitstring): bitstring.
+fun getMRENCLAVE(bitstring): bitstring.
+equation forall app_code: bitstring, cpu_context: bitstring, report_data: bitstring;
+    EREPORT(app_code, cpu_context, report_data) = (getMRENCLAVE(app_code), report_data, MAC(H2(getMRENCLAVE(app_code), report_data), EGETKEYforReportKey(cpu_context))).
+
+fun EGETKEY(bitstring, bitstring): skey.
+
+fun getAnalysisInfo(bitstring): bitstring.
+
+fun getUsagePolicy(bitstring): policy.
+
+fun sealKey(skey, skey): sealedKey.
+reduc forall key: skey, sealkey: skey;
+    unsealKey(sealKey(key, sealkey), sealkey) = key.
+
+fun sealCert(bitstring, skey): sealedCert.
+reduc forall cert: bitstring, key: skey;
+    unsealCert(sealCert(cert, key), key) = cert.
+
+fun sealData(bitstring, skey): sealedData.
+reduc forall data: bitstring, key: skey;
+    unsealData(sealData(data, key), key) = data.
+
+fun implementApp(bool, bool): bitstring.
+reduc forall is_hidden: bool, is_ucon: bool;
+    isHidden(implementApp(is_hidden, is_ucon)) = is_hidden.
+
+reduc forall is_hidden: bool, is_ucon: bool;
+    isUsageControlled(implementApp(is_hidden, is_ucon)) = is_ucon.
+
+(* processing raw data *)
+fun processData(bitstring): bitstring.
+fun malProcessData(bitstring): bitstring.
+
+equation forall data: bitstring;
+    malProcessData(data) = data.
+
+(* DH Key Exchange *)
+const g: G.
+fun exp(G, rv): G.
+equation forall x: rv, y: rv;
+    exp(exp(g, x), y) = exp(exp(g, y), x).
+
+(* Tables *)
+table appliedInfo(bitstring, bitstring, bitstring).
+table appSpecifications(bitstring, bool).
+table provisionPolicyDB(bitstring, bitstring).
+
+table sealedKeyTable(bitstring, sealedKey, sealedCert).
+table sealedDataTable(bitstring, sealedData).
+table malSealedKeyTable(bitstring, sealedKey, sealedCert).
+table malSealedDataTable(bitstring, sealedData).
+
+(* Event *)
+event DC_authenticated(bitstring, bitstring).
+event app_authenticated(bitstring, bitstring).
+event policy_created(bitstring, policy).
+event policy_checked(bitstring, policy).
+event data_processed(bitstring, bitstring, bitstring, policy).
+event cached_policy_checked(bitstring, policy).
+event cached_data_processed(bitstring, bitstring, bitstring, policy).
+
+free providedData: bitstring [private].
+
+free cpu_context: bitstring [private].
+
+(* Queries *)
+query attacker(providedData).
+
+query attacker(processData(providedData)).
+
+query data: bitstring, dc: bitstring, app: bitstring, usagePolicy: policy;
+    event(data_processed(data, dc, app, usagePolicy)) ==> (event(policy_checked(data, usagePolicy)) ==> event(policy_created(data, usagePolicy))).
+
+query data: bitstring, dc: bitstring, app: bitstring, usagePolicy: policy;
+    event(cached_data_processed(data, dc, app, usagePolicy)) ==> (event(cached_policy_checked(data, usagePolicy)) ==> event(policy_created(data, usagePolicy))).
+
+query data: bitstring, DC_DN: bitstring, app: bitstring, usagePolicy: policy;
+    event(data_processed(data, DC_DN, app, usagePolicy)) ==> event(DC_authenticated(data, DC_DN)).
+
+query data: bitstring, DC_DN: bitstring, app: bitstring, usagePolicy: policy;
+    event(cached_data_processed(data, DC_DN, app, usagePolicy)) ==> event(DC_authenticated(data, DC_DN)).
+
+query data: bitstring, dc: bitstring, app: bitstring, usagePolicy: policy;
+    event(data_processed(data, dc, app, usagePolicy)) ==> event(app_authenticated(data, app)).
+
+query data: bitstring, dc: bitstring, app: bitstring, usagePolicy: policy;
+    event(cached_data_processed(data, dc, app, usagePolicy)) ==> event(app_authenticated(data, app)).
+
+(* Debug *)
+(* event evDebug. *)
+(* query event(evDebug). *)
+
+
+let DPApplication(skDP: skey, certDP: bitstring, pkCA: pkey) =
+    in(sc, (=TLS_CLIENT_HELLO, seq: bitstring));
+    out(sc, (TLS_SERVER_CERTIFICATE, seq, certDP));
+    
+    in(sc, (=TLS_CLIENT_CERTIFICATE, =seq, certClient: bitstring));
+    in(sc, (=TLS_CERTIFICATE_VERIFY, =seq, sig: bitstring));
+    let (CSRClient: bitstring, sigClient: bitstring) = certClient in
+    let (pkClient: pkey, extension: bitstring, DCSubj: bitstring) = CSRClient in
+    let data = (certDP, certClient) in
+    if verify(H(data), sig, pkClient) = true then
+        if verify(H(CSRClient), sigClient, pkCA) = true then 
+            out(sc, (TLS_FINISHED, seq));
+            
+            in(sc, (=USAGE_APPLICATION, dataUsageStatement: bitstring, =seq));
+            let (dataEndpointInfo: bitstring, MRENCLAVE: bitstring) = dataUsageStatement in
+            
+            new seq_sc: bitstring;
+            out(sc, (seq_sc, PS_REQ, MRENCLAVE));
+            in(sc, (=seq_sc, =PS_RES, disclosureInfo: bool));
+
+            get provisionPolicyDB(=dataEndpointInfo, provisionPolicy: bitstring) in
+            let (allowedDCSubj: bitstring, is_allowed_disclosure: bool) = provisionPolicy in
+            if allowedDCSubj = DCSubj then
+                if (not(is_allowed_disclosure) || disclosureInfo) then
+                    
+                    insert appliedInfo(MRENCLAVE, DCSubj, dataUsageStatement);
+                    (* event applied(MRENCLAVE, DCSubj, dataUsageStatement); *)
+
+                    new application_result: bitstring;
+                    out(sc, (APP_RES, application_result, seq));
+                0.
+
+let DPProvision(skDP: skey, certDP: bitstring, pkCA: pkey, pkIAS: pkey) =
+    in(sc, (=TLS_CLIENT_HELLO, seq: bitstring));
+    out(sc, (TLS_SERVER_CERTIFICATE, seq, certDP));
+    in(sc, (=TLS_CLIENT_CERTIFICATE, =seq, certClient: bitstring));
+    in(sc, (=TLS_CERTIFICATE_VERIFY, =seq, sig: bitstring));
+    let (CSRClient: bitstring, sigClient: bitstring) = certClient in
+    let (pkClient: pkey, (attestationVerificationReport: bitstring, sigAVR: bitstring), DCSubj: bitstring) = CSRClient in
+    let (quote: bitstring, platformInfo: bitstring) = attestationVerificationReport in
+    let (report: bitstring, sigRP: bitstring) = quote in
+    let (MRENCLAVE: bitstring, report_data: bitstring, sentMAC: bitstring) = report in
+    
+    (* Authenticate a DC *)
+    let data = (certDP, certClient) in
+    if verify(H(data), sig, pkClient) = true then
+        if verify(H(CSRClient), sigClient, pkCA) = true then
+            
+            (* Authenticate an app *)
+            if report_data = HPkey(pkClient) then
+                if verify(H(attestationVerificationReport), sigAVR, pkIAS) = true then
+                    (* Finished the TLS handshake *)
+                    out(sc, (TLS_FINISHED, seq));
+                    in(sc, (=DATA_REQ, =seq));
+
+                    (* Authorize the DC and App by storedUP *)
+                    get appliedInfo(=MRENCLAVE, =DCSubj, dataUsageStatement: bitstring) in
+                    let (dataEndpointInfo: bitstring, _: bitstring) = dataUsageStatement in
+                    let usagePolicy = getUsagePolicy(dataEndpointInfo) in
+                    
+                    event DC_authenticated(providedData, DCSubj);
+                    event app_authenticated(providedData, MRENCLAVE);
+                    event policy_created(providedData, usagePolicy);
+                    
+                    out(sc, (DATA_RES, seq, providedData, usagePolicy));
+                    0.
+
+let DP(skDP: skey, certDP: bitstring, pkCA: pkey, pkIAS: pkey) =
+    DPApplication(skDP, certDP, pkCA) | DPProvision(skDP, certDP, pkCA, pkIAS).
+
+let DCP1(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    (* Phase 1: registration *)
+    new seq: bitstring;
+    out(sc, (seq, app_code));
+    in(sc, (=seq, MRENCLAVE: bitstring, disclosureInfo: bool));
+    0.
+
+let DCP2(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    (* phase 2: application for data use via a DC's browser *)
+    new seq: bitstring;
+    new skDC: skey;
+    new extension: bitstring;
+    let pkDC = pk(skDC) in
+    let CSRDC = (pkDC, extension, DC_DN) in
+    out(sc, (CERT_REQ, seq, CSRDC));
+    in(sc, (=CERT_RES, =seq, certDC: bitstring));
+
+    let data_usage_statement = (dataEndpointInfo, getMRENCLAVE(app_code)) in
+    
+    new seq: bitstring;
+    out(sc, (TLS_CLIENT_HELLO, seq));
+    in(sc, (=TLS_SERVER_CERTIFICATE, =seq, certDP: bitstring));
+    let (CSR_DP: bitstring, sigDP: bitstring) = certDP in
+    let (pkDP: pkey, ext: bitstring, DP_DN: bitstring) = CSR_DP in
+    
+    if verify(H((pkDP, ext, DP_DN)), sigDP, pkCA) = true then
+        out(sc, (TLS_CLIENT_CERTIFICATE, seq, certDC));
+        let data = (certDP, certDC) in
+        let sig = sign(H(data), skDC) in
+        out(sc, (TLS_CERTIFICATE_VERIFY, seq, sig));
+        in(sc, (=TLS_FINISHED, =seq));
+        
+        out(sc, (USAGE_APPLICATION, data_usage_statement, seq));
+        in(sc, (=APP_RES, application_result: bitstring, =seq));
+        0.
+
+let DCP3(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+
+    new seq: bitstring;
+    new skDC: skey;
+    new extension: bitstring;
+    let pkDC = pk(skDC) in
+    let CSRDC = (pkDC, extension, DC_DN) in
+    out(sc, (CERT_REQ, seq, CSRDC));
+    in(sc, (=CERT_RES, =seq, certDC: bitstring));
+    
+    let sig = sign(H(certDC), skDC) in
+
+    (* Phase 3: processing *)
+    (* Step 1 *)
+    new seq: bitstring;
+    
+    out(sc, (APP_CERT_REQ, TLS_CLIENT_CERTIFICATE, seq, certDC));
+    out(sc, (APP_CERT_REQ, TLS_CERTIFICATE_VERIFY, seq, sig));
+    in(sc, (=APP_CERT_RES, =seq));
+
+
+    (* Step 2 *)
+    new seq: bitstring;
+    
+    out(sc, (APP_PROCESS_REQ, TLS_CLIENT_CERTIFICATE, seq, certDC));
+    out(sc, (APP_PROCESS_REQ, TLS_CERTIFICATE_VERIFY, seq, sig));
+    in(sc, (=APP_PROCESS_RES, =seq, processedData: bitstring));
+    
+    (* Step 3 *)
+    new seq: bitstring;
+    
+    out(sc, (APP_CACHE_PROCESS_REQ, TLS_CLIENT_CERTIFICATE, seq, certDC));
+    out(sc, (APP_CACHE_PROCESS_REQ, TLS_CERTIFICATE_VERIFY, seq, sig));
+    in(sc, (=APP_CACHE_PROCESS_RES, =seq, processedData: bitstring));
+    0.
+
+let DC(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    DCP1(dc, DC_DN, app_code, dataEndpointInfo, pkCA) |
+    DCP2(dc, DC_DN, app_code, dataEndpointInfo, pkCA) |
+    DCP3(dc, DC_DN, app_code, dataEndpointInfo, pkCA).
+
+let AppIssueCert(app_code: bitstring, context: bitstring, pkCA: pkey) =
+    in(sc, (=APP_CERT_REQ, =TLS_CLIENT_CERTIFICATE, received_seq: bitstring, certDC: bitstring));
+ 
+    in(sc, (=APP_CERT_REQ, =TLS_CERTIFICATE_VERIFY, =received_seq, sig: bitstring));
+
+    let (CSR_DC: bitstring, sigDC: bitstring) = certDC in
+    let (pkDC: pkey, extension: bitstring, DC_DN: bitstring) = CSR_DC in
+
+    if verify(H(certDC), sig, pkDC) = true then
+        if verify(H(CSR_DC), sigDC, pkCA) = true then 
+            
+            (* App keys *)
+            new skApp: skey;
+            let pkApp = pk(skApp) in
+            (* Obtain quote *)
+            let report_data = HPkey(pkApp) in
+            let report = (getMRENCLAVE(app_code), report_data, MAC(H2(getMRENCLAVE(app_code), report_data), EGETKEYforReportKey(cpu_context))) in
+            out(c, report);
+            in(c, quote: bitstring);
+            
+            (* Obtain the attestation report *)
+            new seq: bitstring;
+            out(sc, (seq, quote));
+            in(sc, (=seq, attestationVerificationReport: bitstring, sigAVR: bitstring));
+            (* Obtain the app certificate *)
+            let CSRApp = (pkApp, (attestationVerificationReport, sigAVR), DC_DN) in
+
+            new seq: bitstring;
+            out(sc, (CERT_REQ, seq, CSRApp));
+            in(sc, (=CERT_RES, =seq, certApp: bitstring));
+            
+            let sk = EGETKEY(app_code, context) in
+            let sealedKey = sealKey(skApp, sk) in
+            let sealedCert = sealCert(certApp, sk) in
+
+            insert sealedKeyTable(DC_DN, sealedKey, sealedCert);
+
+            out(sc, (APP_CERT_RES, received_seq));
+            0.
+
+let AppWithoutCache(app_code: bitstring, pkCA: pkey, context: bitstring) =
+    in(sc, (=APP_PROCESS_REQ, =TLS_CLIENT_CERTIFICATE, received_seq: bitstring, certDC: bitstring));
+    
+    in(sc, (=APP_PROCESS_REQ, =TLS_CERTIFICATE_VERIFY, =received_seq, sig: bitstring));
+    
+    let (CSR_DC: bitstring, sigDC: bitstring) = certDC in
+    let (pkDC: pkey, extension: bitstring, DC_DN: bitstring) = CSR_DC in
+    if verify(H(certDC), sig, pkDC) = true then
+        if verify(H(CSR_DC), sigDC, pkCA) = true then 
+            get sealedKeyTable(=DC_DN, sealedKey: sealedKey, sealedCert: sealedCert) in
+            let sk = EGETKEY(app_code, context) in
+            let keyApp = unsealKey(sealedKey, sk) in
+            let certApp = unsealCert(sealedCert, sk) in
+            (* Obtain quote *)
+            let MRENCLAVE = getMRENCLAVE(app_code) in
+            new seq: bitstring;
+            out(sc, (TLS_CLIENT_HELLO, seq));
+            in(sc, (=TLS_SERVER_CERTIFICATE, =seq, certDP: bitstring));
+            let (CSR_DP: bitstring, sigDP: bitstring) = certDP in
+            let (pkDP: pkey, ext: bitstring, DP_DN: bitstring) = CSR_DP in
+    
+            if verify(H((pkDP, ext, DP_DN)), sigDP, pkCA) = true then
+                out(sc, (TLS_CLIENT_CERTIFICATE, seq, certApp));
+                let data = (certDP, certApp) in
+                let sig = sign(H(data), keyApp) in
+                out(sc, (TLS_CERTIFICATE_VERIFY, seq, sig));
+                in(sc, (=TLS_FINISHED, =seq));
+                
+                out(sc, (DATA_REQ, seq));
+                in(sc, (=DATA_RES, =seq, data: bitstring, UP: policy));
+                
+                (* Check policy *)
+                event policy_checked(data, UP);
+                let processedData = processData(data) in
+                event data_processed(data, DC_DN, MRENCLAVE, UP);
+                
+                (* Sealing *)
+                let storedData = (data, UP) in
+                let sealedData = sealData(storedData, sk) in
+                insert sealedDataTable(DC_DN, sealedData);
+                
+                out(sc, (APP_PROCESS_RES, received_seq, processedData));
+            0.
+
+let AppWithCache(app_code: bitstring, pkCA: pkey, context: bitstring) =
+    in(sc, (=APP_CACHE_PROCESS_REQ, =TLS_CLIENT_CERTIFICATE, received_seq: bitstring, certDC: bitstring));
+    
+    in(sc, (=APP_CACHE_PROCESS_REQ, =TLS_CERTIFICATE_VERIFY, =received_seq, sig: bitstring));
+    
+    let (CSR_DC: bitstring, sigDC: bitstring) = certDC in
+    let (pkDC: pkey, extension: bitstring, DC_DN: bitstring) = CSR_DC in
+    if verify(H(certDC), sig, pkDC) = true then
+        if verify(H(CSR_DC), sigDC, pkCA) = true then
+            
+            get sealedDataTable(=DC_DN, sealedData: sealedData) in
+            let MRENCLAVE = getMRENCLAVE(app_code) in
+            let sk = EGETKEY(app_code, context) in
+            let unsealedData = unsealData(sealedData, sk) in
+            let (data: bitstring, UP: policy) = unsealedData in
+            
+            (* Check policy *)
+            event cached_policy_checked(data, UP);
+            let processedData = processData(data) in
+            event cached_data_processed(data, DC_DN, MRENCLAVE, UP);
+            
+            out(sc, (APP_CACHE_PROCESS_RES, received_seq, processedData));
+            0.
+
+let App(app_code: bitstring, pkCA: pkey, cpu_context: bitstring) =
+    AppIssueCert(app_code, cpu_context, pkCA) | AppWithoutCache(app_code, pkCA, cpu_context) | AppWithCache(app_code, pkCA, cpu_context).
+
+let MalDCP1(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    (* Phase 1: registration *)
+    new seq: bitstring;
+    out(sc, (seq, app_code));
+    in(sc, (=seq, MRENCLAVE: bitstring, disclosureInfo: bool));
+    0.
+
+let MalDCP2(dc: bitstring, DCSubj: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    (* phase 2: application for data use via a DC's browser *)
+    new seq: bitstring;
+    new skDC: skey;
+    new extension: bitstring;
+    let pkDC = pk(skDC) in
+    let CSRDC = (pkDC, extension, DCSubj) in
+
+    out(sc, (CERT_REQ, seq, CSRDC));
+    in(sc, (=CERT_RES, =seq, certDC: bitstring));
+
+    let data_usage_statement = (dataEndpointInfo, getMRENCLAVE(app_code)) in
+    
+    new seq: bitstring;
+    out(sc, (TLS_CLIENT_HELLO, seq));
+    in(sc, (=TLS_SERVER_CERTIFICATE, =seq, certDP: bitstring));
+    let (CSR_DP: bitstring, sigDP: bitstring) = certDP in
+    let (pkDP: pkey, ext: bitstring, DP_DN: bitstring) = CSR_DP in
+    
+    if verify(H((pkDP, ext, DP_DN)), sigDP, pkCA) = true then
+        out(sc, (TLS_CLIENT_CERTIFICATE, seq, certDC));
+        let data = (certDP, certDC) in
+        let sig = sign(H(data), skDC) in
+        out(sc, (TLS_CERTIFICATE_VERIFY, seq, sig));
+        in(sc, (=TLS_FINISHED, =seq));
+        
+        out(sc, (USAGE_APPLICATION, data_usage_statement, seq));
+        in(sc, (=APP_RES, application_result: bitstring, =seq));
+        0.
+
+let MalDCP3WithMalAppS1(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    
+    new seq: bitstring;
+    new skDC: skey;
+    new extension: bitstring;
+    let pkDC = pk(skDC) in
+    let CSRDC = (pkDC, extension, DC_DN) in
+    out(sc, (CERT_REQ, seq, CSRDC));
+    in(sc, (=CERT_RES, =seq, certDC: bitstring));
+    
+    let sig = sign(H(certDC), skDC) in
+
+    (* Phase 3: processing *)
+    (* Step 1 *)
+    out(sc, (MAL_APP_CERT_REQ, TLS_CLIENT_CERTIFICATE, seq, certDC));
+    out(sc, (MAL_APP_CERT_REQ, TLS_CERTIFICATE_VERIFY, seq, sig));
+    in(sc, (=MAL_APP_CERT_RES, =seq));
+    0.
+
+let MalDCP3WithMalAppS2(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    
+    new seq: bitstring;
+    new skDC: skey;
+    new extension: bitstring;
+    let pkDC = pk(skDC) in
+    let CSRDC = (pkDC, extension, DC_DN) in
+    out(sc, (CERT_REQ, seq, CSRDC));
+    in(sc, (=CERT_RES, =seq, certDC: bitstring));
+    
+    let sig = sign(H(certDC), skDC) in
+
+    (* Phase 3: processing *)
+    (* Step 2 *)
+    new seq: bitstring;
+    
+    out(sc, (MAL_APP_PROCESS_REQ, TLS_CLIENT_CERTIFICATE, seq, certDC));
+    out(sc, (MAL_APP_PROCESS_REQ, TLS_CERTIFICATE_VERIFY, seq, sig));
+    in(sc, (=MAL_APP_PROCESS_RES, =seq, processedData: bitstring));
+    out(c, processedData);
+
+    0.
+
+let MalDCP3WithMalAppS3(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    
+    new seq: bitstring;
+    new skDC: skey;
+    new extension: bitstring;
+    let pkDC = pk(skDC) in
+    let CSRDC = (pkDC, extension, DC_DN) in
+    out(sc, (CERT_REQ, seq, CSRDC));
+    in(sc, (=CERT_RES, =seq, certDC: bitstring));
+    
+    let sig = sign(H(certDC), skDC) in
+
+    (* Phase 3: processing *)
+    (* Step 3 *)
+    new seq: bitstring;
+    
+    out(sc, (MAL_APP_CACHE_PROCESS_REQ, TLS_CLIENT_CERTIFICATE, seq, certDC));
+    out(sc, (MAL_APP_CACHE_PROCESS_REQ, TLS_CERTIFICATE_VERIFY, seq, sig));
+    in(sc, (=MAL_APP_CACHE_PROCESS_RES, =seq, processedData: bitstring));
+    out(c, processedData);
+    0.
+
+let MalDCP3WithMalApp(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    MalDCP3WithMalAppS1(dc, DC_DN, app_code, dataEndpointInfo, pkCA) |
+    MalDCP3WithMalAppS2(dc, DC_DN, app_code, dataEndpointInfo, pkCA) |
+    MalDCP3WithMalAppS3(dc, DC_DN, app_code, dataEndpointInfo, pkCA).
+
+let MalDCP3WithAppS1(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    new seq: bitstring;
+    new skDC: skey;
+    new extension: bitstring;
+    let pkDC = pk(skDC) in
+    let CSRDC = (pkDC, extension, DC_DN) in
+    out(sc, (CERT_REQ, seq, CSRDC));
+    in(sc, (=CERT_RES, =seq, certDC: bitstring));
+    
+    let sig = sign(H(certDC), skDC) in
+    
+    (* Phase 3: processing *)
+    (* Step 1 *)
+    out(sc, (APP_CERT_REQ, TLS_CLIENT_CERTIFICATE, seq, certDC));
+    out(sc, (APP_CERT_REQ, TLS_CERTIFICATE_VERIFY, seq, sig));
+    in(sc, (=APP_CERT_RES, =seq));
+    0.
+
+let MalDCP3WithAppS2(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    
+    new seq: bitstring;
+    new skDC: skey;
+    new extension: bitstring;
+    let pkDC = pk(skDC) in
+    let CSRDC = (pkDC, extension, DC_DN) in
+    out(sc, (CERT_REQ, seq, CSRDC));
+    in(sc, (=CERT_RES, =seq, certDC: bitstring));
+    
+    let sig = sign(H(certDC), skDC) in
+    
+    (* Phase 3: processing *)
+    (* Step 2 *)
+    new seq: bitstring;
+    
+    out(sc, (APP_PROCESS_REQ, TLS_CLIENT_CERTIFICATE, seq, certDC));
+    out(sc, (APP_PROCESS_REQ, TLS_CERTIFICATE_VERIFY, seq, sig));
+    in(sc, (=APP_PROCESS_RES, =seq, processedData: bitstring));
+    out(c, processedData);
+    0.
+
+let MalDCP3WithAppS3(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    
+    new seq: bitstring;
+    new skDC: skey;
+    new extension: bitstring;
+    let pkDC = pk(skDC) in
+    let CSRDC = (pkDC, extension, DC_DN) in
+    out(sc, (CERT_REQ, seq, CSRDC));
+    in(sc, (=CERT_RES, =seq, certDC: bitstring));
+    
+    let sig = sign(H(certDC), skDC) in
+    
+    (* Phase 3: processing *)
+    (* Step 3 *)
+    new seq: bitstring;
+    
+    out(sc, (APP_CACHE_PROCESS_REQ, TLS_CLIENT_CERTIFICATE, seq, certDC));
+    out(sc, (APP_CACHE_PROCESS_REQ, TLS_CERTIFICATE_VERIFY, seq, sig));
+    in(sc, (=APP_CACHE_PROCESS_RES, =seq, processedData: bitstring));
+    out(c, processedData);
+    0.
+
+let MalDCP3WithApp(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    MalDCP3WithAppS1(dc, DC_DN, app_code, dataEndpointInfo, pkCA) |
+    MalDCP3WithAppS2(dc, DC_DN, app_code, dataEndpointInfo, pkCA) |
+    MalDCP3WithAppS3(dc, DC_DN, app_code, dataEndpointInfo, pkCA).
+
+let MalDC(dc: bitstring, DC_DN: bitstring, app_code: bitstring, dataEndpointInfo: bitstring, pkCA: pkey) =
+    MalDCP1(dc, DC_DN, app_code, dataEndpointInfo, pkCA) |
+    MalDCP2(dc, DC_DN, app_code, dataEndpointInfo, pkCA) |
+    MalDCP3WithApp(dc, DC_DN, app_code, dataEndpointInfo, pkCA) |
+    MalDCP3WithMalApp(dc, DC_DN, app_code, dataEndpointInfo, pkCA).
+
+(* Malicious app process *)
+let MalAppIssueCert(app_code: bitstring, context: bitstring, pkCA: pkey) =
+    in(sc, (=MAL_APP_CERT_REQ, =TLS_CLIENT_CERTIFICATE, received_seq: bitstring, certDC: bitstring));
+ 
+    in(sc, (=MAL_APP_CERT_REQ, =TLS_CERTIFICATE_VERIFY, =received_seq, sig: bitstring));
+
+    let (CSR_DC: bitstring, sigDC: bitstring) = certDC in
+    let (pkDC: pkey, extension: bitstring, DC_DN: bitstring) = CSR_DC in
+
+    if verify(H(certDC), sig, pkDC) = true then
+        if verify(H(CSR_DC), sigDC, pkCA) = true then 
+            
+            (* App keys *)
+            new skApp: skey;
+            let pkApp = pk(skApp) in
+            (* Obtain quote *)
+            let report_data = HPkey(pkApp) in
+            let report = (getMRENCLAVE(app_code), report_data, MAC(H2(getMRENCLAVE(app_code), report_data), EGETKEYforReportKey(cpu_context))) in
+            out(c, report);
+            in(c, quote: bitstring);
+            
+            (* Obtain the attestation report *)
+            new seq: bitstring;
+            out(sc, (seq, quote));
+            in(sc, (=seq, attestationVerificationReport: bitstring, sigAVR: bitstring));
+            (* Obtain the app certificate *)
+            let CSRApp = (pkApp, (attestationVerificationReport, sigAVR), DC_DN) in
+
+            new seq: bitstring;
+            out(sc, (CERT_REQ, seq, CSRApp));
+            in(sc, (=CERT_RES, =seq, certApp: bitstring));
+            
+            let sk = EGETKEY(app_code, context) in
+            let sealedKey = sealKey(skApp, sk) in
+            let sealedCert = sealCert(certApp, sk) in
+
+            insert sealedKeyTable(DC_DN, sealedKey, sealedCert);
+
+            out(sc, (MAL_APP_CERT_RES, received_seq));
+            0.
+
+let MalAppWithoutCache(app_code: bitstring, pkCA: pkey, context: bitstring) =
+    in(sc, (=MAL_APP_PROCESS_REQ, =TLS_CLIENT_CERTIFICATE, received_seq: bitstring, certDC: bitstring));
+    
+    in(sc, (=MAL_APP_PROCESS_REQ, =TLS_CERTIFICATE_VERIFY, =received_seq, sig: bitstring));
+    
+    let (CSR_DC: bitstring, sigDC: bitstring) = certDC in
+    let (pkDC: pkey, extension: bitstring, DC_DN: bitstring) = CSR_DC in
+    if verify(H(certDC), sig, pkDC) = true then
+        if verify(H(CSR_DC), sigDC, pkCA) = true then 
+            get sealedKeyTable(=DC_DN, sealedKey: sealedKey, sealedCert: sealedCert) in
+            let sk = EGETKEY(app_code, context) in
+            let keyApp = unsealKey(sealedKey, sk) in
+            let certApp = unsealCert(sealedCert, sk) in
+            (* Obtain quote *)
+            let MRENCLAVE = getMRENCLAVE(app_code) in
+            new seq: bitstring;
+            out(sc, (TLS_CLIENT_HELLO, seq));
+            in(sc, (=TLS_SERVER_CERTIFICATE, =seq, certDP: bitstring));
+            let (DPInfo: bitstring, pkDP: pkey, sigDP: bitstring) = certDP in
+            
+            if verify(H((DPInfo, pkDP)), sigDP, pkCA) = true then
+                out(sc, (TLS_CLIENT_CERTIFICATE, seq, certApp));
+                let data = (certDP, certApp) in
+                let sig = sign(H(data), keyApp) in
+                out(sc, (TLS_CERTIFICATE_VERIFY, seq, sig));
+                in(sc, (=TLS_FINISHED, =seq));
+                
+                out(sc, (DATA_REQ, seq));
+                in(sc, (=DATA_RES, =seq, data: bitstring, UP: policy));
+                
+                (* No policy check *)
+                let processedData = malProcessData(data) in
+                event data_processed(data, DC_DN, MRENCLAVE, UP);
+                
+                (* Sealing *)
+                let storedData = (data, UP) in
+                let sealedData = sealData(storedData, sk) in
+                insert sealedDataTable(DC_DN, sealedData);
+                
+                out(sc, (MAL_APP_PROCESS_RES, received_seq, processedData));
+            0.
+
+let MalAppWithCache(app_code: bitstring, pkCA: pkey, context: bitstring) =
+    in(sc, (=MAL_APP_CACHE_PROCESS_REQ, =TLS_CLIENT_CERTIFICATE, received_seq: bitstring, certDC: bitstring));
+    
+    in(sc, (=MAL_APP_CACHE_PROCESS_REQ, =TLS_CERTIFICATE_VERIFY, =received_seq, sig: bitstring));
+    
+    let (CSR_DC: bitstring, sigDC: bitstring) = certDC in
+    let (pkDC: pkey, extension: bitstring, DC_DN: bitstring) = CSR_DC in
+    if verify(H(certDC), sig, pkDC) = true then
+        if verify(H(CSR_DC), sigDC, pkCA) = true then
+            
+            get sealedDataTable(=DC_DN, sealedData: sealedData) in
+            let MRENCLAVE = getMRENCLAVE(app_code) in
+            let sk = EGETKEY(app_code, context) in
+            let unsealedData = unsealData(sealedData, sk) in
+            let (data: bitstring, UP: policy) = unsealedData in
+
+            (* No policy check *)
+            let processedData = malProcessData(data) in
+            event cached_data_processed(data, DC_DN, MRENCLAVE, UP);
+            
+            out(sc, (MAL_APP_CACHE_PROCESS_RES, received_seq, processedData));
+            0.
+
+let MalApp(mal_app_code: bitstring, pkCA: pkey, cpu_context: bitstring) =
+    MalAppIssueCert(mal_app_code, cpu_context, pkCA) | MalAppWithoutCache(mal_app_code, pkCA, cpu_context) | MalAppWithCache(mal_app_code, pkCA, cpu_context).
+
+let QE(skEPID: skey, pkEPID: pkey, cpu_context: bitstring) =
+    (* Phase3: Process data *)
+    (* Issue Quote *)
+    in(c, report: bitstring);
+    let (MRENCLAVE: bitstring, report_data: bitstring, sentMAC: bitstring) = report in
+
+    if verifyMAC(sentMAC, MRENCLAVE, report_data, EGETKEYforReportKey(cpu_context)) then 
+        let sigRP = sign(H(report), skEPID) in
+        let quote = (report, sigRP) in
+        out(c, quote);
+    0.
+
+let IAS(skIAS: skey, pkIAS: pkey, pkEPID: pkey) =
+    (* Phase3: Process data *)
+    (* Verify received quote *)
+    in(sc, (seq:bitstring, quote: bitstring));
+    let (report: bitstring, sigRP: bitstring) = quote in
+    if verify(H(report), sigRP, pkEPID) = true then
+        (* Issue an attestation report *)
+        new platformInfo: bitstring;
+        let attestationVerificationReport = (quote, platformInfo) in
+        let sigAVR = sign(H(attestationVerificationReport), skIAS) in
+        out(sc, (seq, attestationVerificationReport, sigAVR));
+    0.
+
+let RegisterAppSC() =
+    (* Phase 1 *)
+    in(sc, (seq: bitstring, app_code: bitstring));
+
+    (* app analysis system *)
+    if isUsageControlled(app_code) then
+        let disclosureInfo = isHidden(app_code) in
+
+        (* app build system *)
+        let MRENCLAVE = getMRENCLAVE(app_code) in
+        insert appSpecifications(MRENCLAVE, disclosureInfo);
+    
+        out(sc, (seq, MRENCLAVE, disclosureInfo));
+    0.
+
+let GetSpecSC() =
+    (* Phase 2 *)
+    in(sc, (seq: bitstring, =PS_REQ, MRENCLAVE: bitstring));
+    (* obtain disclosure info from DLs *)
+    get appSpecifications(=MRENCLAVE, disclosureInfo: bool) in
+    
+    out(sc, (seq, PS_RES, disclosureInfo));
+    0.
+
+let CA(skCA: skey, pkCA: pkey) =
+    (* Sign *)
+    in(sc, (=CERT_REQ, seq: bitstring, CSR: bitstring));
+    let sig = sign(H(CSR), skCA) in
+    let cert = (CSR, sig) in
+    out(sc, (CERT_RES, seq, cert));
+    0.
+
+(* Main Process *)
+process
+    (* QE signing keys *)
+    new skEPID: skey;
+    let pkEPID = pk(skEPID) in out (c, pkEPID);
+
+    (* CA signing keys*)
+    new skCA: skey;
+    let pkCA = pk(skCA) in out (c, pkCA);
+
+    (* DP keys *)
+    new DP_DN: bitstring;
+    new ext: bitstring;
+    new skDP: skey;
+    let pkDP = pk(skDP) in out (c, pkDP);
+    
+    (* Issue Certificate *)
+    let sig = sign(H((pkDP, ext, DP_DN)), skCA) in
+    let certDP = ((pkDP, ext, DP_DN), sig) in
+
+    (* IAS signing keys *)
+    new skIAS: skey;
+    let pkIAS = pk(skIAS) in out (c, pkIAS);
+
+    (* Create source code for data integration app *)
+    let app_code = implementApp(true, true) in
+    
+    (* DC subject *)
+    new dc: bitstring;
+    let DC_DN = getDN(dc) in
+
+    new mal_dc: bitstring;
+    let MalDC_DN = getDN(mal_dc) in
+
+    (* new cpu_context: bitstring; *)
+    let mal_app_code = implementApp(false, false) in
+    new dataEndpointInfo: bitstring;
+
+    (* create provision policy *)
+    (* The 2nd arg indicates whether the DP wants to keep the data secret *)
+    let provisionPolicy = (DC_DN, true) in
+    insert provisionPolicyDB(dataEndpointInfo, provisionPolicy);
+
+    let dataUsageStatement = (dataEndpointInfo, getMRENCLAVE(app_code))in
+    
+    (
+     (!DC(dc, DC_DN, app_code, dataEndpointInfo, pkCA)) |
+     (!App(app_code, pkCA, cpu_context)) |
+     (!MalDC(dc, MalDC_DN, mal_app_code, dataEndpointInfo, pkCA)) |
+     (!MalApp(mal_app_code, pkCA, cpu_context)) |
+     (!DP(skDP, certDP, pkCA, pkIAS)) |
+     (!QE(skEPID, pkEPID, cpu_context)) |
+     (!RegisterAppSC()) |
+     (!GetSpecSC()) |
+     (!IAS(skIAS, pkIAS, pkEPID)) |
+     (!CA(skCA, pkCA))
+    )

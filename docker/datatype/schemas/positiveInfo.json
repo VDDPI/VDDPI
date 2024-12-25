@@ -1,0 +1,11 @@
+{
+    "dataType": "positiveInfo",
+    "parent": "",
+    "schema": {
+        "positiveID": "integer",
+        "id": "integer",
+        "name": "string",
+        "testDate": "datetime",
+        "testResult": "string"
+    }
+}

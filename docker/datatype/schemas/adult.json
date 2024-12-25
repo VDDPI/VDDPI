@@ -1,0 +1,22 @@
+{
+    "dataType": "adult",
+    "parent": "",
+    "schema": {
+        "datatype": "string",
+        "label": "string",
+        "age": "",
+        "workclass": "string",
+        "fnlwgt": "string",
+        "education": "string",
+        "educationNum": "string",
+        "maritalStatus": "string",
+        "occupation": "string",
+        "relationship": "string",
+        "race": "string",
+        "sex": "string",
+        "capitalGain": "string",
+        "capitalLoss": "string",
+        "hoursPerWeek": "string",
+        "nativeCountry": "string"
+    }
+}

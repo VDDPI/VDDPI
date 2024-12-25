@@ -1,0 +1,1 @@
+cmd_/home/tokuda/tmp/linux-sgx-driver/Module.symvers := sed 's/ko$$/o/' /home/tokuda/tmp/linux-sgx-driver/modules.order | scripts/mod/modpost  -a   -o /home/tokuda/tmp/linux-sgx-driver/Module.symvers -e -i Module.symvers   -T -

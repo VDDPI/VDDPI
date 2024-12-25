@@ -1,0 +1,7 @@
+{
+    "name": "ProVerif",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "."
+    }
+}

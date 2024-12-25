@@ -1,0 +1,9 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY psuedo_api /app
+
+RUN pip install fastapi uvicorn cryptography
+
+CMD ["python3", "main.py"]

@@ -1,0 +1,10 @@
+{
+    "dataType": "facility",
+    "parent": "",
+    "schema": {
+        "id": "integer",
+        "name": "string",
+        "established": "integer",
+        "location": "string"
+    }
+}

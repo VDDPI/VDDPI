@@ -1,0 +1,9 @@
+{
+    "dataType": "person",
+    "parent": "",
+    "schema": {
+        "id": "integer",
+        "age": "integer",
+        "address": "string"
+    }
+}

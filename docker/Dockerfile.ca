@@ -1,0 +1,31 @@
+FROM python:3
+
+RUN pip3 install Flask requests
+
+RUN apt update && apt install -y build-essential
+
+RUN wget https://www.openssl.org/source/openssl-3.0.9.tar.gz
+RUN tar -xf openssl-3.0.9.tar.gz
+RUN cd openssl-3.0.9 && ./config && make && make install
+RUN echo "/usr/local/lib64/" | tee -a /etc/ld.so.conf.d/openssl.conf; ldconfig
+
+COPY ca/openssl.cnf /etc/ssl/
+COPY ca/main.py /root
+COPY ca/startup.sh /root
+
+RUN mkdir -p /etc/ssl/CA
+RUN mkdir -p /etc/ssl/CA/certs
+RUN mkdir -p /etc/ssl/CA/private
+RUN mkdir -p /etc/ssl/CA/crl
+RUN mkdir -p /etc/ssl/CA/newcerts
+RUN chmod 700 /etc/ssl/CA/private
+
+RUN echo "01" > /etc/ssl/CA/serial
+
+RUN touch /etc/ssl/CA/index.txt
+
+# for debug
+RUN echo "unique_subject = no" > /etc/ssl/CA/index.txt.attr
+
+WORKDIR /root
+CMD ["./startup.sh"]

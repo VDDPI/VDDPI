@@ -1,0 +1,18 @@
+ARG BASEIMAGE
+ARG BASEIMAGE_TAG
+
+FROM ${BASEIMAGE}:${BASEIMAGE_TAG}
+
+RUN mkdir upload
+COPY gramine_registry/main.go /upload/
+
+COPY gramine_registry/build.sh /
+
+# install go env
+RUN apt update && apt install -y golang
+
+RUN mkdir /root/code
+
+# server
+EXPOSE 8008
+CMD ["go run ./upload/main.go"]

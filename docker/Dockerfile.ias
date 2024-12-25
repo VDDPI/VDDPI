@@ -1,0 +1,9 @@
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
+
+RUN pip install requests pycryptodome pycryptodomex
+
+COPY psuedo_ias/main.py /app
+COPY psuedo_ias/sign.crt /app
+COPY psuedo_ias/sign.key /app
+COPY psuedo_ias/signCA.crt /app
+COPY psuedo_ias/signCA.key /app

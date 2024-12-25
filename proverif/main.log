@@ -1,0 +1,1064 @@
+File "main.pv", line 272, characters 9-11:
+Warning: identifier seq rebound.
+File "main.pv", line 302, characters 9-11:
+Warning: identifier seq rebound.
+File "main.pv", line 310, characters 9-11:
+Warning: identifier seq rebound.
+File "main.pv", line 317, characters 9-11:
+Warning: identifier seq rebound.
+File "main.pv", line 321, characters 43-55:
+Warning: identifier processedData rebound.
+File "main.pv", line 356, characters 17-19:
+Warning: identifier seq rebound.
+File "main.pv", line 361, characters 17-25:
+Warning: identifier sealedKey rebound.
+File "main.pv", line 362, characters 17-26:
+Warning: identifier sealedCert rebound.
+File "main.pv", line 378, characters 40-48:
+Warning: identifier sealedKey rebound.
+File "main.pv", line 378, characters 62-71:
+Warning: identifier sealedCert rebound.
+File "main.pv", line 392, characters 21-23:
+Warning: identifier sig rebound.
+File "main.pv", line 397, characters 42-45:
+Warning: identifier data rebound.
+File "main.pv", line 406, characters 21-30:
+Warning: identifier sealedData rebound.
+File "main.pv", line 422, characters 41-50:
+Warning: identifier sealedData rebound.
+File "main.pv", line 459, characters 9-11:
+Warning: identifier seq rebound.
+File "main.pv", line 508, characters 9-11:
+Warning: identifier seq rebound.
+File "main.pv", line 531, characters 9-11:
+Warning: identifier seq rebound.
+File "main.pv", line 576, characters 9-11:
+Warning: identifier seq rebound.
+File "main.pv", line 598, characters 9-11:
+Warning: identifier seq rebound.
+File "main.pv", line 645, characters 17-19:
+Warning: identifier seq rebound.
+File "main.pv", line 650, characters 17-25:
+Warning: identifier sealedKey rebound.
+File "main.pv", line 651, characters 17-26:
+Warning: identifier sealedCert rebound.
+File "main.pv", line 667, characters 40-48:
+Warning: identifier sealedKey rebound.
+File "main.pv", line 667, characters 62-71:
+Warning: identifier sealedCert rebound.
+File "main.pv", line 681, characters 21-23:
+Warning: identifier sig rebound.
+File "main.pv", line 686, characters 42-45:
+Warning: identifier data rebound.
+File "main.pv", line 694, characters 21-30:
+Warning: identifier sealedData rebound.
+File "main.pv", line 710, characters 41-50:
+Warning: identifier sealedData rebound.
+Linear part:
+exp(exp(g,x),y) = exp(exp(g,y),x)
+Completing equations...
+Completed equations:
+exp(exp(g,x),y) = exp(exp(g,y),x)
+Convergent part:
+malProcessData(data) = data
+EREPORT(app_code,cpu_context_1,report_data) = (getMRENCLAVE(app_code),report_data,MAC(H2(getMRENCLAVE(app_code),report_data),EGETKEYforReportKey(cpu_context_1)))
+Completing equations...
+Completed equations:
+EREPORT(app_code,cpu_context_1,report_data) = (getMRENCLAVE(app_code),report_data,MAC(H2(getMRENCLAVE(app_code),report_data),EGETKEYforReportKey(cpu_context_1)))
+malProcessData(data) = data
+Process 0 (that is, the initial process):
+{1}new skEPID: skey;
+{2}let pkEPID: pkey = pk(skEPID) in
+{3}out(c, pkEPID);
+{4}new skCA: skey;
+{5}let pkCA: pkey = pk(skCA) in
+{6}out(c, pkCA);
+{7}new DPInfo: bitstring;
+{8}new skDP: skey;
+{9}let pkDP: pkey = pk(skDP) in
+{10}out(c, pkDP);
+{11}let sig: bitstring = sign(H((DPInfo,pkDP)),skCA) in
+{12}let certDP: bitstring = (DPInfo,pkDP,sig) in
+{13}new skIAS: skey;
+{14}let pkIAS: pkey = pk(skIAS) in
+{15}out(c, pkIAS);
+{16}let app_code: bitstring = implementApp(true,true) in
+{17}new dc: bitstring;
+{18}let DC_DN: bitstring = getDN(dc) in
+{19}new mal_dc: bitstring;
+{20}let MalDC_DN: bitstring = getDN(mal_dc) in
+{21}let mal_app_code: bitstring = implementApp(false,false) in
+{22}new dataEndpointInfo: bitstring;
+{23}let provisionPolicy: bitstring = (DC_DN,true) in
+{24}insert provisionPolicyDB(dataEndpointInfo,provisionPolicy);
+{25}let dataUsageStatement: bitstring = (dataEndpointInfo,getMRENCLAVE(app_code)) in
+(
+    {26}!
+    {27}let dc_1: bitstring = dc in
+    {28}let dataEndpointInfo_1: bitstring = dataEndpointInfo in
+    (
+        {29}new seq: bitstring;
+        {30}out(sc, (seq,app_code));
+        {31}in(sc, (=seq,MRENCLAVE: bitstring,disclosureInfo: bool))
+    ) | (
+        {32}new seq_1: bitstring;
+        {33}new skDC: skey;
+        {34}new extension: bitstring;
+        {35}let pkDC: pkey = pk(skDC) in
+        {36}let CSRDC: bitstring = (pkDC,extension,DC_DN) in
+        {37}out(sc, (CERT_REQ,seq_1,DC_DN,CSRDC));
+        {38}in(sc, (=CERT_RES,=seq_1,certDC: bitstring));
+        {39}let data_usage_statement: bitstring = (dataEndpointInfo_1,getMRENCLAVE(app_code)) in
+        {40}new seq_2: bitstring;
+        {41}out(sc, (TLS_CLIENT_HELLO,seq_2));
+        {42}in(sc, (=TLS_SERVER_CERTIFICATE,=seq_2,certDP_1: bitstring));
+        {43}let (DPInfo_1: bitstring,pkDP_1: pkey,sigDP: bitstring) = certDP_1 in
+        {44}if (verify(H((DPInfo_1,pkDP_1)),sigDP,pkCA) = true) then
+        {45}out(sc, (TLS_CLIENT_CERTIFICATE,seq_2,certDC));
+        {46}let data: bitstring = (certDP_1,certDC) in
+        {47}let sig_1: bitstring = sign(H(data),skDC) in
+        {48}out(sc, (TLS_CERTIFICATE_VERIFY,seq_2,sig_1));
+        {49}in(sc, (=TLS_FINISHED,=seq_2));
+        {50}out(sc, (USAGE_APPLICATION,data_usage_statement,seq_2));
+        {51}in(sc, (=APP_RES,application_result: bitstring,=seq_2))
+    ) | (
+        {52}new seq_3: bitstring;
+        {53}new skDC_1: skey;
+        {54}new extension_1: bitstring;
+        {55}let pkDC_1: pkey = pk(skDC_1) in
+        {56}let CSRDC_1: bitstring = (pkDC_1,extension_1,DC_DN) in
+        {57}out(sc, (CERT_REQ,seq_3,DC_DN,CSRDC_1));
+        {58}in(sc, (=CERT_RES,=seq_3,certDC_1: bitstring));
+        {59}let sig_2: bitstring = sign(H(certDC_1),skDC_1) in
+        {60}new seq_4: bitstring;
+        {61}out(sc, (APP_CERT_REQ,TLS_CLIENT_CERTIFICATE,seq_4,certDC_1));
+        {62}out(sc, (APP_CERT_REQ,TLS_CERTIFICATE_VERIFY,seq_4,sig_2));
+        {63}in(sc, (=APP_CERT_RES,=seq_4));
+        {64}new seq_5: bitstring;
+        {65}out(sc, (APP_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_5,certDC_1));
+        {66}out(sc, (APP_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_5,sig_2));
+        {67}in(sc, (=APP_PROCESS_RES,=seq_5,processedData: bitstring));
+        {68}new seq_6: bitstring;
+        {69}out(sc, (APP_CACHE_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_6,certDC_1));
+        {70}out(sc, (APP_CACHE_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_6,sig_2));
+        {71}in(sc, (=APP_CACHE_PROCESS_RES,=seq_6,processedData_1: bitstring))
+    )
+) | (
+    {72}!
+    {73}let cpu_context_1: bitstring = cpu_context in
+    (
+        {74}in(sc, (=APP_CERT_REQ,=TLS_CLIENT_CERTIFICATE,received_seq: bitstring,certDC_2: bitstring));
+        {75}in(sc, (=APP_CERT_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq,sig_3: bitstring));
+        {76}let (CSR_DC: bitstring,sigDC: bitstring) = certDC_2 in
+        {77}let (pkDC_2: pkey,extension_2: bitstring,DC_DN_1: bitstring) = CSR_DC in
+        {78}if (verify(H(certDC_2),sig_3,pkDC_2) = true) then
+        {79}if (verify(H(CSR_DC),sigDC,pkCA) = true) then
+        {80}new skApp: skey;
+        {81}let pkApp: pkey = pk(skApp) in
+        {82}let report_data: bitstring = HPkey(pkApp) in
+        {83}let report: bitstring = (getMRENCLAVE(app_code),report_data,MAC(H2(getMRENCLAVE(app_code),report_data),EGETKEYforReportKey(cpu_context))) in
+        {84}out(c, report);
+        {85}in(c, quote: bitstring);
+        {86}new seq_7: bitstring;
+        {87}out(sc, (seq_7,quote));
+        {88}in(sc, (=seq_7,attestationVerificationReport: bitstring,sigAVR: bitstring));
+        {89}let CSRApp: bitstring = (pkApp,(attestationVerificationReport,sigAVR),DC_DN_1) in
+        {90}new seq_8: bitstring;
+        {91}out(sc, (CERT_REQ,seq_8,DC_DN_1,CSRApp));
+        {92}in(sc, (=CERT_RES,=seq_8,certApp: bitstring));
+        {93}let sk: skey = EGETKEY(app_code,cpu_context_1) in
+        {94}let sealedKey_1: sealedKey = sealKey(skApp,sk) in
+        {95}let sealedCert_1: sealedCert = sealCert(certApp,sk) in
+        {96}insert sealedKeyTable(DC_DN_1,sealedKey_1,sealedCert_1);
+        {97}out(sc, (APP_CERT_RES,received_seq))
+    ) | (
+        {98}in(sc, (=APP_PROCESS_REQ,=TLS_CLIENT_CERTIFICATE,received_seq_1: bitstring,certDC_3: bitstring));
+        {99}in(sc, (=APP_PROCESS_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq_1,sig_4: bitstring));
+        {100}let (CSR_DC_1: bitstring,sigDC_1: bitstring) = certDC_3 in
+        {101}let (pkDC_3: pkey,extension_3: bitstring,DC_DN_2: bitstring) = CSR_DC_1 in
+        {102}if (verify(H(certDC_3),sig_4,pkDC_3) = true) then
+        {103}if (verify(H(CSR_DC_1),sigDC_1,pkCA) = true) then
+        {127}get sealedKeyTable(=DC_DN_2,sealedKey_2: sealedKey,sealedCert_2: sealedCert) in
+        {104}let sk_1: skey = EGETKEY(app_code,cpu_context_1) in
+        {105}let keyApp: skey = unsealKey(sealedKey_2,sk_1) in
+        {106}let certApp_1: bitstring = unsealCert(sealedCert_2,sk_1) in
+        {107}let MRENCLAVE_1: bitstring = getMRENCLAVE(app_code) in
+        {108}new seq_9: bitstring;
+        {109}out(sc, (TLS_CLIENT_HELLO,seq_9));
+        {110}in(sc, (=TLS_SERVER_CERTIFICATE,=seq_9,certDP_2: bitstring));
+        {111}let (DPInfo_2: bitstring,pkDP_2: pkey,sigDP_1: bitstring) = certDP_2 in
+        {112}if (verify(H((DPInfo_2,pkDP_2)),sigDP_1,pkCA) = true) then
+        {113}out(sc, (TLS_CLIENT_CERTIFICATE,seq_9,certApp_1));
+        {114}let data_1: bitstring = (certDP_2,certApp_1) in
+        {115}let sig_5: bitstring = sign(H(data_1),keyApp) in
+        {116}out(sc, (TLS_CERTIFICATE_VERIFY,seq_9,sig_5));
+        {117}in(sc, (=TLS_FINISHED,=seq_9));
+        {118}out(sc, (DATA_REQ,seq_9));
+        {119}in(sc, (=DATA_RES,=seq_9,data_2: bitstring,UP: policy));
+        {120}event policy_checked(data_2,UP);
+        {121}let processedData_2: bitstring = processData(data_2) in
+        {122}event data_processed(data_2,DC_DN_2,MRENCLAVE_1,UP);
+        {123}let storedData: bitstring = (data_2,UP) in
+        {124}let sealedData_1: sealedData = sealData(storedData,sk_1) in
+        {125}insert sealedDataTable(DC_DN_2,sealedData_1);
+        {126}out(sc, (APP_PROCESS_RES,received_seq_1,processedData_2))
+    ) | (
+        {128}in(sc, (=APP_CACHE_PROCESS_REQ,=TLS_CLIENT_CERTIFICATE,received_seq_2: bitstring,certDC_4: bitstring));
+        {129}in(sc, (=APP_CACHE_PROCESS_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq_2,sig_6: bitstring));
+        {130}let (CSR_DC_2: bitstring,sigDC_2: bitstring) = certDC_4 in
+        {131}let (pkDC_4: pkey,extension_4: bitstring,DC_DN_3: bitstring) = CSR_DC_2 in
+        {132}if (verify(H(certDC_4),sig_6,pkDC_4) = true) then
+        {133}if (verify(H(CSR_DC_2),sigDC_2,pkCA) = true) then
+        {142}get sealedDataTable(=DC_DN_3,sealedData_2: sealedData) in
+        {134}let MRENCLAVE_2: bitstring = getMRENCLAVE(app_code) in
+        {135}let sk_2: skey = EGETKEY(app_code,cpu_context_1) in
+        {136}let unsealedData: bitstring = unsealData(sealedData_2,sk_2) in
+        {137}let (data_3: bitstring,UP_1: policy) = unsealedData in
+        {138}event cached_policy_checked(data_3,UP_1);
+        {139}let processedData_3: bitstring = processData(data_3) in
+        {140}event cached_data_processed(data_3,DC_DN_3,MRENCLAVE_2,UP_1);
+        {141}out(sc, (APP_CACHE_PROCESS_RES,received_seq_2,processedData_3))
+    )
+) | (
+    {143}!
+    {144}let dc_2: bitstring = dc in
+    {145}let dataEndpointInfo_2: bitstring = dataEndpointInfo in
+    (
+        {146}new seq_10: bitstring;
+        {147}out(sc, (seq_10,mal_app_code));
+        {148}in(sc, (=seq_10,MRENCLAVE_3: bitstring,disclosureInfo_1: bool))
+    ) | (
+        {149}new seq_11: bitstring;
+        {150}new skDC_2: skey;
+        {151}new extension_5: bitstring;
+        {152}let pkDC_5: pkey = pk(skDC_2) in
+        {153}let CSRDC_2: bitstring = (pkDC_5,extension_5,MalDC_DN) in
+        {154}out(sc, (CERT_REQ,seq_11,MalDC_DN,CSRDC_2));
+        {155}in(sc, (=CERT_RES,=seq_11,certDC_5: bitstring));
+        {156}let data_usage_statement_1: bitstring = (dataEndpointInfo_2,getMRENCLAVE(mal_app_code)) in
+        {157}new seq_12: bitstring;
+        {158}out(sc, (TLS_CLIENT_HELLO,seq_12));
+        {159}in(sc, (=TLS_SERVER_CERTIFICATE,=seq_12,certDP_3: bitstring));
+        {160}let (DPInfo_3: bitstring,pkDP_3: pkey,sigDP_2: bitstring) = certDP_3 in
+        {161}if (verify(H((DPInfo_3,pkDP_3)),sigDP_2,pkCA) = true) then
+        {162}out(sc, (TLS_CLIENT_CERTIFICATE,seq_12,certDC_5));
+        {163}let data_4: bitstring = (certDP_3,certDC_5) in
+        {164}let sig_7: bitstring = sign(H(data_4),skDC_2) in
+        {165}out(sc, (TLS_CERTIFICATE_VERIFY,seq_12,sig_7));
+        {166}in(sc, (=TLS_FINISHED,=seq_12));
+        {167}out(sc, (USAGE_APPLICATION,data_usage_statement_1,seq_12));
+        {168}in(sc, (=APP_RES,application_result_1: bitstring,=seq_12))
+    ) | (
+        {169}new seq_13: bitstring;
+        {170}new skDC_3: skey;
+        {171}new extension_6: bitstring;
+        {172}let pkDC_6: pkey = pk(skDC_3) in
+        {173}let CSRDC_3: bitstring = (pkDC_6,extension_6,MalDC_DN) in
+        {174}out(sc, (CERT_REQ,seq_13,MalDC_DN,CSRDC_3));
+        {175}in(sc, (=CERT_RES,=seq_13,certDC_6: bitstring));
+        {176}let sig_8: bitstring = sign(H(certDC_6),skDC_3) in
+        {177}out(sc, (APP_CERT_REQ,TLS_CLIENT_CERTIFICATE,seq_13,certDC_6));
+        {178}out(sc, (APP_CERT_REQ,TLS_CERTIFICATE_VERIFY,seq_13,sig_8));
+        {179}in(sc, (=APP_CERT_RES,=seq_13))
+    ) | (
+        {180}new seq_14: bitstring;
+        {181}new skDC_4: skey;
+        {182}new extension_7: bitstring;
+        {183}let pkDC_7: pkey = pk(skDC_4) in
+        {184}let CSRDC_4: bitstring = (pkDC_7,extension_7,MalDC_DN) in
+        {185}out(sc, (CERT_REQ,seq_14,MalDC_DN,CSRDC_4));
+        {186}in(sc, (=CERT_RES,=seq_14,certDC_7: bitstring));
+        {187}let sig_9: bitstring = sign(H(certDC_7),skDC_4) in
+        {188}new seq_15: bitstring;
+        {189}out(sc, (APP_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_15,certDC_7));
+        {190}out(sc, (APP_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_15,sig_9));
+        {191}in(sc, (=APP_PROCESS_RES,=seq_15,processedData_4: bitstring));
+        {192}out(c, processedData_4)
+    ) | (
+        {193}new seq_16: bitstring;
+        {194}new skDC_5: skey;
+        {195}new extension_8: bitstring;
+        {196}let pkDC_8: pkey = pk(skDC_5) in
+        {197}let CSRDC_5: bitstring = (pkDC_8,extension_8,MalDC_DN) in
+        {198}out(sc, (CERT_REQ,seq_16,MalDC_DN,CSRDC_5));
+        {199}in(sc, (=CERT_RES,=seq_16,certDC_8: bitstring));
+        {200}let sig_10: bitstring = sign(H(certDC_8),skDC_5) in
+        {201}new seq_17: bitstring;
+        {202}out(sc, (APP_CACHE_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_17,certDC_8));
+        {203}out(sc, (APP_CACHE_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_17,sig_10));
+        {204}in(sc, (=APP_CACHE_PROCESS_RES,=seq_17,processedData_5: bitstring));
+        {205}out(c, processedData_5)
+    ) | (
+        {206}new seq_18: bitstring;
+        {207}new skDC_6: skey;
+        {208}new extension_9: bitstring;
+        {209}let pkDC_9: pkey = pk(skDC_6) in
+        {210}let CSRDC_6: bitstring = (pkDC_9,extension_9,MalDC_DN) in
+        {211}out(sc, (CERT_REQ,seq_18,MalDC_DN,CSRDC_6));
+        {212}in(sc, (=CERT_RES,=seq_18,certDC_9: bitstring));
+        {213}let sig_11: bitstring = sign(H(certDC_9),skDC_6) in
+        {214}out(sc, (MAL_APP_CERT_REQ,TLS_CLIENT_CERTIFICATE,seq_18,certDC_9));
+        {215}out(sc, (MAL_APP_CERT_REQ,TLS_CERTIFICATE_VERIFY,seq_18,sig_11));
+        {216}in(sc, (=MAL_APP_CERT_RES,=seq_18))
+    ) | (
+        {217}new seq_19: bitstring;
+        {218}new skDC_7: skey;
+        {219}new extension_10: bitstring;
+        {220}let pkDC_10: pkey = pk(skDC_7) in
+        {221}let CSRDC_7: bitstring = (pkDC_10,extension_10,MalDC_DN) in
+        {222}out(sc, (CERT_REQ,seq_19,MalDC_DN,CSRDC_7));
+        {223}in(sc, (=CERT_RES,=seq_19,certDC_10: bitstring));
+        {224}let sig_12: bitstring = sign(H(certDC_10),skDC_7) in
+        {225}new seq_20: bitstring;
+        {226}out(sc, (MAL_APP_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_20,certDC_10));
+        {227}out(sc, (MAL_APP_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_20,sig_12));
+        {228}in(sc, (=MAL_APP_PROCESS_RES,=seq_20,processedData_6: bitstring));
+        {229}out(c, processedData_6)
+    ) | (
+        {230}new seq_21: bitstring;
+        {231}new skDC_8: skey;
+        {232}new extension_11: bitstring;
+        {233}let pkDC_11: pkey = pk(skDC_8) in
+        {234}let CSRDC_8: bitstring = (pkDC_11,extension_11,MalDC_DN) in
+        {235}out(sc, (CERT_REQ,seq_21,MalDC_DN,CSRDC_8));
+        {236}in(sc, (=CERT_RES,=seq_21,certDC_11: bitstring));
+        {237}let sig_13: bitstring = sign(H(certDC_11),skDC_8) in
+        {238}new seq_22: bitstring;
+        {239}out(sc, (MAL_APP_CACHE_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_22,certDC_11));
+        {240}out(sc, (MAL_APP_CACHE_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_22,sig_13));
+        {241}in(sc, (=MAL_APP_CACHE_PROCESS_RES,=seq_22,processedData_7: bitstring));
+        {242}out(c, processedData_7)
+    )
+) | (
+    {243}!
+    {244}let cpu_context_2: bitstring = cpu_context in
+    (
+        {245}in(sc, (=MAL_APP_CERT_REQ,=TLS_CLIENT_CERTIFICATE,received_seq_3: bitstring,certDC_12: bitstring));
+        {246}in(sc, (=MAL_APP_CERT_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq_3,sig_14: bitstring));
+        {247}let (CSR_DC_3: bitstring,sigDC_3: bitstring) = certDC_12 in
+        {248}let (pkDC_12: pkey,extension_12: bitstring,DC_DN_4: bitstring) = CSR_DC_3 in
+        {249}if (verify(H(certDC_12),sig_14,pkDC_12) = true) then
+        {250}if (verify(H(CSR_DC_3),sigDC_3,pkCA) = true) then
+        {251}new skApp_1: skey;
+        {252}let pkApp_1: pkey = pk(skApp_1) in
+        {253}let report_data_1: bitstring = HPkey(pkApp_1) in
+        {254}let report_1: bitstring = (getMRENCLAVE(mal_app_code),report_data_1,MAC(H2(getMRENCLAVE(mal_app_code),report_data_1),EGETKEYforReportKey(cpu_context))) in
+        {255}out(c, report_1);
+        {256}in(c, quote_1: bitstring);
+        {257}new seq_23: bitstring;
+        {258}out(sc, (seq_23,quote_1));
+        {259}in(sc, (=seq_23,attestationVerificationReport_1: bitstring,sigAVR_1: bitstring));
+        {260}let CSRApp_1: bitstring = (pkApp_1,(attestationVerificationReport_1,sigAVR_1),DC_DN_4) in
+        {261}new seq_24: bitstring;
+        {262}out(sc, (CERT_REQ,seq_24,DC_DN_4,CSRApp_1));
+        {263}in(sc, (=CERT_RES,=seq_24,certApp_2: bitstring));
+        {264}let sk_3: skey = EGETKEY(mal_app_code,cpu_context_2) in
+        {265}let sealedKey_3: sealedKey = sealKey(skApp_1,sk_3) in
+        {266}let sealedCert_3: sealedCert = sealCert(certApp_2,sk_3) in
+        {267}insert sealedKeyTable(DC_DN_4,sealedKey_3,sealedCert_3);
+        {268}out(sc, (MAL_APP_CERT_RES,received_seq_3))
+    ) | (
+        {269}in(sc, (=MAL_APP_PROCESS_REQ,=TLS_CLIENT_CERTIFICATE,received_seq_4: bitstring,certDC_13: bitstring));
+        {270}in(sc, (=MAL_APP_PROCESS_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq_4,sig_15: bitstring));
+        {271}let (CSR_DC_4: bitstring,sigDC_4: bitstring) = certDC_13 in
+        {272}let (pkDC_13: pkey,extension_13: bitstring,DC_DN_5: bitstring) = CSR_DC_4 in
+        {273}if (verify(H(certDC_13),sig_15,pkDC_13) = true) then
+        {274}if (verify(H(CSR_DC_4),sigDC_4,pkCA) = true) then
+        {297}get sealedKeyTable(=DC_DN_5,sealedKey_4: sealedKey,sealedCert_4: sealedCert) in
+        {275}let sk_4: skey = EGETKEY(mal_app_code,cpu_context_2) in
+        {276}let keyApp_1: skey = unsealKey(sealedKey_4,sk_4) in
+        {277}let certApp_3: bitstring = unsealCert(sealedCert_4,sk_4) in
+        {278}let MRENCLAVE_4: bitstring = getMRENCLAVE(mal_app_code) in
+        {279}new seq_25: bitstring;
+        {280}out(sc, (TLS_CLIENT_HELLO,seq_25));
+        {281}in(sc, (=TLS_SERVER_CERTIFICATE,=seq_25,certDP_4: bitstring));
+        {282}let (DPInfo_4: bitstring,pkDP_4: pkey,sigDP_3: bitstring) = certDP_4 in
+        {283}if (verify(H((DPInfo_4,pkDP_4)),sigDP_3,pkCA) = true) then
+        {284}out(sc, (TLS_CLIENT_CERTIFICATE,seq_25,certApp_3));
+        {285}let data_5: bitstring = (certDP_4,certApp_3) in
+        {286}let sig_16: bitstring = sign(H(data_5),keyApp_1) in
+        {287}out(sc, (TLS_CERTIFICATE_VERIFY,seq_25,sig_16));
+        {288}in(sc, (=TLS_FINISHED,=seq_25));
+        {289}out(sc, (DATA_REQ,seq_25));
+        {290}in(sc, (=DATA_RES,=seq_25,data_6: bitstring,UP_2: policy));
+        {291}let processedData_8: bitstring = malProcessData(data_6) in
+        {292}event data_processed(data_6,DC_DN_5,MRENCLAVE_4,UP_2);
+        {293}let storedData_1: bitstring = (data_6,UP_2) in
+        {294}let sealedData_3: sealedData = sealData(storedData_1,sk_4) in
+        {295}insert sealedDataTable(DC_DN_5,sealedData_3);
+        {296}out(sc, (MAL_APP_PROCESS_RES,received_seq_4,processedData_8))
+    ) | (
+        {298}in(sc, (=MAL_APP_CACHE_PROCESS_REQ,=TLS_CLIENT_CERTIFICATE,received_seq_5: bitstring,certDC_14: bitstring));
+        {299}in(sc, (=MAL_APP_CACHE_PROCESS_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq_5,sig_17: bitstring));
+        {300}let (CSR_DC_5: bitstring,sigDC_5: bitstring) = certDC_14 in
+        {301}let (pkDC_14: pkey,extension_14: bitstring,DC_DN_6: bitstring) = CSR_DC_5 in
+        {302}if (verify(H(certDC_14),sig_17,pkDC_14) = true) then
+        {303}if (verify(H(CSR_DC_5),sigDC_5,pkCA) = true) then
+        {311}get sealedDataTable(=DC_DN_6,sealedData_4: sealedData) in
+        {304}let MRENCLAVE_5: bitstring = getMRENCLAVE(mal_app_code) in
+        {305}let sk_5: skey = EGETKEY(mal_app_code,cpu_context_2) in
+        {306}let unsealedData_1: bitstring = unsealData(sealedData_4,sk_5) in
+        {307}let (data_7: bitstring,UP_3: policy) = unsealedData_1 in
+        {308}let processedData_9: bitstring = malProcessData(data_7) in
+        {309}event cached_data_processed(data_7,DC_DN_6,MRENCLAVE_5,UP_3);
+        {310}out(sc, (MAL_APP_CACHE_PROCESS_RES,received_seq_5,processedData_9))
+    )
+) | (
+    {312}!
+    {313}let skDP_1: skey = skDP in
+    (
+        {314}in(sc, (=TLS_CLIENT_HELLO,seq_26: bitstring));
+        {315}out(sc, (TLS_SERVER_CERTIFICATE,seq_26,certDP));
+        {316}in(sc, (=TLS_CLIENT_CERTIFICATE,=seq_26,certClient: bitstring));
+        {317}in(sc, (=TLS_CERTIFICATE_VERIFY,=seq_26,sig_18: bitstring));
+        {318}let (CSRClient: bitstring,sigClient: bitstring) = certClient in
+        {319}let (pkClient: pkey,extension_15: bitstring,DCSubj: bitstring) = CSRClient in
+        {320}let data_8: bitstring = (certDP,certClient) in
+        {321}if (verify(H(data_8),sig_18,pkClient) = true) then
+        {322}if (verify(H(CSRClient),sigClient,pkCA) = true) then
+        {323}out(sc, (TLS_FINISHED,seq_26));
+        {324}in(sc, (=USAGE_APPLICATION,dataUsageStatement_1: bitstring,=seq_26));
+        {325}let (dataEndpointInfo_3: bitstring,MRENCLAVE_6: bitstring) = dataUsageStatement_1 in
+        {326}new seq_sc: bitstring;
+        {327}out(sc, (seq_sc,PS_REQ,MRENCLAVE_6));
+        {328}in(sc, (=seq_sc,=PS_RES,disclosureInfo_2: bool));
+        {335}get provisionPolicyDB(=dataEndpointInfo_3,provisionPolicy_1: bitstring) in
+        {329}let (allowedDCSubj: bitstring,is_allowed_disclosure: bool) = provisionPolicy_1 in
+        {330}if (allowedDCSubj = DCSubj) then
+        {331}if (not(is_allowed_disclosure) || disclosureInfo_2) then
+        {332}insert appliedInfo(MRENCLAVE_6,DCSubj,dataUsageStatement_1);
+        {333}new application_result_2: bitstring;
+        {334}out(sc, (APP_RES,application_result_2,seq_26))
+    ) | (
+        {336}in(sc, (=TLS_CLIENT_HELLO,seq_27: bitstring));
+        {337}out(sc, (TLS_SERVER_CERTIFICATE,seq_27,certDP));
+        {338}in(sc, (=TLS_CLIENT_CERTIFICATE,=seq_27,certClient_1: bitstring));
+        {339}in(sc, (=TLS_CERTIFICATE_VERIFY,=seq_27,sig_19: bitstring));
+        {340}let (CSRClient_1: bitstring,sigClient_1: bitstring) = certClient_1 in
+        {341}let (pkClient_1: pkey,(attestationVerificationReport_2: bitstring,sigAVR_2: bitstring),DCSubj_1: bitstring) = CSRClient_1 in
+        {342}let (quote_2: bitstring,platformInfo: bitstring) = attestationVerificationReport_2 in
+        {343}let (report_2: bitstring,sigRP: bitstring) = quote_2 in
+        {344}let (MRENCLAVE_7: bitstring,report_data_2: bitstring,sentMAC: bitstring) = report_2 in
+        {345}let data_9: bitstring = (certDP,certClient_1) in
+        {346}if (verify(H(data_9),sig_19,pkClient_1) = true) then
+        {347}if (verify(H(CSRClient_1),sigClient_1,pkCA) = true) then
+        {348}if (report_data_2 = HPkey(pkClient_1)) then
+        {349}if (verify(H(attestationVerificationReport_2),sigAVR_2,pkIAS) = true) then
+        {350}out(sc, (TLS_FINISHED,seq_27));
+        {351}in(sc, (=DATA_REQ,=seq_27));
+        {358}get appliedInfo(=MRENCLAVE_7,=DCSubj_1,dataUsageStatement_2: bitstring) in
+        {352}let (dataEndpointInfo_4: bitstring,ignored_v: bitstring) = dataUsageStatement_2 in
+        {353}let usagePolicy: policy = getUsagePolicy(dataEndpointInfo_4) in
+        {354}event DC_authenticated(providedData,DCSubj_1);
+        {355}event app_authenticated(providedData,MRENCLAVE_7);
+        {356}event policy_calculated(providedData,usagePolicy);
+        {357}out(sc, (DATA_RES,seq_27,providedData,usagePolicy))
+    )
+) | (
+    {359}!
+    {360}let skEPID_1: skey = skEPID in
+    {361}let cpu_context_3: bitstring = cpu_context in
+    {362}in(c, report_3: bitstring);
+    {363}let (MRENCLAVE_8: bitstring,report_data_3: bitstring,sentMAC_1: bitstring) = report_3 in
+    {364}if verifyMAC(sentMAC_1,MRENCLAVE_8,report_data_3,EGETKEYforReportKey(cpu_context_3)) then
+    {365}let sigRP_1: bitstring = sign(H(report_3),skEPID_1) in
+    {366}let quote_3: bitstring = (report_3,sigRP_1) in
+    {367}out(c, quote_3)
+) | (
+    {368}!
+    {369}in(sc, (seq_28: bitstring,app_code_1: bitstring));
+    {370}if isUsageControlled(app_code_1) then
+    {371}let disclosureInfo_3: bool = isHidden(app_code_1) in
+    {372}let MRENCLAVE_9: bitstring = getMRENCLAVE(app_code_1) in
+    {373}insert appSpecifications(MRENCLAVE_9,disclosureInfo_3);
+    {374}out(sc, (seq_28,MRENCLAVE_9,disclosureInfo_3))
+) | (
+    {375}!
+    {376}in(sc, (seq_29: bitstring,=PS_REQ,MRENCLAVE_10: bitstring));
+    {378}get appSpecifications(=MRENCLAVE_10,disclosureInfo_4: bool) in
+    {377}out(sc, (seq_29,PS_RES,disclosureInfo_4))
+) | (
+    {379}!
+    {380}let skIAS_1: skey = skIAS in
+    {381}in(sc, (seq_30: bitstring,quote_4: bitstring));
+    {382}let (report_4: bitstring,sigRP_2: bitstring) = quote_4 in
+    {383}if (verify(H(report_4),sigRP_2,pkEPID) = true) then
+    {384}new platformInfo_1: bitstring;
+    {385}let attestationVerificationReport_3: bitstring = (quote_4,platformInfo_1) in
+    {386}let sigAVR_3: bitstring = sign(H(attestationVerificationReport_3),skIAS_1) in
+    {387}out(sc, (seq_30,attestationVerificationReport_3,sigAVR_3))
+) | (
+    {388}!
+    {389}let skCA_1: skey = skCA in
+    {390}in(sc, (=CERT_REQ,seq_31: bitstring,hostInfo: bitstring,CSR: bitstring));
+    {391}let (pkHost: pkey,extension_16: bitstring,CSRHostInfo: bitstring) = CSR in
+    {392}if (hostInfo = CSRHostInfo) then
+    {393}let sig_20: bitstring = sign(H(CSR),skCA_1) in
+    {394}let cert: bitstring = (CSR,sig_20) in
+    {395}out(sc, (CERT_RES,seq_31,cert))
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new skEPID: skey;
+{2}let pkEPID: pkey = pk(skEPID) in
+{3}out(c, pkEPID);
+{4}new skCA: skey;
+{5}let pkCA: pkey = pk(skCA) in
+{6}out(c, pkCA);
+{7}new DPInfo: bitstring;
+{8}new skDP: skey;
+{9}let pkDP: pkey = pk(skDP) in
+{10}out(c, pkDP);
+{13}new skIAS: skey;
+{14}let pkIAS: pkey = pk(skIAS) in
+{15}out(c, pkIAS);
+{17}new dc: bitstring;
+{19}new mal_dc: bitstring;
+{22}new dataEndpointInfo: bitstring;
+{18}let DC_DN: bitstring = getDN(dc) in
+{23}let provisionPolicy: bitstring = (DC_DN,true) in
+{24}insert provisionPolicyDB(dataEndpointInfo,provisionPolicy);
+{16}let app_code: bitstring = implementApp(true,true) in
+(
+    {26}!
+    (
+        {29}new seq: bitstring;
+        {30}out(sc, (seq,app_code));
+        {31}in(sc, (=seq,MRENCLAVE: bitstring,disclosureInfo: bool))
+    ) | (
+        {32}new seq_1: bitstring;
+        {33}new skDC: skey;
+        {34}new extension: bitstring;
+        {35}let pkDC: pkey = pk(skDC) in
+        {36}let CSRDC: bitstring = (pkDC,extension,DC_DN) in
+        {37}out(sc, (CERT_REQ,seq_1,DC_DN,CSRDC));
+        {38}in(sc, (=CERT_RES,=seq_1,certDC: bitstring));
+        {40}new seq_2: bitstring;
+        {41}out(sc, (TLS_CLIENT_HELLO,seq_2));
+        {42}in(sc, (=TLS_SERVER_CERTIFICATE,=seq_2,certDP_1: bitstring));
+        {43}let (DPInfo_1: bitstring,pkDP_1: pkey,sigDP: bitstring) = certDP_1 in
+        {44}if (verify(H((DPInfo_1,pkDP_1)),sigDP,pkCA) = true) then
+        {45}out(sc, (TLS_CLIENT_CERTIFICATE,seq_2,certDC));
+        {46}let data: bitstring = (certDP_1,certDC) in
+        {47}let sig_1: bitstring = sign(H(data),skDC) in
+        {48}out(sc, (TLS_CERTIFICATE_VERIFY,seq_2,sig_1));
+        {49}in(sc, (=TLS_FINISHED,=seq_2));
+        {28}let dataEndpointInfo_1: bitstring = dataEndpointInfo in
+        {39}let data_usage_statement: bitstring = (dataEndpointInfo_1,getMRENCLAVE(app_code)) in
+        {50}out(sc, (USAGE_APPLICATION,data_usage_statement,seq_2));
+        {51}in(sc, (=APP_RES,application_result: bitstring,=seq_2))
+    ) | (
+        {52}new seq_3: bitstring;
+        {53}new skDC_1: skey;
+        {54}new extension_1: bitstring;
+        {55}let pkDC_1: pkey = pk(skDC_1) in
+        {56}let CSRDC_1: bitstring = (pkDC_1,extension_1,DC_DN) in
+        {57}out(sc, (CERT_REQ,seq_3,DC_DN,CSRDC_1));
+        {58}in(sc, (=CERT_RES,=seq_3,certDC_1: bitstring));
+        {60}new seq_4: bitstring;
+        {61}out(sc, (APP_CERT_REQ,TLS_CLIENT_CERTIFICATE,seq_4,certDC_1));
+        {59}let sig_2: bitstring = sign(H(certDC_1),skDC_1) in
+        {62}out(sc, (APP_CERT_REQ,TLS_CERTIFICATE_VERIFY,seq_4,sig_2));
+        {63}in(sc, (=APP_CERT_RES,=seq_4));
+        {64}new seq_5: bitstring;
+        {65}out(sc, (APP_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_5,certDC_1));
+        {66}out(sc, (APP_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_5,sig_2));
+        {67}in(sc, (=APP_PROCESS_RES,=seq_5,processedData: bitstring));
+        {68}new seq_6: bitstring;
+        {69}out(sc, (APP_CACHE_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_6,certDC_1));
+        {70}out(sc, (APP_CACHE_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_6,sig_2));
+        {71}in(sc, (=APP_CACHE_PROCESS_RES,=seq_6,processedData_1: bitstring))
+    )
+) | (
+    {72}!
+    {73}let cpu_context_1: bitstring = cpu_context in
+    (
+        {74}in(sc, (=APP_CERT_REQ,=TLS_CLIENT_CERTIFICATE,received_seq: bitstring,certDC_2: bitstring));
+        {75}in(sc, (=APP_CERT_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq,sig_3: bitstring));
+        {76}let (CSR_DC: bitstring,sigDC: bitstring) = certDC_2 in
+        {77}let (pkDC_2: pkey,extension_2: bitstring,DC_DN_1: bitstring) = CSR_DC in
+        {78}if (verify(H(certDC_2),sig_3,pkDC_2) = true) then
+        {79}if (verify(H(CSR_DC),sigDC,pkCA) = true) then
+        {80}new skApp: skey;
+        {81}let pkApp: pkey = pk(skApp) in
+        {82}let report_data: bitstring = HPkey(pkApp) in
+        {83}let report: bitstring = (getMRENCLAVE(app_code),report_data,MAC(H2(getMRENCLAVE(app_code),report_data),EGETKEYforReportKey(cpu_context))) in
+        {84}out(c, report);
+        {85}in(c, quote: bitstring);
+        {86}new seq_7: bitstring;
+        {87}out(sc, (seq_7,quote));
+        {88}in(sc, (=seq_7,attestationVerificationReport: bitstring,sigAVR: bitstring));
+        {90}new seq_8: bitstring;
+        {89}let CSRApp: bitstring = (pkApp,(attestationVerificationReport,sigAVR),DC_DN_1) in
+        {91}out(sc, (CERT_REQ,seq_8,DC_DN_1,CSRApp));
+        {92}in(sc, (=CERT_RES,=seq_8,certApp: bitstring));
+        {93}let sk: skey = EGETKEY(app_code,cpu_context_1) in
+        {95}let sealedCert_1: sealedCert = sealCert(certApp,sk) in
+        {94}let sealedKey_1: sealedKey = sealKey(skApp,sk) in
+        {96}insert sealedKeyTable(DC_DN_1,sealedKey_1,sealedCert_1);
+        {97}out(sc, (APP_CERT_RES,received_seq))
+    ) | (
+        {98}in(sc, (=APP_PROCESS_REQ,=TLS_CLIENT_CERTIFICATE,received_seq_1: bitstring,certDC_3: bitstring));
+        {99}in(sc, (=APP_PROCESS_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq_1,sig_4: bitstring));
+        {100}let (CSR_DC_1: bitstring,sigDC_1: bitstring) = certDC_3 in
+        {101}let (pkDC_3: pkey,extension_3: bitstring,DC_DN_2: bitstring) = CSR_DC_1 in
+        {102}if (verify(H(certDC_3),sig_4,pkDC_3) = true) then
+        {103}if (verify(H(CSR_DC_1),sigDC_1,pkCA) = true) then
+        {127}get sealedKeyTable(=DC_DN_2,sealedKey_2: sealedKey,sealedCert_2: sealedCert) in
+        {104}let sk_1: skey = EGETKEY(app_code,cpu_context_1) in
+        {105}let keyApp: skey = unsealKey(sealedKey_2,sk_1) in
+        {106}let certApp_1: bitstring = unsealCert(sealedCert_2,sk_1) in
+        {108}new seq_9: bitstring;
+        {109}out(sc, (TLS_CLIENT_HELLO,seq_9));
+        {110}in(sc, (=TLS_SERVER_CERTIFICATE,=seq_9,certDP_2: bitstring));
+        {111}let (DPInfo_2: bitstring,pkDP_2: pkey,sigDP_1: bitstring) = certDP_2 in
+        {112}if (verify(H((DPInfo_2,pkDP_2)),sigDP_1,pkCA) = true) then
+        {113}out(sc, (TLS_CLIENT_CERTIFICATE,seq_9,certApp_1));
+        {114}let data_1: bitstring = (certDP_2,certApp_1) in
+        {115}let sig_5: bitstring = sign(H(data_1),keyApp) in
+        {116}out(sc, (TLS_CERTIFICATE_VERIFY,seq_9,sig_5));
+        {117}in(sc, (=TLS_FINISHED,=seq_9));
+        {118}out(sc, (DATA_REQ,seq_9));
+        {119}in(sc, (=DATA_RES,=seq_9,data_2: bitstring,UP: policy));
+        {120}event policy_checked(data_2,UP);
+        {107}let MRENCLAVE_1: bitstring = getMRENCLAVE(app_code) in
+        {122}event data_processed(data_2,DC_DN_2,MRENCLAVE_1,UP);
+        {123}let storedData: bitstring = (data_2,UP) in
+        {124}let sealedData_1: sealedData = sealData(storedData,sk_1) in
+        {125}insert sealedDataTable(DC_DN_2,sealedData_1);
+        {121}let processedData_2: bitstring = processData(data_2) in
+        {126}out(sc, (APP_PROCESS_RES,received_seq_1,processedData_2))
+    ) | (
+        {128}in(sc, (=APP_CACHE_PROCESS_REQ,=TLS_CLIENT_CERTIFICATE,received_seq_2: bitstring,certDC_4: bitstring));
+        {129}in(sc, (=APP_CACHE_PROCESS_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq_2,sig_6: bitstring));
+        {130}let (CSR_DC_2: bitstring,sigDC_2: bitstring) = certDC_4 in
+        {131}let (pkDC_4: pkey,extension_4: bitstring,DC_DN_3: bitstring) = CSR_DC_2 in
+        {132}if (verify(H(certDC_4),sig_6,pkDC_4) = true) then
+        {133}if (verify(H(CSR_DC_2),sigDC_2,pkCA) = true) then
+        {142}get sealedDataTable(=DC_DN_3,sealedData_2: sealedData) in
+        {135}let sk_2: skey = EGETKEY(app_code,cpu_context_1) in
+        {136}let unsealedData: bitstring = unsealData(sealedData_2,sk_2) in
+        {137}let (data_3: bitstring,UP_1: policy) = unsealedData in
+        {138}event cached_policy_checked(data_3,UP_1);
+        {134}let MRENCLAVE_2: bitstring = getMRENCLAVE(app_code) in
+        {140}event cached_data_processed(data_3,DC_DN_3,MRENCLAVE_2,UP_1);
+        {139}let processedData_3: bitstring = processData(data_3) in
+        {141}out(sc, (APP_CACHE_PROCESS_RES,received_seq_2,processedData_3))
+    )
+) | (
+    {21}let mal_app_code: bitstring = implementApp(false,false) in
+    (
+        {143}!
+        (
+            {146}new seq_10: bitstring;
+            {147}out(sc, (seq_10,mal_app_code));
+            {148}in(sc, (=seq_10,MRENCLAVE_3: bitstring,disclosureInfo_1: bool))
+        ) | (
+            {20}let MalDC_DN: bitstring = getDN(mal_dc) in
+            (
+                {149}new seq_11: bitstring;
+                {150}new skDC_2: skey;
+                {151}new extension_5: bitstring;
+                {152}let pkDC_5: pkey = pk(skDC_2) in
+                {153}let CSRDC_2: bitstring = (pkDC_5,extension_5,MalDC_DN) in
+                {154}out(sc, (CERT_REQ,seq_11,MalDC_DN,CSRDC_2));
+                {155}in(sc, (=CERT_RES,=seq_11,certDC_5: bitstring));
+                {157}new seq_12: bitstring;
+                {158}out(sc, (TLS_CLIENT_HELLO,seq_12));
+                {159}in(sc, (=TLS_SERVER_CERTIFICATE,=seq_12,certDP_3: bitstring));
+                {160}let (DPInfo_3: bitstring,pkDP_3: pkey,sigDP_2: bitstring) = certDP_3 in
+                {161}if (verify(H((DPInfo_3,pkDP_3)),sigDP_2,pkCA) = true) then
+                {162}out(sc, (TLS_CLIENT_CERTIFICATE,seq_12,certDC_5));
+                {163}let data_4: bitstring = (certDP_3,certDC_5) in
+                {164}let sig_7: bitstring = sign(H(data_4),skDC_2) in
+                {165}out(sc, (TLS_CERTIFICATE_VERIFY,seq_12,sig_7));
+                {166}in(sc, (=TLS_FINISHED,=seq_12));
+                {145}let dataEndpointInfo_2: bitstring = dataEndpointInfo in
+                {156}let data_usage_statement_1: bitstring = (dataEndpointInfo_2,getMRENCLAVE(mal_app_code)) in
+                {167}out(sc, (USAGE_APPLICATION,data_usage_statement_1,seq_12));
+                {168}in(sc, (=APP_RES,application_result_1: bitstring,=seq_12))
+            ) | (
+                {169}new seq_13: bitstring;
+                {170}new skDC_3: skey;
+                {171}new extension_6: bitstring;
+                {172}let pkDC_6: pkey = pk(skDC_3) in
+                {173}let CSRDC_3: bitstring = (pkDC_6,extension_6,MalDC_DN) in
+                {174}out(sc, (CERT_REQ,seq_13,MalDC_DN,CSRDC_3));
+                {175}in(sc, (=CERT_RES,=seq_13,certDC_6: bitstring));
+                {177}out(sc, (APP_CERT_REQ,TLS_CLIENT_CERTIFICATE,seq_13,certDC_6));
+                {176}let sig_8: bitstring = sign(H(certDC_6),skDC_3) in
+                {178}out(sc, (APP_CERT_REQ,TLS_CERTIFICATE_VERIFY,seq_13,sig_8));
+                {179}in(sc, (=APP_CERT_RES,=seq_13))
+            ) | (
+                {180}new seq_14: bitstring;
+                {181}new skDC_4: skey;
+                {182}new extension_7: bitstring;
+                {183}let pkDC_7: pkey = pk(skDC_4) in
+                {184}let CSRDC_4: bitstring = (pkDC_7,extension_7,MalDC_DN) in
+                {185}out(sc, (CERT_REQ,seq_14,MalDC_DN,CSRDC_4));
+                {186}in(sc, (=CERT_RES,=seq_14,certDC_7: bitstring));
+                {188}new seq_15: bitstring;
+                {189}out(sc, (APP_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_15,certDC_7));
+                {187}let sig_9: bitstring = sign(H(certDC_7),skDC_4) in
+                {190}out(sc, (APP_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_15,sig_9));
+                {191}in(sc, (=APP_PROCESS_RES,=seq_15,processedData_4: bitstring));
+                {192}out(c, processedData_4)
+            ) | (
+                {193}new seq_16: bitstring;
+                {194}new skDC_5: skey;
+                {195}new extension_8: bitstring;
+                {196}let pkDC_8: pkey = pk(skDC_5) in
+                {197}let CSRDC_5: bitstring = (pkDC_8,extension_8,MalDC_DN) in
+                {198}out(sc, (CERT_REQ,seq_16,MalDC_DN,CSRDC_5));
+                {199}in(sc, (=CERT_RES,=seq_16,certDC_8: bitstring));
+                {201}new seq_17: bitstring;
+                {202}out(sc, (APP_CACHE_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_17,certDC_8));
+                {200}let sig_10: bitstring = sign(H(certDC_8),skDC_5) in
+                {203}out(sc, (APP_CACHE_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_17,sig_10));
+                {204}in(sc, (=APP_CACHE_PROCESS_RES,=seq_17,processedData_5: bitstring));
+                {205}out(c, processedData_5)
+            ) | (
+                {206}new seq_18: bitstring;
+                {207}new skDC_6: skey;
+                {208}new extension_9: bitstring;
+                {209}let pkDC_9: pkey = pk(skDC_6) in
+                {210}let CSRDC_6: bitstring = (pkDC_9,extension_9,MalDC_DN) in
+                {211}out(sc, (CERT_REQ,seq_18,MalDC_DN,CSRDC_6));
+                {212}in(sc, (=CERT_RES,=seq_18,certDC_9: bitstring));
+                {214}out(sc, (MAL_APP_CERT_REQ,TLS_CLIENT_CERTIFICATE,seq_18,certDC_9));
+                {213}let sig_11: bitstring = sign(H(certDC_9),skDC_6) in
+                {215}out(sc, (MAL_APP_CERT_REQ,TLS_CERTIFICATE_VERIFY,seq_18,sig_11));
+                {216}in(sc, (=MAL_APP_CERT_RES,=seq_18))
+            ) | (
+                {217}new seq_19: bitstring;
+                {218}new skDC_7: skey;
+                {219}new extension_10: bitstring;
+                {220}let pkDC_10: pkey = pk(skDC_7) in
+                {221}let CSRDC_7: bitstring = (pkDC_10,extension_10,MalDC_DN) in
+                {222}out(sc, (CERT_REQ,seq_19,MalDC_DN,CSRDC_7));
+                {223}in(sc, (=CERT_RES,=seq_19,certDC_10: bitstring));
+                {225}new seq_20: bitstring;
+                {226}out(sc, (MAL_APP_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_20,certDC_10));
+                {224}let sig_12: bitstring = sign(H(certDC_10),skDC_7) in
+                {227}out(sc, (MAL_APP_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_20,sig_12));
+                {228}in(sc, (=MAL_APP_PROCESS_RES,=seq_20,processedData_6: bitstring));
+                {229}out(c, processedData_6)
+            ) | (
+                {230}new seq_21: bitstring;
+                {231}new skDC_8: skey;
+                {232}new extension_11: bitstring;
+                {233}let pkDC_11: pkey = pk(skDC_8) in
+                {234}let CSRDC_8: bitstring = (pkDC_11,extension_11,MalDC_DN) in
+                {235}out(sc, (CERT_REQ,seq_21,MalDC_DN,CSRDC_8));
+                {236}in(sc, (=CERT_RES,=seq_21,certDC_11: bitstring));
+                {238}new seq_22: bitstring;
+                {239}out(sc, (MAL_APP_CACHE_PROCESS_REQ,TLS_CLIENT_CERTIFICATE,seq_22,certDC_11));
+                {237}let sig_13: bitstring = sign(H(certDC_11),skDC_8) in
+                {240}out(sc, (MAL_APP_CACHE_PROCESS_REQ,TLS_CERTIFICATE_VERIFY,seq_22,sig_13));
+                {241}in(sc, (=MAL_APP_CACHE_PROCESS_RES,=seq_22,processedData_7: bitstring));
+                {242}out(c, processedData_7)
+            )
+        )
+    ) | (
+        {243}!
+        {244}let cpu_context_2: bitstring = cpu_context in
+        (
+            {245}in(sc, (=MAL_APP_CERT_REQ,=TLS_CLIENT_CERTIFICATE,received_seq_3: bitstring,certDC_12: bitstring));
+            {246}in(sc, (=MAL_APP_CERT_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq_3,sig_14: bitstring));
+            {247}let (CSR_DC_3: bitstring,sigDC_3: bitstring) = certDC_12 in
+            {248}let (pkDC_12: pkey,extension_12: bitstring,DC_DN_4: bitstring) = CSR_DC_3 in
+            {249}if (verify(H(certDC_12),sig_14,pkDC_12) = true) then
+            {250}if (verify(H(CSR_DC_3),sigDC_3,pkCA) = true) then
+            {251}new skApp_1: skey;
+            {252}let pkApp_1: pkey = pk(skApp_1) in
+            {253}let report_data_1: bitstring = HPkey(pkApp_1) in
+            {254}let report_1: bitstring = (getMRENCLAVE(mal_app_code),report_data_1,MAC(H2(getMRENCLAVE(mal_app_code),report_data_1),EGETKEYforReportKey(cpu_context))) in
+            {255}out(c, report_1);
+            {256}in(c, quote_1: bitstring);
+            {257}new seq_23: bitstring;
+            {258}out(sc, (seq_23,quote_1));
+            {259}in(sc, (=seq_23,attestationVerificationReport_1: bitstring,sigAVR_1: bitstring));
+            {261}new seq_24: bitstring;
+            {260}let CSRApp_1: bitstring = (pkApp_1,(attestationVerificationReport_1,sigAVR_1),DC_DN_4) in
+            {262}out(sc, (CERT_REQ,seq_24,DC_DN_4,CSRApp_1));
+            {263}in(sc, (=CERT_RES,=seq_24,certApp_2: bitstring));
+            {264}let sk_3: skey = EGETKEY(mal_app_code,cpu_context_2) in
+            {266}let sealedCert_3: sealedCert = sealCert(certApp_2,sk_3) in
+            {265}let sealedKey_3: sealedKey = sealKey(skApp_1,sk_3) in
+            {267}insert sealedKeyTable(DC_DN_4,sealedKey_3,sealedCert_3);
+            {268}out(sc, (MAL_APP_CERT_RES,received_seq_3))
+        ) | (
+            {269}in(sc, (=MAL_APP_PROCESS_REQ,=TLS_CLIENT_CERTIFICATE,received_seq_4: bitstring,certDC_13: bitstring));
+            {270}in(sc, (=MAL_APP_PROCESS_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq_4,sig_15: bitstring));
+            {271}let (CSR_DC_4: bitstring,sigDC_4: bitstring) = certDC_13 in
+            {272}let (pkDC_13: pkey,extension_13: bitstring,DC_DN_5: bitstring) = CSR_DC_4 in
+            {273}if (verify(H(certDC_13),sig_15,pkDC_13) = true) then
+            {274}if (verify(H(CSR_DC_4),sigDC_4,pkCA) = true) then
+            {297}get sealedKeyTable(=DC_DN_5,sealedKey_4: sealedKey,sealedCert_4: sealedCert) in
+            {275}let sk_4: skey = EGETKEY(mal_app_code,cpu_context_2) in
+            {276}let keyApp_1: skey = unsealKey(sealedKey_4,sk_4) in
+            {277}let certApp_3: bitstring = unsealCert(sealedCert_4,sk_4) in
+            {279}new seq_25: bitstring;
+            {280}out(sc, (TLS_CLIENT_HELLO,seq_25));
+            {281}in(sc, (=TLS_SERVER_CERTIFICATE,=seq_25,certDP_4: bitstring));
+            {282}let (DPInfo_4: bitstring,pkDP_4: pkey,sigDP_3: bitstring) = certDP_4 in
+            {283}if (verify(H((DPInfo_4,pkDP_4)),sigDP_3,pkCA) = true) then
+            {284}out(sc, (TLS_CLIENT_CERTIFICATE,seq_25,certApp_3));
+            {285}let data_5: bitstring = (certDP_4,certApp_3) in
+            {286}let sig_16: bitstring = sign(H(data_5),keyApp_1) in
+            {287}out(sc, (TLS_CERTIFICATE_VERIFY,seq_25,sig_16));
+            {288}in(sc, (=TLS_FINISHED,=seq_25));
+            {289}out(sc, (DATA_REQ,seq_25));
+            {290}in(sc, (=DATA_RES,=seq_25,data_6: bitstring,UP_2: policy));
+            {278}let MRENCLAVE_4: bitstring = getMRENCLAVE(mal_app_code) in
+            {292}event data_processed(data_6,DC_DN_5,MRENCLAVE_4,UP_2);
+            {293}let storedData_1: bitstring = (data_6,UP_2) in
+            {294}let sealedData_3: sealedData = sealData(storedData_1,sk_4) in
+            {295}insert sealedDataTable(DC_DN_5,sealedData_3);
+            {291}let processedData_8: bitstring = malProcessData(data_6) in
+            {296}out(sc, (MAL_APP_PROCESS_RES,received_seq_4,processedData_8))
+        ) | (
+            {298}in(sc, (=MAL_APP_CACHE_PROCESS_REQ,=TLS_CLIENT_CERTIFICATE,received_seq_5: bitstring,certDC_14: bitstring));
+            {299}in(sc, (=MAL_APP_CACHE_PROCESS_REQ,=TLS_CERTIFICATE_VERIFY,=received_seq_5,sig_17: bitstring));
+            {300}let (CSR_DC_5: bitstring,sigDC_5: bitstring) = certDC_14 in
+            {301}let (pkDC_14: pkey,extension_14: bitstring,DC_DN_6: bitstring) = CSR_DC_5 in
+            {302}if (verify(H(certDC_14),sig_17,pkDC_14) = true) then
+            {303}if (verify(H(CSR_DC_5),sigDC_5,pkCA) = true) then
+            {311}get sealedDataTable(=DC_DN_6,sealedData_4: sealedData) in
+            {305}let sk_5: skey = EGETKEY(mal_app_code,cpu_context_2) in
+            {306}let unsealedData_1: bitstring = unsealData(sealedData_4,sk_5) in
+            {307}let (data_7: bitstring,UP_3: policy) = unsealedData_1 in
+            {304}let MRENCLAVE_5: bitstring = getMRENCLAVE(mal_app_code) in
+            {309}event cached_data_processed(data_7,DC_DN_6,MRENCLAVE_5,UP_3);
+            {308}let processedData_9: bitstring = malProcessData(data_7) in
+            {310}out(sc, (MAL_APP_CACHE_PROCESS_RES,received_seq_5,processedData_9))
+        )
+    ) | (
+        {312}!
+        {11}let sig: bitstring = sign(H((DPInfo,pkDP)),skCA) in
+        {12}let certDP: bitstring = (DPInfo,pkDP,sig) in
+        (
+            {314}in(sc, (=TLS_CLIENT_HELLO,seq_26: bitstring));
+            {315}out(sc, (TLS_SERVER_CERTIFICATE,seq_26,certDP));
+            {316}in(sc, (=TLS_CLIENT_CERTIFICATE,=seq_26,certClient: bitstring));
+            {317}in(sc, (=TLS_CERTIFICATE_VERIFY,=seq_26,sig_18: bitstring));
+            {318}let (CSRClient: bitstring,sigClient: bitstring) = certClient in
+            {319}let (pkClient: pkey,extension_15: bitstring,DCSubj: bitstring) = CSRClient in
+            {320}let data_8: bitstring = (certDP,certClient) in
+            {321}if (verify(H(data_8),sig_18,pkClient) = true) then
+            {322}if (verify(H(CSRClient),sigClient,pkCA) = true) then
+            {323}out(sc, (TLS_FINISHED,seq_26));
+            {324}in(sc, (=USAGE_APPLICATION,dataUsageStatement_1: bitstring,=seq_26));
+            {325}let (dataEndpointInfo_3: bitstring,MRENCLAVE_6: bitstring) = dataUsageStatement_1 in
+            {326}new seq_sc: bitstring;
+            {327}out(sc, (seq_sc,PS_REQ,MRENCLAVE_6));
+            {328}in(sc, (=seq_sc,=PS_RES,disclosureInfo_2: bool));
+            {335}get provisionPolicyDB(=dataEndpointInfo_3,provisionPolicy_1: bitstring) in
+            {329}let (allowedDCSubj: bitstring,is_allowed_disclosure: bool) = provisionPolicy_1 in
+            {330}if (allowedDCSubj = DCSubj) then
+            {331}if (not(is_allowed_disclosure) || disclosureInfo_2) then
+            {332}insert appliedInfo(MRENCLAVE_6,DCSubj,dataUsageStatement_1);
+            {333}new application_result_2: bitstring;
+            {334}out(sc, (APP_RES,application_result_2,seq_26))
+        ) | (
+            {336}in(sc, (=TLS_CLIENT_HELLO,seq_27: bitstring));
+            {337}out(sc, (TLS_SERVER_CERTIFICATE,seq_27,certDP));
+            {338}in(sc, (=TLS_CLIENT_CERTIFICATE,=seq_27,certClient_1: bitstring));
+            {339}in(sc, (=TLS_CERTIFICATE_VERIFY,=seq_27,sig_19: bitstring));
+            {340}let (CSRClient_1: bitstring,sigClient_1: bitstring) = certClient_1 in
+            {341}let (pkClient_1: pkey,(attestationVerificationReport_2: bitstring,sigAVR_2: bitstring),DCSubj_1: bitstring) = CSRClient_1 in
+            {342}let (quote_2: bitstring,platformInfo: bitstring) = attestationVerificationReport_2 in
+            {343}let (report_2: bitstring,sigRP: bitstring) = quote_2 in
+            {344}let (MRENCLAVE_7: bitstring,report_data_2: bitstring,sentMAC: bitstring) = report_2 in
+            {345}let data_9: bitstring = (certDP,certClient_1) in
+            {346}if (verify(H(data_9),sig_19,pkClient_1) = true) then
+            {347}if (verify(H(CSRClient_1),sigClient_1,pkCA) = true) then
+            {348}if (report_data_2 = HPkey(pkClient_1)) then
+            {349}if (verify(H(attestationVerificationReport_2),sigAVR_2,pkIAS) = true) then
+            {350}out(sc, (TLS_FINISHED,seq_27));
+            {351}in(sc, (=DATA_REQ,=seq_27));
+            {358}get appliedInfo(=MRENCLAVE_7,=DCSubj_1,dataUsageStatement_2: bitstring) in
+            {352}let (dataEndpointInfo_4: bitstring,ignored_v: bitstring) = dataUsageStatement_2 in
+            {354}event DC_authenticated(providedData,DCSubj_1);
+            {355}event app_authenticated(providedData,MRENCLAVE_7);
+            {353}let usagePolicy: policy = getUsagePolicy(dataEndpointInfo_4) in
+            {356}event policy_calculated(providedData,usagePolicy);
+            {357}out(sc, (DATA_RES,seq_27,providedData,usagePolicy))
+        )
+    ) | (
+        {359}!
+        {362}in(c, report_3: bitstring);
+        {363}let (MRENCLAVE_8: bitstring,report_data_3: bitstring,sentMAC_1: bitstring) = report_3 in
+        {361}let cpu_context_3: bitstring = cpu_context in
+        {364}if verifyMAC(sentMAC_1,MRENCLAVE_8,report_data_3,EGETKEYforReportKey(cpu_context_3)) then
+        {360}let skEPID_1: skey = skEPID in
+        {365}let sigRP_1: bitstring = sign(H(report_3),skEPID_1) in
+        {366}let quote_3: bitstring = (report_3,sigRP_1) in
+        {367}out(c, quote_3)
+    ) | (
+        {368}!
+        {369}in(sc, (seq_28: bitstring,app_code_1: bitstring));
+        {370}if isUsageControlled(app_code_1) then
+        {371}let disclosureInfo_3: bool = isHidden(app_code_1) in
+        {372}let MRENCLAVE_9: bitstring = getMRENCLAVE(app_code_1) in
+        {373}insert appSpecifications(MRENCLAVE_9,disclosureInfo_3);
+        {374}out(sc, (seq_28,MRENCLAVE_9,disclosureInfo_3))
+    ) | (
+        {375}!
+        {376}in(sc, (seq_29: bitstring,=PS_REQ,MRENCLAVE_10: bitstring));
+        {378}get appSpecifications(=MRENCLAVE_10,disclosureInfo_4: bool) in
+        {377}out(sc, (seq_29,PS_RES,disclosureInfo_4))
+    ) | (
+        {379}!
+        {381}in(sc, (seq_30: bitstring,quote_4: bitstring));
+        {382}let (report_4: bitstring,sigRP_2: bitstring) = quote_4 in
+        {383}if (verify(H(report_4),sigRP_2,pkEPID) = true) then
+        {384}new platformInfo_1: bitstring;
+        {385}let attestationVerificationReport_3: bitstring = (quote_4,platformInfo_1) in
+        {380}let skIAS_1: skey = skIAS in
+        {386}let sigAVR_3: bitstring = sign(H(attestationVerificationReport_3),skIAS_1) in
+        {387}out(sc, (seq_30,attestationVerificationReport_3,sigAVR_3))
+    ) | (
+        {388}!
+        {390}in(sc, (=CERT_REQ,seq_31: bitstring,hostInfo: bitstring,CSR: bitstring));
+        {391}let (pkHost: pkey,extension_16: bitstring,CSRHostInfo: bitstring) = CSR in
+        {392}if (hostInfo = CSRHostInfo) then
+        {389}let skCA_1: skey = skCA in
+        {393}let sig_20: bitstring = sign(H(CSR),skCA_1) in
+        {394}let cert: bitstring = (CSR,sig_20) in
+        {395}out(sc, (CERT_RES,seq_31,cert))
+    )
+)
+
+-- Query not attacker(providedData[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 198 rules (83 with conclusion selected). Queue: 101 rules.
+400 rules inserted. Base: 366 rules (110 with conclusion selected). Queue: 53 rules.
+600 rules inserted. Base: 473 rules (143 with conclusion selected). Queue: 63 rules.
+800 rules inserted. Base: 573 rules (179 with conclusion selected). Queue: 30 rules.
+1000 rules inserted. Base: 663 rules (210 with conclusion selected). Queue: 35 rules.
+1200 rules inserted. Base: 760 rules (223 with conclusion selected). Queue: 36 rules.
+1400 rules inserted. Base: 841 rules (266 with conclusion selected). Queue: 3 rules.
+Starting query not attacker(providedData[])
+RESULT not attacker(providedData[]) is true.
+-- Query not attacker(processData(providedData[])) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 198 rules (83 with conclusion selected). Queue: 101 rules.
+400 rules inserted. Base: 366 rules (110 with conclusion selected). Queue: 53 rules.
+600 rules inserted. Base: 473 rules (143 with conclusion selected). Queue: 63 rules.
+800 rules inserted. Base: 573 rules (179 with conclusion selected). Queue: 30 rules.
+1000 rules inserted. Base: 663 rules (210 with conclusion selected). Queue: 35 rules.
+1200 rules inserted. Base: 760 rules (223 with conclusion selected). Queue: 36 rules.
+1400 rules inserted. Base: 841 rules (266 with conclusion selected). Queue: 3 rules.
+Starting query not attacker(processData(providedData[]))
+RESULT not attacker(processData(providedData[])) is true.
+-- Query event(data_processed(data_10,dc_3,app,usagePolicy_1)) ==> (event(policy_checked(data_10,usagePolicy_1)) ==> event(policy_calculated(data_10,usagePolicy_1))) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 198 rules (83 with conclusion selected). Queue: 104 rules.
+400 rules inserted. Base: 370 rules (110 with conclusion selected). Queue: 63 rules.
+600 rules inserted. Base: 473 rules (137 with conclusion selected). Queue: 37 rules.
+800 rules inserted. Base: 576 rules (177 with conclusion selected). Queue: 31 rules.
+1000 rules inserted. Base: 663 rules (203 with conclusion selected). Queue: 32 rules.
+1200 rules inserted. Base: 773 rules (223 with conclusion selected). Queue: 69 rules.
+1400 rules inserted. Base: 865 rules (253 with conclusion selected). Queue: 21 rules.
+Starting query event(data_processed(data_10,dc_3,app,usagePolicy_1)) ==> (event(policy_checked(data_10,usagePolicy_1)) ==> event(policy_calculated(data_10,usagePolicy_1)))
+goal reachable: b-event(policy_checked(providedData[],getUsagePolicy(dataEndpointInfo[]))) && b-event(policy_calculated(providedData[],getUsagePolicy(dataEndpointInfo[]))) -> event(data_processed(providedData[],getDN(dc[]),getMRENCLAVE(implementApp(true,true)),getUsagePolicy(dataEndpointInfo[])))
+The 1st, 2nd hypotheses occur strictly before the conclusion.
+goal reachable: b-event(policy_checked(providedData[],getUsagePolicy(dataEndpointInfo[]))) && b-event(policy_calculated(providedData[],getUsagePolicy(dataEndpointInfo[]))) -> event(data_processed(providedData[],getDN(dc[]),getMRENCLAVE(implementApp(true,true)),getUsagePolicy(dataEndpointInfo[]))) && event(policy_checked(providedData[],getUsagePolicy(dataEndpointInfo[])))
+The 1st, 2nd hypotheses occur strictly before the 1st conclusion.
+The 2nd hypothesis occurs strictly before the 2nd conclusion.
+RESULT event(data_processed(data_10,dc_3,app,usagePolicy_1)) ==> (event(policy_checked(data_10,usagePolicy_1)) ==> event(policy_calculated(data_10,usagePolicy_1))) is true.
+-- Query event(cached_data_processed(data_10,dc_3,app,usagePolicy_1)) ==> (event(cached_policy_checked(data_10,usagePolicy_1)) ==> event(policy_calculated(data_10,usagePolicy_1))) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 198 rules (83 with conclusion selected). Queue: 104 rules.
+400 rules inserted. Base: 370 rules (110 with conclusion selected). Queue: 72 rules.
+600 rules inserted. Base: 475 rules (134 with conclusion selected). Queue: 23 rules.
+800 rules inserted. Base: 573 rules (172 with conclusion selected). Queue: 29 rules.
+1000 rules inserted. Base: 663 rules (204 with conclusion selected). Queue: 31 rules.
+1200 rules inserted. Base: 767 rules (223 with conclusion selected). Queue: 43 rules.
+1400 rules inserted. Base: 846 rules (263 with conclusion selected). Queue: 3 rules.
+Starting query event(cached_data_processed(data_10,dc_3,app,usagePolicy_1)) ==> (event(cached_policy_checked(data_10,usagePolicy_1)) ==> event(policy_calculated(data_10,usagePolicy_1)))
+goal reachable: b-event(cached_policy_checked(providedData[],getUsagePolicy(dataEndpointInfo[]))) && b-event(policy_calculated(providedData[],getUsagePolicy(dataEndpointInfo[]))) -> event(cached_data_processed(providedData[],getDN(dc[]),getMRENCLAVE(implementApp(true,true)),getUsagePolicy(dataEndpointInfo[])))
+The 1st, 2nd hypotheses occur strictly before the conclusion.
+goal reachable: b-event(cached_policy_checked(providedData[],getUsagePolicy(dataEndpointInfo[]))) && b-event(policy_calculated(providedData[],getUsagePolicy(dataEndpointInfo[]))) -> event(cached_data_processed(providedData[],getDN(dc[]),getMRENCLAVE(implementApp(true,true)),getUsagePolicy(dataEndpointInfo[]))) && event(cached_policy_checked(providedData[],getUsagePolicy(dataEndpointInfo[])))
+The 1st, 2nd hypotheses occur strictly before the 1st conclusion.
+The 2nd hypothesis occurs strictly before the 2nd conclusion.
+RESULT event(cached_data_processed(data_10,dc_3,app,usagePolicy_1)) ==> (event(cached_policy_checked(data_10,usagePolicy_1)) ==> event(policy_calculated(data_10,usagePolicy_1))) is true.
+-- Query event(cached_data_processed(data_10,DC_DN_7,app,usagePolicy_1)) ==> event(DC_authenticated(data_10,DC_DN_7)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 198 rules (83 with conclusion selected). Queue: 103 rules.
+400 rules inserted. Base: 368 rules (110 with conclusion selected). Queue: 66 rules.
+600 rules inserted. Base: 473 rules (137 with conclusion selected). Queue: 38 rules.
+800 rules inserted. Base: 575 rules (176 with conclusion selected). Queue: 31 rules.
+1000 rules inserted. Base: 664 rules (207 with conclusion selected). Queue: 34 rules.
+1200 rules inserted. Base: 764 rules (223 with conclusion selected). Queue: 41 rules.
+1400 rules inserted. Base: 846 rules (264 with conclusion selected). Queue: 3 rules.
+Starting query event(cached_data_processed(data_10,DC_DN_7,app,usagePolicy_1)) ==> event(DC_authenticated(data_10,DC_DN_7))
+goal reachable: b-event(DC_authenticated(providedData[],getDN(dc[]))) -> event(cached_data_processed(providedData[],getDN(dc[]),getMRENCLAVE(implementApp(true,true)),getUsagePolicy(dataEndpointInfo[])))
+RESULT event(cached_data_processed(data_10,DC_DN_7,app,usagePolicy_1)) ==> event(DC_authenticated(data_10,DC_DN_7)) is true.
+-- Query event(cached_data_processed(data_10,dc_3,app,usagePolicy_1)) ==> event(app_authenticated(data_10,app)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 198 rules (83 with conclusion selected). Queue: 103 rules.
+400 rules inserted. Base: 368 rules (110 with conclusion selected). Queue: 66 rules.
+600 rules inserted. Base: 473 rules (137 with conclusion selected). Queue: 38 rules.
+800 rules inserted. Base: 575 rules (176 with conclusion selected). Queue: 31 rules.
+1000 rules inserted. Base: 664 rules (207 with conclusion selected). Queue: 34 rules.
+1200 rules inserted. Base: 764 rules (223 with conclusion selected). Queue: 41 rules.
+1400 rules inserted. Base: 846 rules (264 with conclusion selected). Queue: 3 rules.
+Starting query event(cached_data_processed(data_10,dc_3,app,usagePolicy_1)) ==> event(app_authenticated(data_10,app))
+goal reachable: b-event(app_authenticated(providedData[],getMRENCLAVE(implementApp(true,true)))) -> event(cached_data_processed(providedData[],getDN(dc[]),getMRENCLAVE(implementApp(true,true)),getUsagePolicy(dataEndpointInfo[])))
+RESULT event(cached_data_processed(data_10,dc_3,app,usagePolicy_1)) ==> event(app_authenticated(data_10,app)) is true.
+-- Query event(data_processed(data_10,DC_DN_7,app,usagePolicy_1)) ==> event(DC_authenticated(data_10,DC_DN_7)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 198 rules (83 with conclusion selected). Queue: 103 rules.
+400 rules inserted. Base: 368 rules (110 with conclusion selected). Queue: 60 rules.
+600 rules inserted. Base: 474 rules (140 with conclusion selected). Queue: 51 rules.
+800 rules inserted. Base: 575 rules (178 with conclusion selected). Queue: 31 rules.
+1000 rules inserted. Base: 664 rules (206 with conclusion selected). Queue: 34 rules.
+1200 rules inserted. Base: 767 rules (223 with conclusion selected). Queue: 58 rules.
+1400 rules inserted. Base: 858 rules (254 with conclusion selected). Queue: 9 rules.
+Starting query event(data_processed(data_10,DC_DN_7,app,usagePolicy_1)) ==> event(DC_authenticated(data_10,DC_DN_7))
+goal reachable: b-event(DC_authenticated(providedData[],getDN(dc[]))) -> event(data_processed(providedData[],getDN(dc[]),getMRENCLAVE(implementApp(true,true)),getUsagePolicy(dataEndpointInfo[])))
+RESULT event(data_processed(data_10,DC_DN_7,app,usagePolicy_1)) ==> event(DC_authenticated(data_10,DC_DN_7)) is true.
+-- Query event(data_processed(data_10,dc_3,app,usagePolicy_1)) ==> event(app_authenticated(data_10,app)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 198 rules (83 with conclusion selected). Queue: 103 rules.
+400 rules inserted. Base: 368 rules (110 with conclusion selected). Queue: 60 rules.
+600 rules inserted. Base: 474 rules (140 with conclusion selected). Queue: 51 rules.
+800 rules inserted. Base: 575 rules (178 with conclusion selected). Queue: 31 rules.
+1000 rules inserted. Base: 664 rules (206 with conclusion selected). Queue: 34 rules.
+1200 rules inserted. Base: 767 rules (223 with conclusion selected). Queue: 58 rules.
+1400 rules inserted. Base: 858 rules (254 with conclusion selected). Queue: 9 rules.
+Starting query event(data_processed(data_10,dc_3,app,usagePolicy_1)) ==> event(app_authenticated(data_10,app))
+goal reachable: b-event(app_authenticated(providedData[],getMRENCLAVE(implementApp(true,true)))) -> event(data_processed(providedData[],getDN(dc[]),getMRENCLAVE(implementApp(true,true)),getUsagePolicy(dataEndpointInfo[])))
+RESULT event(data_processed(data_10,dc_3,app,usagePolicy_1)) ==> event(app_authenticated(data_10,app)) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(providedData[]) is true.
+
+Query not attacker(processData(providedData[])) is true.
+
+Query event(data_processed(data_10,dc_3,app,usagePolicy_1)) ==> (event(policy_checked(data_10,usagePolicy_1)) ==> event(policy_calculated(data_10,usagePolicy_1))) is true.
+
+Query event(cached_data_processed(data_10,dc_3,app,usagePolicy_1)) ==> (event(cached_policy_checked(data_10,usagePolicy_1)) ==> event(policy_calculated(data_10,usagePolicy_1))) is true.
+
+Query event(cached_data_processed(data_10,DC_DN_7,app,usagePolicy_1)) ==> event(DC_authenticated(data_10,DC_DN_7)) is true.
+
+Query event(cached_data_processed(data_10,dc_3,app,usagePolicy_1)) ==> event(app_authenticated(data_10,app)) is true.
+
+Query event(data_processed(data_10,DC_DN_7,app,usagePolicy_1)) ==> event(DC_authenticated(data_10,DC_DN_7)) is true.
+
+Query event(data_processed(data_10,dc_3,app,usagePolicy_1)) ==> event(app_authenticated(data_10,app)) is true.
+
+--------------------------------------------------------------
+

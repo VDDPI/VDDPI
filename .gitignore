@@ -1,0 +1,12 @@
+provider/files/*.pem
+!provider/files/Intel_SGX_Attestation_RootCA.pem
+!provider/files/psuedo_Attestation_RootCA.pem
+provider/files/*.key
+provider/files/*.csr
+registry/fablo-target/
+consumer/consumer.*
+consumer/code/RootCA.pem
+registry/docker-compose.yml
+*gramine-base_latest.tar.gz
+docker/psuedo_api/server.*
+docker/psuedo_api/key.pem

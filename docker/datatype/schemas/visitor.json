@@ -1,0 +1,14 @@
+{
+    "dataType": "visitor",
+    "parent": "person",
+    "schema": {
+        "facilityID": "string",
+        "date": "datetime",
+        "purchased": "string",
+        "person": {
+            "id": "integer",
+            "age": "integer",
+            "address": "string"
+        }
+    }
+}

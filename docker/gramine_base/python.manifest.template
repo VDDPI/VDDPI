@@ -1,0 +1,58 @@
+loader.entrypoint = "file:{{ gramine.libos }}"
+libos.entrypoint = "{{ entrypoint }}"
+
+loader.log_level = "{{ log_level }}"
+
+loader.env.LD_LIBRARY_PATH = "{{ python.stdlib }}/lib:/lib:{{ arch_libdir }}:/usr/lib:/usr/{{ arch_libdir }}"
+
+loader.insecure__use_cmdline_argv = true
+
+sys.enable_sigterm_injection = true
+
+fs.mounts = [
+  { path = "/lib", uri = "file:{{ gramine.runtimedir() }}" },
+  { path = "{{ arch_libdir }}", uri = "file:{{ arch_libdir }}" },
+  { path = "/usr", uri = "file:/usr" },
+  { path = "/usr/local/lib/python3.6", uri = "file:/usr/local/lib/python3.6" },
+  { path = "{{ python.distlib }}", uri = "file:{{ python.distlib }}" },
+  { path = "/etc", uri = "file:/etc" },
+  { type = "tmpfs", path = "/tmp" },
+  { path = "/certs/", uri = "file:certs/", type = "encrypted", key_name = "_sgx_mrenclave"},
+  { path = "/data/", uri = "file:data/", type = "encrypted", key_name = "_sgx_mrenclave"},
+]
+
+sgx.debug = true
+sgx.nonpie_binary = true
+sgx.enclave_size = "2G"
+sys.stack.size = "2M"
+sgx.thread_num = 64
+
+sgx.remote_attestation = "{{ ra_type }}"
+sgx.ra_client_spid = "{{ ra_client_spid }}"
+sgx.ra_client_linkable = {{ 'true' if ra_client_linkable == '1' else 'false' }}
+
+sgx.trusted_files = [
+  "file:{{ gramine.libos }}",
+  "file:{{ entrypoint }}",
+  "file:{{ gramine.runtimedir() }}/",
+  "file:{{ arch_libdir }}/",
+  "file:/usr/{{ arch_libdir }}/",
+  "file:/etc/mime.types",
+  "file:./gen_cert.py",
+  "file:./code/plib.py",
+]
+
+sgx.allowed_files = [
+  "file:/etc/nsswitch.conf",
+  "file:/etc/ethers",
+  "file:/etc/hosts",
+  "file:/etc/group",
+  "file:/etc/passwd",
+  "file:/etc/gai.conf",
+  "file:/etc/host.conf",
+  "file:/etc/resolv.conf",
+  "file:/usr/local/lib/", # Python lib path
+  "file:{{ python.distlib }}/",
+  "file:./code",
+  "file:./datauserRootCA.pem"
+]
