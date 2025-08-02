@@ -55,7 +55,7 @@ Prototype/
 2. Clone this repository
 
 ```bash
-$ git clone https://github.com/adukots/DDIF.git
+$ git clone https://github.com/VDDPI/VDDPI.git
 ```
 
 2. Set IP address (Data consumer must use an SGX-enabled machine.)
