@@ -512,13 +512,17 @@ def verify(self, ssl_sock, client_address):
     return False
 
 def get_processing_spec(MRENCLAVE):
+    print(MRENCLAVE) # kakei
     params = {"MRENCLAVE": MRENCLAVE}
     
     with open(REGISTRIES_API, "r") as f:
         registries = f.read().split("\n")[:-1]
 
+    print(registries) # kakei
     for registry in registries:
         res = json.loads(requests.get(registry, params=params).text)
+        print(">>>>>>>>>>>>>>>>>>")
+        print(res) # kakei
         try:
             if ("policy" not in locals()):
 
@@ -549,6 +553,7 @@ def get_processing_spec(MRENCLAVE):
                     print("Verification Failed")
                     return None
         except Exception as e:
+            print("--- Exception!! ---")
             print(e)
             return None
     
