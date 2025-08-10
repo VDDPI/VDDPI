@@ -19,7 +19,7 @@ done
 
 echo "Registring..."
 curl -X 'POST' \
-  'http://133.68.18.15/register' \
+  'http://192.168.220.5/register' \
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'program=@consumer/code/main.py;type=text/x-python' \
@@ -29,14 +29,14 @@ curl -X 'POST' \
 # Phase2: Apply for data usage
 echo "========================== Phase2: Apply for data usage =========================="
 
-curl 133.68.18.15:8001/root-crt > consumer/code/RootCA.pem
+curl 192.168.220.5:8001/root-crt > consumer/code/RootCA.pem
 cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 133.68.18.15:8001
 
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://133.68.18.15:443/data/person/personal-001\n1\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://133.68.18.15:443/data/person/personal-002\n2\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://133.68.18.15:443/data/person/personal-003\n3\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://133.68.18.15:443/data/person/personal-004\n4\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://133.68.18.15:443/data/person/personal-005\n5\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
+echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-001\n1\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
+echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-002\n2\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
+echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-003\n3\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
+echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-004\n4\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
+echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-005\n5\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
 
 # Phase3: process data
 echo "============================== Phase3: Process data =============================="
