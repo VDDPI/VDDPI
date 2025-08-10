@@ -1,10 +1,6 @@
-FROM gramineproject/gramine:stable-focal
+FROM gramineproject/gramine:stable-jammy
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-COPY gramine_base/linux-sgx-driver/ /opt/intel/linux-sgx-driver
-COPY gramine_base/gramine-python /root/
-COPY gramine_base/python.manifest.template /root/
 
 RUN apt-get update
 RUN apt-get install -y build-essential \
@@ -19,16 +15,15 @@ RUN apt-get install -y libcurl4-openssl-dev \
     python3-cryptography python3-pip python3-protobuf
 RUN apt-get install -y git pkg-config libssl-dev
 
-# gramine setup
-RUN git clone https://github.com/gramineproject/gramine.git -b v1.3.1
-RUN cd /gramine && meson setup build/ --buildtype=release -Ddirect=enabled -Dsgx=enabled -Dsgx_driver=oot -Dsgx_driver_include_path=/opt/intel/linux-sgx-driver \
-    && ninja -C build && ninja -C build/ install
+COPY gramine_base/linux-sgx-driver/ /opt/intel/linux-sgx-driver
+COPY gramine_base/gramine-python /root/
+COPY gramine_base/python.manifest.template /root/
 
 # cpython build
 RUN git clone https://github.com/python/cpython.git -b v3.6.9
 COPY gramine_base/python.c /cpython/Programs/
 COPY gramine_base/build_cpython.sh /cpython/
-RUN cd cpython && ./configure && sed -i '223s/$/ -lssl -lcrypto/' Makefile && make && make install
+RUN cd cpython && LIBS="-lssl -lcrypto" CFLAGS="-O2" ./configure && make && make install
 RUN pip3 install requests numpy scipy
 RUN cp /usr/local/bin/python3 /usr/bin/mypython
 
