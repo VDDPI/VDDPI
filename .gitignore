@@ -6,6 +6,7 @@ provider/files/*.csr
 registry/fablo-target/
 consumer/consumer.*
 consumer/code/RootCA.pem
+consumer/code/tokens
 registry/docker-compose.yml
 *gramine-base_latest.tar.gz
 docker/psuedo_api/server.*

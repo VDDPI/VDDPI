@@ -32,11 +32,21 @@ echo "========================== Phase2: Apply for data usage ==================
 curl 192.168.220.5:8001/root-crt > consumer/code/RootCA.pem
 cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 192.168.220.5:8001
 
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-001\n1\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-002\n2\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-003\n3\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-004\n4\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-005\n5\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
+python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
+	-ai 9049742836e22731ced39b84c0e7d473d007bc8e9815144 \
+	-an 1 -di https://192.168.220.7:443/data/person/personal-001
+python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
+	-ai 9049742836e22731ced39b84c0e7d473d007bc8e9815144 \
+	-an 2 -di https://192.168.220.7:443/data/person/personal-002
+python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
+	-ai 9049742836e22731ced39b84c0e7d473d007bc8e9815144 \
+	-an 3 -di https://192.168.220.7:443/data/person/personal-003
+python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
+	-ai 9049742836e22731ced39b84c0e7d473d007bc8e9815144 \
+	-an 4 -di https://192.168.220.7:443/data/person/personal-004
+python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
+	-ai 9049742836e22731ced39b84c0e7d473d007bc8e9815144 \
+	-an 5 -di https://192.168.220.7:443/data/person/personal-005
 
 # Phase3: process data
 echo "============================== Phase3: Process data =============================="
