@@ -20,4 +20,7 @@ services:
       - 8002:8002
     tty: true
     devices:
-      - "/dev/isgx:/dev/isgx"
+      #- "/dev/isgx:/dev/isgx"
+      - "/dev/sgx_enclave:/dev/sgx_enclave"
+      - "/dev/sgx_provision:/dev/sgx_provision"
+    entrypoint: [ "tail", "-f", "/dev/null" ] # for debug

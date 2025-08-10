@@ -70,6 +70,7 @@ def apply(usage_statement):
     ret = json.loads(requests.post("https://" + provider_addr + "/apply", verify=CA_CERT, cert=(CLIENT_CERT, CLIENT_KEY), json=usage_statement).text)
 
     if (ret["status"] == "failed"):
+        print(ret)
         return
     
     with open("./code/tokens", "a") as f:

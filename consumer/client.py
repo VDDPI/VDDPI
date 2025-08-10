@@ -38,7 +38,7 @@ for _ in range(waiting_sec):
 print()
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-with context.wrap_socket(client_socket, server_hostname='133.68.18.15') as tls_socket:
+with context.wrap_socket(client_socket, server_hostname='192.168.220.5') as tls_socket:
     tls_socket.connect(('192.168.220.6', 8002))
 
     with open('code/tokens', 'rb') as f:

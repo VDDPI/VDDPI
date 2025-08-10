@@ -46,7 +46,7 @@ gramine-base:
 	-t $(GRAMINE_BASE_DOCKER_IMAGE_NAME):$(GRAMINE_BASE_DOCKER_IMAGE_TAG)
 
 .PHONY: gramine-consumer
-gramine-consumer:
+gramine-consumer: gramine-base
 	@echo "Building $(GRAMINE_CONSUMER_DOCKER_IMAGE_NAME):$(GRAMINE_CONSUMER_DOCKER_IMAGE_TAG)"
 	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.gramineconsumer $(DOCKER_FILE_PATH) \
 	-t $(GRAMINE_CONSUMER_DOCKER_IMAGE_NAME):$(GRAMINE_CONSUMER_DOCKER_IMAGE_TAG) \

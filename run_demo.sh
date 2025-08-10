@@ -30,7 +30,7 @@ curl -X 'POST' \
 echo "========================== Phase2: Apply for data usage =========================="
 
 curl 192.168.220.5:8001/root-crt > consumer/code/RootCA.pem
-cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 133.68.18.15:8001
+cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 192.168.220.5:8001
 
 echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-001\n1\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
 echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://192.168.220.7:443/data/person/personal-002\n2\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
