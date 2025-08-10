@@ -1,5 +1,3 @@
-version: "3"
-
 networks:
   FABLO_NETWORK:
     external: true
@@ -15,14 +13,6 @@ networks:
     ipam:
       config:
         - subnet: 192.168.3.0/24
-  v4-network:
-    ipam:
-      config:
-        - subnet: 192.168.4.0/24
-  v5-network:
-    ipam:
-      config:
-        - subnet: 192.168.5.0/24
 
 services:
   v1-gramine:
@@ -58,28 +48,6 @@ services:
     hostname: "analysis-container"
     networks:
       v3-network:
-  v4-gramine:
-    image: ${GRAMINE_REGISTRY_IMAGE}:${GRAMINE_REGISTRY_IMAGE_TAG}
-    tty: true
-    hostname: "gramine-container"
-    networks:
-      v4-network:
-  v4-analyzer:
-    image: ${ANALYZER_REGISTRY_IMAGE}:${ANALYZER_REGISTRY_IMAGE_TAG}
-    hostname: "analysis-container"
-    networks:
-      v4-network:
-  v5-gramine:
-    image: ${GRAMINE_REGISTRY_IMAGE}:${GRAMINE_REGISTRY_IMAGE_TAG}
-    tty: true
-    hostname: "gramine-container"
-    networks:
-      v5-network:
-  v5-analyzer:
-    image: ${ANALYZER_REGISTRY_IMAGE}:${ANALYZER_REGISTRY_IMAGE_TAG}
-    hostname: "analysis-container"
-    networks:
-      v5-network:
   v1-api:
     image: ${API_REGISTRY_IMAGE}:${API_REGISTRY_IMAGE_TAG}
     ports:
@@ -106,24 +74,6 @@ services:
       - 82:80
     networks:
       v3-network:
-      FABLO_NETWORK:
-  v4-api:
-    image: ${API_REGISTRY_IMAGE}:${API_REGISTRY_IMAGE_TAG}
-    ports:
-      - 83:80
-    environment:
-      - REGISTRY_ID=registry4.example.com
-    networks:
-      v4-network:
-      FABLO_NETWORK:
-  v5-api:
-    image: ${API_REGISTRY_IMAGE}:${API_REGISTRY_IMAGE_TAG}
-    ports:
-      - 84:80
-    environment:
-      - REGISTRY_ID=registry5.example.com
-    networks:
-      v5-network:
       FABLO_NETWORK:
   registry-ca:
     image: ${CA_REGISTRY_IMAGE}:${CA_REGISTRY_IMAGE_TAG}

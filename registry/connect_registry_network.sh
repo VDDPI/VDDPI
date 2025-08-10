@@ -4,56 +4,42 @@ declare -A registriesCC1=(
     ["dev-peer0.registry1.example.com-chaincode1"]="registry_v1-network"
     ["dev-peer0.registry2.example.com-chaincode1"]="registry_v2-network"
     ["dev-peer0.registry3.example.com-chaincode1"]="registry_v3-network"
-    ["dev-peer0.registry4.example.com-chaincode1"]="registry_v4-network"
-    ["dev-peer0.registry5.example.com-chaincode1"]="registry_v5-network"
 )
 
 declare -A registriesCC2=(
     ["dev-peer0.registry1.example.com-chaincode2"]="registry_v1-network"
     ["dev-peer0.registry2.example.com-chaincode2"]="registry_v2-network"
     ["dev-peer0.registry3.example.com-chaincode2"]="registry_v3-network"
-    ["dev-peer0.registry4.example.com-chaincode2"]="registry_v4-network"
-    ["dev-peer0.registry5.example.com-chaincode2"]="registry_v5-network"
 )
 
 declare -A registry_API=(
     ["registry-network_v1-api_1"]="registry_v1-network"
     ["registry-network_v2-api_1"]="registry_v2-network"
     ["registry-network_v3-api_1"]="registry_v3-network"
-    ["registry-network_v4-api_1"]="registry_v4-network"
-    ["registry-network_v5-api_1"]="registry_v5-network"
 )
 
 declare -A registry_peers=(
     ["peer0.registry1.example.com"]="registry_v1-network"
     ["peer0.registry2.example.com"]="registry_v2-network"
     ["peer0.registry3.example.com"]="registry_v3-network"
-    ["peer0.registry4.example.com"]="registry_v4-network"
-    ["peer0.registry5.example.com"]="registry_v5-network"
 )
 
 declare -A registry_ca=(
     ["ca.registry1.example.com"]="registry_v1-network"
     ["ca.registry2.example.com"]="registry_v2-network"
     ["ca.registry3.example.com"]="registry_v3-network"
-    ["ca.registry4.example.com"]="registry_v4-network"
-    ["ca.registry5.example.com"]="registry_v5-network"
 )
 
 declare -A registry_cli=(
     ["cli.registry1.example.com"]="registry_v1-network"
     ["cli.registry2.example.com"]="registry_v2-network"
     ["cli.registry3.example.com"]="registry_v3-network"
-    ["cli.registry4.example.com"]="registry_v4-network"
-    ["cli.registry5.example.com"]="registry_v5-network"
 )
 
 declare -A registry_fablo_rest=(
     ["fablo-rest.registry1.example.com"]="registry_v1-network"
     ["fablo-rest.registry2.example.com"]="registry_v2-network"
     ["fablo-rest.registry3.example.com"]="registry_v3-network"
-    ["fablo-rest.registry4.example.com"]="registry_v4-network"
-    ["fablo-rest.registry5.example.com"]="registry_v5-network"
 )
 
 for CC1 in ${!registriesCC1[@]}
