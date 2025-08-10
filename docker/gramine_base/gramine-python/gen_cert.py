@@ -137,7 +137,7 @@ def gen_certificate_request(c, st, l, o, cn, mail):
         quote = f.read()
 
     # get IAS report
-    apiURL = 'http://192.168.11.1:8004/sgx/dev/attestation/v4/report/'
+    apiURL = 'http://192.168.220.5:8004/sgx/dev/attestation/v4/report/'
     json_data = {
         "isvEnclaveQuote": base64.b64encode(quote).decode("utf-8")
     }
