@@ -14,6 +14,6 @@ cd /cpython && ./build_cpython.sh /root/code/main.py /root/gen_cert.py > /dev/nu
 # build gramine
 tmp_path=/tmp/mrenclave
 gramine-sgx-gen-private-key -f > /dev/null
-cd /root && make clean > /dev/null && MRENCLAVE=`make SGX=1 RA_TYPE=epid RA_CLIENT_SPID=$1 LINKABLE=$2 2>&1 | grep "mr_enclave"`
+cd /root && make clean > /dev/null && MRENCLAVE=`make SGX=1 RA_TYPE=dcap RA_CLIENT_SPID=$1 LINKABLE=$2 2>&1 | grep -A1 "Measurement:" | tail -n1 | awk '{print $1}'`
 
 echo ${MRENCLAVE:17}

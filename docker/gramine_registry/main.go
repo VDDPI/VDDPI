@@ -38,7 +38,7 @@ func upload(web http.ResponseWriter, req *http.Request) {
 				return
 			}
 			
-			log.Printf("Start building")
+			log.Printf("Start building (SPID:%s, isLinkable:%s)", string(SPID), string(isLinkable))
 			MRENCLAVE, err := exec.Command("./../build.sh", SPID, isLinkable).Output()
 			log.Printf("Finish buiding")
 
@@ -47,6 +47,8 @@ func upload(web http.ResponseWriter, req *http.Request) {
 				fmt.Fprint(web, "Cannot get MRENCLAVE")
 				return
 			}
+
+			log.Printf("MRENCLAVE: %s", string(MRENCLAVE))
 
 			web.WriteHeader(http.StatusOK)
 			fmt.Fprint(web, string(MRENCLAVE))
