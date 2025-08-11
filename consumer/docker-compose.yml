@@ -2,7 +2,7 @@ version: "3"
 
 services:
   gramine-consumer:
-    image: ${GRAMINE_CONSUMER_IMAGE}:${GRAMINE_CONSUMER_IMAGE_TAG}
+    image: gramine-consumer:latest
     container_name: gramine-consumer
     environment:
       - SPID=${SPID}

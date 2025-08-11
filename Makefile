@@ -1,29 +1,5 @@
 DOCKER_CMD = docker
 DOCKER_COMPOSE_CMD = docker compose
-DOCKER_FILE_PATH = docker
-
-GRAMINE_BASE_DOCKER_IMAGE_NAME = gramine-base
-GRAMINE_BASE_DOCKER_IMAGE_TAG = latest
-GRAMINE_CONSUMER_DOCKER_IMAGE_NAME = gramine-consumer
-GRAMINE_CONSUMER_DOCKER_IMAGE_TAG = latest
-GRAMINE_REGISTRY_DOCKER_IMAGE_NAME = gramine-registry
-GRAMINE_REGISTRY_DOCKER_IMAGE_TAG = latest
-DB_PROVIDER_DOCKER_IMAGE_NAME = db-provider
-DB_PROVIDER_DOCKER_IMAGE_TAG = latest
-SERVER_PROVIDER_DOCKER_IMAGE_NAME = server-provider
-SERVER_PROVIDER_DOCKER_IMAGE_TAG = latest
-ANALYZER_REGISTRY_DOCKER_IMAGE_NAME = analyzer-registry
-ANALYZER_REGISTRY_DOCKER_IMAGE_TAG = latest
-CA_REGISTRY_DOCKER_IMAGE_NAME = ca-registry
-CA_REGISTRY_DOCKER_IMAGE_TAG = latest
-API_REGISTRY_DOCKER_IMAGE_NAME = api-registry
-API_REGISTRY_DOCKER_IMAGE_TAG = latest
-PSUEDO_IAS_DOCKER_IMAGE_NAME = psuedo-ias
-PSUEDO_IAS_DOCKER_IMAGE_TAG = latest
-PSUEDO_API_DOCKER_IMAGE_NAME = psuedo-api
-PSUEDO_API_DOCKER_IMAGE_TAG = latest
-DATATYPE_API_IMAGE_NAME = datatype-api
-DATATYPE_API_IMAGE_TAG = latest
 
 SPID = 1234567890abcdef1234567890abcdef
 IS_LINKABLE = 0
@@ -41,80 +17,78 @@ SERVER_PROVIDER_HOST_NAME = 192.168.220.7
 PRIVATE_CA = 192.168.220.5:8001
 
 gramine-base:
-	@echo "Building $(GRAMINE_BASE_DOCKER_IMAGE_NAME):$(GRAMINE_BASE_DOCKER_IMAGE_TAG)"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.graminebase $(DOCKER_FILE_PATH) \
-	-t $(GRAMINE_BASE_DOCKER_IMAGE_NAME):$(GRAMINE_BASE_DOCKER_IMAGE_TAG)
+	@echo "Building gramine-base:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.graminebase docker \
+	-t gramine-base:latest
 
 .PHONY: gramine-consumer
 gramine-consumer: gramine-base
-	@echo "Building $(GRAMINE_CONSUMER_DOCKER_IMAGE_NAME):$(GRAMINE_CONSUMER_DOCKER_IMAGE_TAG)"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.gramineconsumer $(DOCKER_FILE_PATH) \
-	-t $(GRAMINE_CONSUMER_DOCKER_IMAGE_NAME):$(GRAMINE_CONSUMER_DOCKER_IMAGE_TAG) \
-	--build-arg BASEIMAGE=$(GRAMINE_BASE_DOCKER_IMAGE_NAME) \
-	--build-arg BASEIMAGE_TAG=$(GRAMINE_BASE_DOCKER_IMAGE_TAG)
+	@echo "Building gramine-consumer:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
+	-t gramine-consumer:latest \
+	--build-arg BASEIMAGE=gramine-base \
+	--build-arg BASEIMAGE_TAG=latest
 
 .PHONY: gramine-registry
 gramine-registry: gramine-base
-	@echo "Building $(GRAMINE_REGISTRY_DOCKER_IMAGE_NAME):$(GRAMINE_REGISTRY_DOCKER_IMAGE_TAG)"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.gramineregistry $(DOCKER_FILE_PATH) \
-	-t $(GRAMINE_REGISTRY_DOCKER_IMAGE_NAME):$(GRAMINE_REGISTRY_DOCKER_IMAGE_TAG) \
-	--build-arg BASEIMAGE=$(GRAMINE_BASE_DOCKER_IMAGE_NAME) \
-	--build-arg BASEIMAGE_TAG=$(GRAMINE_BASE_DOCKER_IMAGE_TAG)
+	@echo "Building gramine-registry:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.gramineregistry docker \
+	-t gramine-registry:latest \
+	--build-arg BASEIMAGE=gramine-base \
+	--build-arg BASEIMAGE_TAG=latest
 
 .PHONY: db-provider
 db-provider:
-	@echo "Building $(DB_PROVIDER_DOCKER_IMAGE_NAME):$(DB_PROVIDER_DOCKER_IMAGE_TAG)"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.dbprovider $(DOCKER_FILE_PATH) \
-	-t $(DB_PROVIDER_DOCKER_IMAGE_NAME):$(DB_PROVIDER_DOCKER_IMAGE_TAG)
+	@echo "Building db-provider:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.dbprovider docker \
+	-t db-provider:latest
 
 .PHONY: provider
 provider:
-	@echo "Building $(SERVER_PROVIDER_DOCKER_IMAGE_NAME):$(SERVER_PROVIDER_DOCKER_IMAGE_TAG)"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.provider $(DOCKER_FILE_PATH) \
-	-t $(SERVER_PROVIDER_DOCKER_IMAGE_NAME):$(SERVER_PROVIDER_DOCKER_IMAGE_TAG)
+	@echo "Building server-provider:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.provider docker \
+	-t server-provider:latest
 
 .PHONY: analyzer-registry
 analyzer-registry:
-	@echo "Building $(ANALYZER_REGISTRY_DOCKER_IMAGE_NAME):$(ANALYZER_REGISTRY_DOCKER_IMAGE_TAG)"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.analyzer $(DOCKER_FILE_PATH) \
-	-t $(ANALYZER_REGISTRY_DOCKER_IMAGE_NAME):$(ANALYZER_REGISTRY_DOCKER_IMAGE_TAG)
+	@echo "Building analyzer-registry:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.analyzer docker \
+	-t analyzer-registry:latest
 
 .PHONY: ca-registry
 ca-registry:
-	@echo "Building $(CA_REGISTRY_DOCKER_IMAGE_NAME):$(CA_REGISTRY_DOCKER_IMAGE_TAG)"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.ca $(DOCKER_FILE_PATH) \
-	-t $(CA_REGISTRY_DOCKER_IMAGE_NAME):$(CA_REGISTRY_DOCKER_IMAGE_TAG)
+	@echo "Building ca-registry:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.ca docker \
+	-t ca-registry:latest
 
 .PHONY: api-registry
 api-registry:
-	@echo "Building $(API_REGISTRY_DOCKER_IMAGE_NAME):$(API_REGISTRY_DOCKER_IMAGE_TAG)"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.apiregistry $(DOCKER_FILE_PATH) \
-	-t $(API_REGISTRY_DOCKER_IMAGE_NAME):$(API_REGISTRY_DOCKER_IMAGE_TAG)
+	@echo "Building api-registry:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.apiregistry docker \
+	-t api-registry:latest
 
 .PHONY: datatype-api
 datatype-api:
 	@echo "Building Datatype API"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.datatype $(DOCKER_FILE_PATH) \
-	-t $(DATATYPE_API_IMAGE_NAME):$(DATATYPE_API_IMAGE_TAG)
+	@$(DOCKER_CMD) build -f docker/Dockerfile.datatype docker \
+	-t datatype-api:latest
 
 .PHONY: psuedo-ias
 psuedo-ias:
-	@echo "Building $(PSUEDO_IAS_DOCKER_IMAGE_NAME):$(PSUEDO_IAS_DOCKER_IMAGE_TAG)"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.ias $(DOCKER_FILE_PATH) \
-	-t $(PSUEDO_IAS_DOCKER_IMAGE_NAME):$(PSUEDO_IAS_DOCKER_IMAGE_TAG)
+	@echo "Building psuedo-ias:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.ias docker \
+	-t psuedo-ias:latest
 
 .PHONY: psuedo-api
 psuedo-api:
-	@echo "Building $(PSUEDO_API_DOCKER_IMAGE_NAME):$(PSUEDO_API_DOCKER_IMAGE_TAG)"
-	@$(DOCKER_CMD) build -f $(DOCKER_FILE_PATH)/Dockerfile.api $(DOCKER_FILE_PATH) \
-	-t $(PSUEDO_API_DOCKER_IMAGE_NAME):$(PSUEDO_API_DOCKER_IMAGE_TAG)
+	@echo "Building psuedo-api:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.api docker \
+	-t psuedo-api:latest
 
 # Consumer
 .PHONY: run-consumer
 run-consumer: gramine-consumer
 	@cd consumer && \
-	GRAMINE_CONSUMER_IMAGE=$(GRAMINE_CONSUMER_DOCKER_IMAGE_NAME) \
-	GRAMINE_CONSUMER_IMAGE_TAG=$(GRAMINE_CONSUMER_DOCKER_IMAGE_TAG) \
 	SPID=$(SPID) \
 	IS_LINKABLE=$(IS_LINKABLE) \
 	PRIVATE_CA=$(PRIVATE_CA) \
@@ -127,8 +101,6 @@ run-consumer: gramine-consumer
 .PHONY: run-consumer
 stop-consumer:
 	@cd consumer && \
-	GRAMINE_CONSUMER_IMAGE=$(GRAMINE_CONSUMER_DOCKER_IMAGE_NAME) \
-	GRAMINE_CONSUMER_IMAGE_TAG=$(GRAMINE_CONSUMER_DOCKER_IMAGE_TAG) \
 	SPID=$(SPID) \
 	IS_LINKABLE=$(IS_LINKABLE) \
 	PRIVATE_CA=$(PRIVATE_CA) \
@@ -143,10 +115,6 @@ stop-consumer:
 run-provider: db-provider provider
 	@curl $(PRIVATE_CA)/root-crt > provider/files/RootCA.pem
 	@cd provider && \
-	SERVER_PROVIDER_IMAGE=$(SERVER_PROVIDER_DOCKER_IMAGE_NAME) \
-	SERVER_PROVIDER_IMAGE_TAG=$(SERVER_PROVIDER_DOCKER_IMAGE_TAG) \
-	DB_PROVIDER_IMAGE=$(DB_PROVIDER_DOCKER_IMAGE_NAME) \
-	DB_PROVIDER_IMAGE_TAG=$(DB_PROVIDER_DOCKER_IMAGE_TAG) \
 	SERVER_PORT=$(SERVER_PROVIDER_PORT) \
 	SERVER_HOST_NAME=$(SERVER_PROVIDER_HOST_NAME) \
 	PRIVATE_CA=$(PRIVATE_CA) \
@@ -155,10 +123,6 @@ run-provider: db-provider provider
 .PHONY: stop-provider
 stop-provider:
 	@cd provider && \
-	SERVER_PROVIDER_IMAGE=$(SERVER_PROVIDER_DOCKER_IMAGE_NAME) \
-	SERVER_PROVIDER_IMAGE_TAG=$(SERVER_PROVIDER_DOCKER_IMAGE_TAG) \
-	DB_PROVIDER_IMAGE=$(DB_PROVIDER_DOCKER_IMAGE_NAME) \
-	DB_PROVIDER_IMAGE_TAG=$(DB_PROVIDER_DOCKER_IMAGE_TAG) \
 	SERVER_PORT=$(SERVER_PROVIDER_PORT) \
 	SERVER_HOST_NAME=$(SERVER_PROVIDER_HOST_NAME) \
 	PRIVATE_CA=$(PRIVATE_CA) \
@@ -170,20 +134,6 @@ run-registry: gramine-registry analyzer-registry ca-registry api-registry dataty
 	@docker network ls -f "name=fablo_network" --format '{{.Name}}' | \
 	xargs -i sed -e "s/FABLO_NETWORK/{}/g" $(REGISTRY_DOCKERCOMPOSE_TEMPLATE_FILE) > $(REGISTRY_DOCKERCOMPOSE_FILE)
 	@cd registry && \
-	GRAMINE_REGISTRY_IMAGE=$(GRAMINE_REGISTRY_DOCKER_IMAGE_NAME) \
-	GRAMINE_REGISTRY_IMAGE_TAG=$(GRAMINE_REGISTRY_DOCKER_IMAGE_TAG) \
-	ANALYZER_REGISTRY_IMAGE=$(ANALYZER_REGISTRY_DOCKER_IMAGE_NAME) \
-	ANALYZER_REGISTRY_IMAGE_TAG=$(ANALYZER_REGISTRY_DOCKER_IMAGE_TAG) \
-	API_REGISTRY_IMAGE=$(API_REGISTRY_DOCKER_IMAGE_NAME) \
-	API_REGISTRY_IMAGE_TAG=$(API_REGISTRY_DOCKER_IMAGE_TAG) \
-	CA_REGISTRY_IMAGE=$(CA_REGISTRY_DOCKER_IMAGE_NAME) \
-	CA_REGISTRY_IMAGE_TAG=$(CA_REGISTRY_DOCKER_IMAGE_TAG) \
-	DATATYPE_API_IMAGE=$(DATATYPE_API_IMAGE_NAME) \
-	DATATYPE_API_IMAGE_TAG=$(DATATYPE_API_IMAGE_TAG) \
-	PSUEDO_IAS_DOCKER_IMAGE=$(PSUEDO_IAS_DOCKER_IMAGE_NAME) \
-	PSUEDO_IAS_DOCKER_IMAGE_TAG=$(PSUEDO_IAS_DOCKER_IMAGE_TAG) \
-	PSUEDO_API_DOCKER_IMAGE=$(PSUEDO_API_DOCKER_IMAGE_NAME) \
-	PSUEDO_API_DOCKER_IMAGE_TAG=$(PSUEDO_API_DOCKER_IMAGE_TAG) \
 	$(DOCKER_COMPOSE_CMD) up --build -d
 	@cd registry && ./connect_registry_network.sh
 	@cd init && ./registry_setup.sh
@@ -193,34 +143,20 @@ run-registry: gramine-registry analyzer-registry ca-registry api-registry dataty
 stop-registry:
 	@cd registry && ./fablo down
 	@cd registry && \
-		GRAMINE_REGISTRY_IMAGE=$(GRAMINE_REGISTRY_DOCKER_IMAGE_NAME) \
-		GRAMINE_REGISTRY_IMAGE_TAG=$(GRAMINE_REGISTRY_DOCKER_IMAGE_TAG) \
-		ANALYZER_REGISTRY_IMAGE=$(ANALYZER_REGISTRY_DOCKER_IMAGE_NAME) \
-		ANALYZER_REGISTRY_IMAGE_TAG=$(ANALYZER_REGISTRY_DOCKER_IMAGE_TAG) \
-		API_REGISTRY_IMAGE=$(API_REGISTRY_DOCKER_IMAGE_NAME) \
-		API_REGISTRY_IMAGE_TAG=$(API_REGISTRY_DOCKER_IMAGE_TAG) \
-		CA_REGISTRY_IMAGE=$(CA_REGISTRY_DOCKER_IMAGE_NAME) \
-		CA_REGISTRY_IMAGE_TAG=$(CA_REGISTRY_DOCKER_IMAGE_TAG) \
-		DATATYPE_API_IMAGE=$(DATATYPE_API_IMAGE_NAME) \
-		DATATYPE_API_IMAGE_TAG=$(DATATYPE_API_IMAGE_TAG) \
-		PSUEDO_IAS_DOCKER_IMAGE=$(PSUEDO_IAS_DOCKER_IMAGE_NAME) \
-		PSUEDO_IAS_DOCKER_IMAGE_TAG=$(PSUEDO_IAS_DOCKER_IMAGE_TAG) \
-		PSUEDO_API_DOCKER_IMAGE=$(PSUEDO_API_DOCKER_IMAGE_NAME) \
-		PSUEDO_API_DOCKER_IMAGE_TAG=$(PSUEDO_API_DOCKER_IMAGE_TAG) \
 		$(DOCKER_COMPOSE_CMD) down
 	@cd registry && ./fablo prune
 
 .PHONY: clean
 clean:
 	@echo "Removing images"
-	@$(DOCKER_CMD) rmi $(GRAMINE_BASE_DOCKER_IMAGE_NAME):$(GRAMINE_BASE_DOCKER_IMAGE_TAG) \
-	$(GRAMINE_CONSUMER_DOCKER_IMAGE_NAME):$(GRAMINE_CONSUMER_DOCKER_IMAGE_NAME) \
-	$(GRAMINE_REGISTRY_DOCKER_IMAGE_NAME):$(GRAMINE_REGISTRY_DOCKER_IMAGE_NAME) \
-	$(DB_PROVIDER_DOCKER_IMAGE_NAME):$(DB_PROVIDER_DOCKER_IMAGE_TAG) \
-	$(SERVER_PROVIDER_DOCKER_IMAGE_NAME):$(SERVER_PROVIDER_DOCKER_IMAGE_TAG) \
-	$(ANALYZER_REGISTRY_DOCKER_IMAGE_NAME):$(ANALYZER_REGISTRY_DOCKER_IMAGE_TAG) \
-	$(CA_REGISTRY_DOCKER_IMAGE_NAME):$(CA_REGISTRY_DOCKER_IMAGE_TAG) \
-	$(API_REGISTRY_DOCKER_IMAGE_NAME):$(API_REGISTRY_DOCKER_IMAGE_TAG) \
-	$(PSUEDO_IAS_DOCKER_IMAGE_NAME):$(PSUEDO_IAS_DOCKER_IMAGE_TAG) \
-	$(DATATYPE_API_IMAGE_NAME):$(DATATYPE_API_IMAGE_TAG) \
-	$(PSUEDO_API_DOCKER_IMAGE_NAME):$(PSUEDO_API_DOCKER_IMAGE_TAG)
+	@$(DOCKER_CMD) rmi gramine-base:latest \
+	gramine-consumer:latest \
+	gramine-registry:latest \
+	db-provider:latest \
+	server-provider:latest \
+	analyzer-registry:latest \
+	ca-registry:latest \
+	api-registry:latest \
+	psuedo-ias:latest \
+	datatype-api:latest \
+	psuedo-api:latest

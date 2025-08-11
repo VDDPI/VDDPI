@@ -16,40 +16,40 @@ networks:
 
 services:
   v1-gramine:
-    image: ${GRAMINE_REGISTRY_IMAGE}:${GRAMINE_REGISTRY_IMAGE_TAG}
+    image: gramine-registry:latest
     tty: true
     hostname: "gramine-container"
     networks:
       v1-network:
   v1-analyzer:
-    image: ${ANALYZER_REGISTRY_IMAGE}:${ANALYZER_REGISTRY_IMAGE_TAG}
+    image: analyzer-registry:latest
     hostname: "analysis-container"
     networks:
       v1-network:
   v2-gramine:
-    image: ${GRAMINE_REGISTRY_IMAGE}:${GRAMINE_REGISTRY_IMAGE_TAG}
+    image: gramine-registry:latest
     tty: true
     hostname: "gramine-container"
     networks:
       v2-network:
   v2-analyzer:
-    image: ${ANALYZER_REGISTRY_IMAGE}:${ANALYZER_REGISTRY_IMAGE_TAG}
+    image: analyzer-registry:latest
     hostname: "analysis-container"
     networks:
       v2-network:
   v3-gramine:
-    image: ${GRAMINE_REGISTRY_IMAGE}:${GRAMINE_REGISTRY_IMAGE_TAG}
+    image: gramine-registry:latest
     tty: true
     hostname: "gramine-container"
     networks:
       v3-network:
   v3-analyzer:
-    image: ${ANALYZER_REGISTRY_IMAGE}:${ANALYZER_REGISTRY_IMAGE_TAG}
+    image: analyzer-registry:latest
     hostname: "analysis-container"
     networks:
       v3-network:
   v1-api:
-    image: ${API_REGISTRY_IMAGE}:${API_REGISTRY_IMAGE_TAG}
+    image: api-registry:latest
     ports:
       - 80:80
     environment:
@@ -58,7 +58,7 @@ services:
       v1-network:
       FABLO_NETWORK:
   v2-api:
-    image: ${API_REGISTRY_IMAGE}:${API_REGISTRY_IMAGE_TAG}
+    image: api-registry:latest
     ports:
       - 81:80
     environment:
@@ -67,7 +67,7 @@ services:
       v2-network:
       FABLO_NETWORK:
   v3-api:
-    image: ${API_REGISTRY_IMAGE}:${API_REGISTRY_IMAGE_TAG}
+    image: api-registry:latest
     environment:
       - REGISTRY_ID=registry3.example.com
     ports:
@@ -76,19 +76,19 @@ services:
       v3-network:
       FABLO_NETWORK:
   registry-ca:
-    image: ${CA_REGISTRY_IMAGE}:${CA_REGISTRY_IMAGE_TAG}
+    image: ca-registry:latest
     ports:
       - 8001:8000
   datatype-api:
-    image: ${DATATYPE_API_IMAGE}:${DATATYPE_API_IMAGE_TAG}
+    image: datatype-api:latest
     hostname: "datatype"
     ports:
       - 8003:80
   psuedo-ias:
-    image: ${PSUEDO_IAS_DOCKER_IMAGE}:${PSUEDO_IAS_DOCKER_IMAGE_TAG}
+    image: psuedo-ias:latest
     ports:
       - 8004:80
   psuedo-api:
-    image: ${PSUEDO_API_DOCKER_IMAGE}:${PSUEDO_API_DOCKER_IMAGE_TAG}
+    image: psuedo-api:latest
     ports:
       - 8005:443

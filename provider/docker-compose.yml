@@ -2,7 +2,7 @@ version: "3"
 
 services:
   server:
-    image: ${SERVER_PROVIDER_IMAGE}:${SERVER_PROVIDER_IMAGE_TAG}
+    image: server-provider:latest
     container_name: provider-server
     tty: true
     depends_on:
@@ -20,7 +20,7 @@ services:
     networks:
       provider-net:
   db:
-    image: ${DB_PROVIDER_IMAGE}:${DB_PROVIDER_IMAGE_TAG}
+    image: db-provider:latest
     container_name: provider-db
     command: --default-authentication-plugin=mysql_native_password
     networks:
