@@ -50,7 +50,8 @@ def create_declaration(subject, app_id, data_id, arg_num, counter, location, dur
     data = subject + app_id + data_id + arg_num + counter + location + duration + expiration_date
     with open(key, "r") as f:
         pkey = crypto.load_privatekey(crypto.FILETYPE_PEM, f.read())
-        sig = base64.b64encode(crypto.sign(pkey, data, "sha256")).decode()
+        data_bytes = data.encode("utf-8")
+        sig = base64.b64encode(crypto.sign(pkey, data_bytes, "sha256")).decode()
 
     ret = {
         "consumer": subject,
