@@ -1,7 +1,4 @@
-ARG BASEIMAGE
-ARG BASEIMAGE_TAG
-
-FROM ${BASEIMAGE}:${BASEIMAGE_TAG}
+FROM gramine-base:latest
 
 COPY gramine_consumer/run.sh /root
 
