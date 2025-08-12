@@ -17,8 +17,8 @@ context.check_hostname = False
 context.verify_mode = ssl.CERT_NONE
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-with context.wrap_socket(client_socket, server_hostname='192.168.220.5') as tls_socket:
-    tls_socket.connect(('192.168.220.5', 8001))
+with context.wrap_socket(client_socket, server_hostname='192.168.220.6') as tls_socket:
+    tls_socket.connect(('192.168.220.6', 8001))
     tls_socket.send((PRIVATE_CA_ISSUE_URL + "\n" + SUBSCRIPTION_KEY).encode())
 
     while True:
