@@ -303,7 +303,9 @@ if __name__ == "__main__":
     
     bind_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     bind_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    print(f"Bind (0.0.0.0, 8002)")
     bind_socket.bind(('0.0.0.0', 8002))
+    print(f"Listen ...")
     bind_socket.listen(1)
     
     client_socket, fromaddr = bind_socket.accept()
@@ -327,4 +329,6 @@ if __name__ == "__main__":
         request(client_cn, msg2)
         
         tls_socket.send(b'Session completed.')
+
+    print(f"Socket is closed ...")
     client_socket.close()
