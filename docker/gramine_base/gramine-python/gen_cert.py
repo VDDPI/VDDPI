@@ -14,10 +14,10 @@ CA_CERT = "./code/RootCA.pem"
 def add_set(encoder, oid, value):
     encoder.enter(asn1.Numbers.Set)
     encoder.enter(asn1.Numbers.Sequence)
-    
+
     encoder.write(oid, asn1.Numbers.ObjectIdentifier)
     encoder.write(value, asn1.Numbers.PrintableString)
-    
+
     encoder.leave()
     encoder.leave()
 
@@ -26,11 +26,11 @@ def gen_certificate_request(c, st, l, o, cn, mail):
     encoder.start()
     encoder.enter(asn1.Numbers.Sequence)
     encoder.enter(asn1.Numbers.Sequence)
-    
+
     certReqInfoEncoder = asn1.Encoder()
     certReqInfoEncoder.start()
     certReqInfoEncoder.enter(asn1.Numbers.Sequence)
-    
+
     # set version
     encoder.write(0, asn1.Numbers.Integer)
     certReqInfoEncoder.write(0, asn1.Numbers.Integer)
@@ -38,7 +38,7 @@ def gen_certificate_request(c, st, l, o, cn, mail):
     # subject
     encoder.enter(asn1.Numbers.Sequence)
     certReqInfoEncoder.enter(asn1.Numbers.Sequence)
-    
+
     # c = input("Country Name (2 letter code) [AU]:")
     if (c != ""):
         add_set(encoder, "2.5.4.6", c)
@@ -77,32 +77,32 @@ def gen_certificate_request(c, st, l, o, cn, mail):
 
     encoder.leave()
     certReqInfoEncoder.leave()
-    
+
     # entering subjectPublicKeyInfo
     encoder.enter(asn1.Numbers.Sequence)
     certReqInfoEncoder.enter(asn1.Numbers.Sequence)
-    
+
     # entering algorithms
     encoder.enter(asn1.Numbers.Sequence)
     certReqInfoEncoder.enter(asn1.Numbers.Sequence)
-    
+
     encoder.write("1.2.840.113549.1.1.1", asn1.Numbers.ObjectIdentifier)
     encoder.write(0, asn1.Numbers.Null)
-    
+
     certReqInfoEncoder.write("1.2.840.113549.1.1.1", asn1.Numbers.ObjectIdentifier)
     certReqInfoEncoder.write(0, asn1.Numbers.Null)
-    
+
     # leaving algorithm
     encoder.leave()
     certReqInfoEncoder.leave()
-    
+
     # generate subject key
     subjectPKey, PKey = get_subject_pkey()
-    
+
     # subjectPublicKey
     encoder.write(subjectPKey, asn1.Numbers.BitString)
     certReqInfoEncoder.write(subjectPKey, asn1.Numbers.BitString)
-    
+
     # leaving subjectPublicKeyInfo
     encoder.leave()
     certReqInfoEncoder.leave()
@@ -113,19 +113,19 @@ def gen_certificate_request(c, st, l, o, cn, mail):
 
     certReqInfoEncoder.enter(0, asn1.Classes.Context)
     certReqInfoEncoder.enter(asn1.Numbers.Sequence)
-    
-    
+
+
     encoder.write("1.2.840.113549.1.9.14", asn1.Numbers.ObjectIdentifier)
     certReqInfoEncoder.write("1.2.840.113549.1.9.14", asn1.Numbers.ObjectIdentifier)
-    
+
     encoder.enter(asn1.Numbers.Set)
     encoder.enter(asn1.Numbers.Sequence)
     encoder.enter(asn1.Numbers.Sequence)
-    
+
     certReqInfoEncoder.enter(asn1.Numbers.Set)
     certReqInfoEncoder.enter(asn1.Numbers.Sequence)
     certReqInfoEncoder.enter(asn1.Numbers.Sequence)
-    
+
 
     # get quote
     # get pubkey hash(sha256) and set REPORT_DATA
@@ -192,7 +192,7 @@ def gen_certificate_request(c, st, l, o, cn, mail):
     encoder.enter(asn1.Numbers.Sequence)
     encoder.write("1.2.840.113549.1.1.5", asn1.Numbers.ObjectIdentifier)
     encoder.write(0, asn1.Numbers.Null)
-    
+
     # leaving signatureAlgorithm
     encoder.leave()
     # signature
@@ -201,45 +201,30 @@ def gen_certificate_request(c, st, l, o, cn, mail):
     encoder.leave()
 
     print("CSR was successfully generated.")
-    
+
     return encoder.output(), PKey
 
 def get_subject_pkey():
+    """
+    CSR用の公開鍵・秘密鍵ペアを生成し、公開鍵をDER形式で返す関数
+
+    Returns:
+        tuple: (公開鍵のDERバイト列, 秘密鍵オブジェクト)
+    """
+    # 1. RSA秘密鍵を生成（2048ビット）
     key = crypto.PKey()
     key.generate_key(crypto.TYPE_RSA, 2048)
-    
-    cert = crypto.X509()
-    cert.get_subject().C = 'JP'
-    cert.get_subject().ST = 'test'
-    cert.get_subject().L = 'test'
-    cert.get_subject().O = 'test'
-    cert.get_subject().OU = 'test'
-    cert.get_subject().CN = 'test'
-    cert.set_serial_number(1000)
-    cert.gmtime_adj_notBefore(0)
-    cert.gmtime_adj_notAfter(10*365*24*60*60)
-    cert.set_issuer(cert.get_subject())
-    cert.set_pubkey(key)
-    cert.sign(key, 'sha256')
 
-    decoder = asn1.Decoder()
-    decoder.start(crypto.dump_certificate(crypto.FILETYPE_ASN1, cert))
-    
-    _, value = decoder.read()
-    decoder.start(value)
-    _, value = decoder.read()
-    decoder.start(value)
-    _, _ = decoder.read()
-    _, _ = decoder.read()
-    _, _ = decoder.read()
-    _, _ = decoder.read()
-    _, _ = decoder.read()
-    _, value = decoder.read()
-    decoder.start(value)
-    _, _ = decoder.read()
-    _, value = decoder.read()
+    # 2. 公開鍵をDER（バイナリ）形式で直接取得
+    # DER = Distinguished Encoding Rules（ASN.1のバイナリエンコーディング形式）
+    # CSRに埋め込むために必要な形式
+    # crypto.dump_publickey() で秘密鍵オブジェクトから直接公開鍵を抽出できる
+    public_key_der = crypto.dump_publickey(crypto.FILETYPE_ASN1, key)
 
-    return value, key
+    # 3. 公開鍵のDERバイト列と秘密鍵オブジェクトを返す
+    # - public_key_der: CSRに埋め込む公開鍵（バイト列）
+    # - key: CSRに署名するための秘密鍵オブジェクト
+    return public_key_der, key
 
 if __name__ == '__main__':
 
@@ -255,7 +240,7 @@ if __name__ == '__main__':
     client_socket, fromaddr = bind_socket.accept()
     with context.wrap_socket(client_socket, server_side=True) as tls_socket:
         print(f"Client connected: {fromaddr} ")
-        
+
         client_cert = tls_socket.getpeercert()
         if client_cert:
             subject = dict(x[0] for x in client_cert['subject'])
@@ -264,22 +249,22 @@ if __name__ == '__main__':
         else:
             print("Client certificate not found.")
             exit(1)
-        
+
         data = tls_socket.recv(1024)
         msg = data.decode()
         privateCA = msg.split("\n")[0]
         SUBSCRIPTION_KEY = msg.split("\n")[1]
-    
+
     csr, pkey = gen_certificate_request(subject.get("countryName", ""), subject.get("stateOrProvinceName", ""), subject.get("localityName", ""), subject.get("organizationName", ""), subject.get("commonName", ""), subject.get("mail", ""))
 
     with open("certs/private.key", "w") as f:
         f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, pkey).decode("utf-8"))
-    
+
     res = requests.post(url=privateCA, data=csr, headers={"Context-Type": "application/octet-stream"}).text
 
     cert_filename = "certs/client.pem"
     with open(cert_filename, "w") as f:
         f.write(res)
-    
+
     client_socket.close()
 
