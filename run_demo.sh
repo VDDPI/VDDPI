@@ -24,7 +24,9 @@ curl -X 'POST' \
   -H 'Content-Type: multipart/form-data' \
   -F 'program=@consumer/code/main.py;type=text/x-python' \
   -F 'SPID=1234567890abcdef1234567890abcdef' \
-  -F 'isLinkable=0' | jq .
+  -F 'isLinkable=0' | tee /tmp/response.json | jq .
+
+APP_ID=$(cat /tmp/response.json | jq -r '.DataProcessingSpec.App_ID')
 
 # Phase2: Apply for data usage
 echo "========================== Phase2: Apply for data usage =========================="
@@ -33,19 +35,19 @@ curl 192.168.220.5:8001/root-crt > consumer/code/RootCA.pem
 cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 192.168.220.5:8001
 
 python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
-	-ai 9049742836e22731ced39b84c0e7d473d007bc8e9815144 \
+	-ai $APP_ID \
 	-an 1 -di https://192.168.220.7:443/data/person/personal-001
 python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
-	-ai 9049742836e22731ced39b84c0e7d473d007bc8e9815144 \
+	-ai $APP_ID \
 	-an 2 -di https://192.168.220.7:443/data/person/personal-002
 python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
-	-ai 9049742836e22731ced39b84c0e7d473d007bc8e9815144 \
+	-ai $APP_ID \
 	-an 3 -di https://192.168.220.7:443/data/person/personal-003
 python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
-	-ai 9049742836e22731ced39b84c0e7d473d007bc8e9815144 \
+	-ai $APP_ID \
 	-an 4 -di https://192.168.220.7:443/data/person/personal-004
 python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
-	-ai 9049742836e22731ced39b84c0e7d473d007bc8e9815144 \
+	-ai $APP_ID \
 	-an 5 -di https://192.168.220.7:443/data/person/personal-005
 
 # Phase3: process data
