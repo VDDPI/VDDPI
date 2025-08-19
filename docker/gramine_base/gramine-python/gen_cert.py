@@ -206,24 +206,18 @@ def gen_certificate_request(c, st, l, o, cn, mail):
 
 def get_subject_pkey():
     """
-    CSR用の公開鍵・秘密鍵ペアを生成し、公開鍵をDER形式で返す関数
+    Generate a public key and private key pair for CSR, and return the public key in DER format.
 
     Returns:
-        tuple: (公開鍵のDERバイト列, 秘密鍵オブジェクト)
+        tuple: (public key DER byte sequence, private key object)
     """
-    # 1. RSA秘密鍵を生成（2048ビット）
+    # 1. Generate RSA private key (2048bit)
     key = crypto.PKey()
     key.generate_key(crypto.TYPE_RSA, 2048)
 
-    # 2. 公開鍵をDER（バイナリ）形式で直接取得
-    # DER = Distinguished Encoding Rules（ASN.1のバイナリエンコーディング形式）
-    # CSRに埋め込むために必要な形式
-    # crypto.dump_publickey() で秘密鍵オブジェクトから直接公開鍵を抽出できる
+    # 2. Obtain the public key directly in DER (binary) format.
     public_key_der = crypto.dump_publickey(crypto.FILETYPE_ASN1, key)
 
-    # 3. 公開鍵のDERバイト列と秘密鍵オブジェクトを返す
-    # - public_key_der: CSRに埋め込む公開鍵（バイト列）
-    # - key: CSRに署名するための秘密鍵オブジェクト
     return public_key_der, key
 
 if __name__ == '__main__':
@@ -257,13 +251,13 @@ if __name__ == '__main__':
 
     csr, pkey = gen_certificate_request(subject.get("countryName", ""), subject.get("stateOrProvinceName", ""), subject.get("localityName", ""), subject.get("organizationName", ""), subject.get("commonName", ""), subject.get("mail", ""))
 
-    with open("certs/private.key", "w") as f:
+    with open("certs/private.key", "wb") as f:
         f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, pkey).decode("utf-8"))
 
     res = requests.post(url=privateCA, data=csr, headers={"Context-Type": "application/octet-stream"}).text
 
     cert_filename = "certs/client.pem"
-    with open(cert_filename, "w") as f:
+    with open(cert_filename, "wb") as f:
         f.write(res)
 
     client_socket.close()
