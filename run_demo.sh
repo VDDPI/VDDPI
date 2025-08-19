@@ -34,6 +34,10 @@ echo "========================== Phase2: Apply for data usage ==================
 curl 192.168.220.5:8001/root-crt > consumer/code/RootCA.pem
 cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 192.168.220.5:8001
 
+echo "-----------------------"
+echo APP ID: $APP_ID
+echo "-----------------------"
+
 python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
 	-ai $APP_ID \
 	-an 1 -di https://192.168.220.7:443/data/person/personal-001
