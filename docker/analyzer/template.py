@@ -220,8 +220,8 @@ def store_data(data):
         f.write(json.dumps(data))
 
 def request(client_cn, tokens):
-    with open(CA_CERT, "r") as cert:
-        with open(TRUSTED_CA_CERT, "w") as trusted_cert:
+    with open(CA_CERT, "rb") as cert:
+        with open(TRUSTED_CA_CERT, "wb") as trusted_cert:
             trusted_cert.write(cert.read())
         
     providers = []
@@ -230,10 +230,21 @@ def request(client_cn, tokens):
             payload = verify_token(line.split(",")[0], line.split(",")[1])
             providers.append(payload)
         except jwt.exceptions.InvalidSignatureError as e:
-            print("Invalid Signature: " + line)
+            print(f"JWT Invalid Signature: {e}")
+            print(f"Problematic line: {line}")
+
+            import traceback
+            traceback.print_exc()
+
             tls_socket.send("Invalid Signature".encode())
         except Exception as e:
             print("Invalid Certificate")
+            print(f"Error: {e}")
+            print(f"Exception type: {type(e).__name__}")
+
+            import traceback
+            traceback.print_exc()
+
             tls_socket.send("Invalid Certificate".encode())
     provided_data_uc = []
     provided_data = []
