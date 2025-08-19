@@ -9,7 +9,7 @@ PFX_PATH = "./consumer.pfx"
 
 def get_cert(ca_addr):
 
-    subprocess.run(["openssl", "req", "-nodes", "-new", "-keyout", KEY_PATH, "-out", CSR_PATH, "-outform", "DER", "-days", "365"])
+    subprocess.run(["openssl", "req", "-nodes", "-new", "-keyout", KEY_PATH, "-out", CSR_PATH, "-outform", "DER"])
 
     with open(CSR_PATH, "rb") as f:
         csr = f.read()
