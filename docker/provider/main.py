@@ -274,7 +274,10 @@ class apply(Resource):
                     }), 400)
         
         if (usage_declaration.app_ID not in providing_policy.app_ID):
-            return "Failed to apply (Not Allowed to provide for this application)"
+            return make_response(jsonify({
+                        "status": "failed",
+                        "description": "Failed to apply (Not Allowed to provide for this application)"
+                    }), 400)
         
         try:
             for output in processing_spec.output:
