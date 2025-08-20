@@ -220,7 +220,7 @@ def get_subject_pkey():
 
     # 3. Obtain the subject public key in DER (binary) format.
     d = asn1.Decoder()
-    d.start(subject_pki)
+    d.start(subject_pki_info)
     _, seq = d.read()
     subject_pki = seq[1]
 
