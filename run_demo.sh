@@ -3,19 +3,10 @@
 cp /dev/null consumer/code/tokens
 
 # Phase1: register the data processing app
-echo "=================== Phase3: Register your data processing app ==================="
-echo "Please start the registry and provider (\$make run-registry; make run-provider)."
-echo "Press Enter when the startup is completed."
-while true;
-do
-    echo -n ">> "
-    read -r input
-
-    if [[ -z "$input" ]];
-    then
-        break
-    fi
-done
+echo "=================== Phase1: Register your data processing app ==================="
+echo "Please start the registry (\$make run-registry)."
+echo ""
+read -p "If the registry is running, press Enter to continue..."
 
 echo "Registring..."
 curl -X 'POST' \
@@ -30,6 +21,13 @@ APP_ID=$(cat /tmp/response.json | jq -r '.DataProcessingSpec.App_ID')
 
 # Phase2: Apply for data usage
 echo "========================== Phase2: Apply for data usage =========================="
+echo "Before starting the provider, make sure to set the App ID in \`docker/db/02_create_data.sql\`."
+echo ""
+echo "  App ID: $APP_ID"
+echo ""
+echo "After that, start the provider (\$make run-provider)."
+echo ""
+read -p "Press Enter to continue once everything is ready..."
 
 curl 192.168.220.5:8001/root-crt > consumer/code/RootCA.pem
 cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 192.168.220.5:8001
