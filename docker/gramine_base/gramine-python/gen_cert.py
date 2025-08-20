@@ -215,10 +215,16 @@ def get_subject_pkey():
     key = crypto.PKey()
     key.generate_key(crypto.TYPE_RSA, 2048)
 
-    # 2. Obtain the public key directly in DER (binary) format.
-    public_key_der = crypto.dump_publickey(crypto.FILETYPE_ASN1, key)
+    # 2. Obtain the subject public key info in DER (binary) format.
+    subject_pki_info = crypto.dump_publickey(crypto.FILETYPE_ASN1, key)
 
-    return public_key_der, key
+    # 3. Obtain the subject public key in DER (binary) format.
+    d = asn1.Decoder()
+    d.start(subject_pki)
+    _, seq = d.read()
+    subject_pki = seq[1]
+
+    return subject_pki, key
 
 if __name__ == '__main__':
 
