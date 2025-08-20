@@ -257,13 +257,13 @@ if __name__ == '__main__':
 
     csr, pkey = gen_certificate_request(subject.get("countryName", ""), subject.get("stateOrProvinceName", ""), subject.get("localityName", ""), subject.get("organizationName", ""), subject.get("commonName", ""), subject.get("mail", ""))
 
-    with open("certs/private.key", "wb") as f:
+    with open("certs/private.key", "w") as f:
         f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, pkey).decode("utf-8"))
 
     res = requests.post(url=privateCA, data=csr, headers={"Context-Type": "application/octet-stream"}).text
 
     cert_filename = "certs/client.pem"
-    with open(cert_filename, "wb") as f:
+    with open(cert_filename, "w") as f:
         f.write(res)
 
     client_socket.close()
