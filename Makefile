@@ -16,13 +16,17 @@ REGISTRY_DOCKERCOMPOSE_FILE = registry/docker-compose.yml
 SERVER_PROVIDER_HOST_NAME = 192.168.220.7
 PRIVATE_CA = 192.168.220.5:8001
 
+.PHONY: gramine-base
 gramine-base:
 	@echo "Building gramine-base:latest"
 	@$(DOCKER_CMD) build -f docker/Dockerfile.graminebase docker \
-	-t gramine-base:latest
+		-t gramine-base:latest
+
+load-gramine-base:
+	@bash ./load_gramine_base.sh
 
 .PHONY: gramine-consumer
-gramine-consumer: gramine-base
+gramine-consumer: load-gramine-base
 	@echo "Building gramine-consumer:latest"
 	@$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
 	-t gramine-consumer:latest
