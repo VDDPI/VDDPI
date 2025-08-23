@@ -30,31 +30,15 @@ echo ""
 read -p "Press Enter to continue once everything is ready..."
 
 curl 192.168.220.5:8001/root-crt > consumer/code/RootCA.pem
-cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 192.168.220.5:8001
+(
+	cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 192.168.220.5:8001
+)
 
-echo "-----------------------"
-echo APP ID: $APP_ID
-echo "-----------------------"
-
-python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
-	-ai $APP_ID \
-	-an 1 -di https://192.168.220.7:443/data/person/personal-001
-python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
-	-ai $APP_ID \
-	-an 2 -di https://192.168.220.7:443/data/person/personal-002
-python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
-	-ai $APP_ID \
-	-an 3 -di https://192.168.220.7:443/data/person/personal-003
-python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
-	-ai $APP_ID \
-	-an 4 -di https://192.168.220.7:443/data/person/personal-004
-python3 create_declaration.py -subj consumer.example.com -ct 5 -loc JP -dr 30 -exd 2025-12-31 \
-	-ai $APP_ID \
-	-an 5 -di https://192.168.220.7:443/data/person/personal-005
+./run_data_usage_application.sh $APP_ID
 
 # Phase3: process data
 echo "============================== Phase3: Process data =============================="
-cd .. && make run-consumer
+make run-consumer
 
 echo "Waiting for 20 seconds to start consumer..."
 sleep 20
