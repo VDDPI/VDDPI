@@ -154,7 +154,10 @@ def provide_data(data_type, data):
     if (num != 1):
         cur.close()
         conn.close()
-        return "Failed to load data usage policy", 400
+        msg =  "Failed to load data usage policy"
+        print(msg)
+        print(query)
+        return msg, 400
     else:
         res = cur.fetchone()
         cur.close()
