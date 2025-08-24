@@ -26,10 +26,13 @@ load-gramine-base:
 	@bash ./load_gramine_base.sh
 
 .PHONY: gramine-consumer
-gramine-consumer: gramine-base load-gramine-base
+gramine-consumer: load-gramine-base
 	@echo "Building gramine-consumer:latest"
 	@$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
 	-t gramine-consumer:latest
+
+gramine-consumer-mrenclave:
+	@$(DOCKER_CMD) run -it --rm --entrypoint gramine-sgx-sigstruct-view gramine-consumer:latest python.sig
 
 .PHONY: gramine-registry
 gramine-registry: gramine-base

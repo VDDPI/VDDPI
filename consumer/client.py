@@ -5,7 +5,7 @@ import time
 client_cert = 'consumer.crt'
 client_key = 'consumer.key'
 
-ca_cert = 'code/RootCA.pem'
+ca_cert = 'cache/RootCA.pem'
 
 PRIVATE_CA_ISSUE_URL = "http://192.168.220.5:8001/issue"
 SUBSCRIPTION_KEY = "1234567890abcdef1234567890abcdef"
@@ -41,7 +41,7 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 with context.wrap_socket(client_socket, server_hostname='192.168.220.6') as tls_socket:
     tls_socket.connect(('192.168.220.6', 8002))
 
-    with open('code/tokens', 'rb') as f:
+    with open('cache/tokens', 'rb') as f:
         tokens = f.read()
     tls_socket.send(str(len(tokens.decode().split("\n")) - 1).encode())
     tls_socket.send(tokens)

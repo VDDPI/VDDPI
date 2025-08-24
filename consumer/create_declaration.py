@@ -15,7 +15,7 @@ DECLARATION_FILE = "./code/data_usage_declaration"
 
 CLIENT_CERT = "./consumer.crt"
 CLIENT_KEY = "./consumer.key"
-CA_CERT = "./code/RootCA.pem"
+CA_CERT = "./cache/RootCA.pem"
 
 def create_declaration(subject, app_id, data_id, arg_num, counter, location, duration, expiration_date, key):
     
@@ -74,7 +74,7 @@ def apply(usage_statement):
         print(ret)
         return
     
-    with open("./code/tokens", "a") as f:
+    with open("./cache/tokens", "a") as f:
         f.write(ret["jwt"] + "," + ret["cert"].replace("\n", "\\n")[:-2] + "\n")
     
 if __name__ == "__main__":

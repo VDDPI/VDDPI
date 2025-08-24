@@ -1,7 +1,14 @@
 FROM gramine-base:latest
 
 COPY gramine_consumer/run.sh /root
+COPY gramine_consumer/code   /root/code
+
+WORKDIR /cpython
+RUN ./build_cpython.sh /root/code/main.py /root/gen_cert.py 2> /dev/null && cp python /usr/bin/mypython
 
 WORKDIR /root
+RUN gramine-sgx-gen-private-key -f
+RUN make clean && make SGX=1 RA_TYPE=dcap RA_CLIENT_SPID=1234567890abcdef1234567890abcdef LINKABLE=0
 RUN mkdir data
+
 CMD ["./run.sh"]

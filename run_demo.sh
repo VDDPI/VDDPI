@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cp /dev/null consumer/code/tokens
+cp /dev/null consumer/cache/tokens
 
 # Phase1: register the data processing app
 echo "=================== Phase1: Register your data processing app ==================="
@@ -13,7 +13,7 @@ curl -X 'POST' \
   'http://192.168.220.5/register' \
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
-  -F 'program=@consumer/code/main.py;type=text/x-python' \
+  -F 'program=@docker/gramine_consumer/code/main.py;type=text/x-python' \
   -F 'SPID=1234567890abcdef1234567890abcdef' \
   -F 'isLinkable=0' | tee /tmp/response.json | jq .
 
@@ -29,7 +29,7 @@ echo "After that, start the provider (\$make run-provider)."
 echo ""
 read -p "Press Enter to continue once everything is ready..."
 
-curl 192.168.220.5:8001/root-crt > consumer/code/RootCA.pem
+curl 192.168.220.5:8001/root-crt > consumer/cache/RootCA.pem
 (
 	cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 192.168.220.5:8001
 )

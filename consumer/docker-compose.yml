@@ -12,8 +12,6 @@ services:
       - COUNTRY=${COUNTRY}
       - CNAME=${CNAME}
       - HOST_NAME=${CONSUMER_HOST_NAME}
-    volumes:
-      - ./code:/root/code
     ports:
       - 443:443
       - 8001:8001
