@@ -8,6 +8,7 @@ consumer/consumer.*
 consumer/code/RootCA.pem
 consumer/code/tokens
 consumer/code/__pycache__
+consumer/cache/*
 registry/docker-compose.yml
 *gramine-base_latest.tar.gz
 docker/psuedo_api/server.*
