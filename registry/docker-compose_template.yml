@@ -91,4 +91,4 @@ services:
   psuedo-api:
     image: psuedo-api:latest
     ports:
-      - 8005:443
+      - 8005:80
