@@ -18,7 +18,7 @@ cd /cpython && ./build_cpython.sh /root/code/main.py /root/gen_cert.py 2> /dev/n
 echo "========= Start build data processing app =========="
 # build gramine
 gramine-sgx-gen-private-key -f > /dev/null
-cd /root && make clean > /dev/null && make SGX=1 RA_TYPE=dcap RA_CLIENT_SPID=${SPID} LINKABLE=${IS_LINKABLE}
+cd /root && make clean > /dev/null && make SGX=1 RA_TYPE=epid RA_CLIENT_SPID=${SPID} LINKABLE=${IS_LINKABLE}
 echo "========= Finish build data processing app =========="
 
 echo "========= Start generating certificate =========="
@@ -30,4 +30,4 @@ echo "========= Start data processing app =========="
 gramine-sgx ./python code/main.py
 
 echo "========= Finish data processing app =========="
-# /bin/bash
+/bin/bash

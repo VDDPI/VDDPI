@@ -26,7 +26,7 @@ load-gramine-base:
 	@bash ./load_gramine_base.sh
 
 .PHONY: gramine-consumer
-gramine-consumer: load-gramine-base
+gramine-consumer: gramine-base load-gramine-base
 	@echo "Building gramine-consumer:latest"
 	@$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
 	-t gramine-consumer:latest
