@@ -11,10 +11,10 @@
 #define HASH_BUF_LEN 1024 * 16
 
 #define DP_PROGRAM "./code/main.py"
-#define DP_HASH_VALUE "b1bd8aa8829390b08299b02c3f82da1cc11b0ce58ef3e2dc833102d13462dd58"
+#define DP_HASH_VALUE "dab72c36f4ca841c6bcad869684c7540bdb7b807f3dc5684bdf40619b3049fa1"
 
 #define GEN_CERT_PROGRAM "gen_cert.py"
-#define GCP_HASH_VALUE "77f9fd0edf269f0fa50666ab09c1cc06c6d90a8a8091b6dd68103712e6f479ae"
+#define GCP_HASH_VALUE "ea68f815873ff35ef09049280a370b032e7f94e50be1c857e15c4124750754ef"
 
 #ifdef __FreeBSD__
 #include <fenv.h>
