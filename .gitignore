@@ -12,6 +12,7 @@ registry/docker-compose.yml
 *gramine-base_latest.tar.gz
 docker/psuedo_api/server.*
 docker/psuedo_api/key.pem
+docker/db/02_create_data.sql
 cache/*
 
 !.gitkeep

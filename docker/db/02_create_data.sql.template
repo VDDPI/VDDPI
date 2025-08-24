@@ -1,4 +1,4 @@
-SET @APP_ID = '281d9646110a7a04dab0d6c01600c91ae73fe40bac7c57d';
+SET @APP_ID = '<MRENCLAVE>';
 
 use provider;
 
