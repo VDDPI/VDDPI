@@ -1,5 +1,6 @@
 #FROM gramineproject/gramine:stable-jammy
-FROM gramineproject/gramine:v1.4
+#FROM gramineproject/gramine:v1.4
+FROM gramineproject/gramine:1.9-jammy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
