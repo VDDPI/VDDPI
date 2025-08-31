@@ -1,12 +1,21 @@
 from flask import Flask, request
 import subprocess
 import requests
+import ipaddress
 
 OPENSSL_CONF = "/etc/ssl/openssl.cnf"
 CAROOT_CRT = "/etc/ssl/CA/cacert.pem"
 SAN_FILE = "./san.txt"
 
 app = Flask(__name__)
+
+def format_san_entry(san):
+    """Convert SAN value to appropriate IP or DNS format string"""
+    try:
+        ipaddress.ip_address(san)
+        return "IP:" + san
+    except ValueError:
+        return "DNS:" + san
 
 @app.route("/issue", methods=["POST"])
 def issue():
@@ -17,7 +26,7 @@ def issue():
         san_data = request.args["san"]
 
         with open(SAN_FILE, "w") as f:
-            f.write("subjectAltName = IP:" + san_data + "\n")
+            f.write("subjectAltName = " + format_san_entry(san_data) + "\n")
         
         with open("tmp.csr", "wb") as f:
             f.write(pem_csr)
