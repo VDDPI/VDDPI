@@ -102,7 +102,7 @@ run-consumer: gramine-consumer
 	CONSUMER_HOST_NAME=$(CNAME_CONSUMER) \
 	$(DOCKER_COMPOSE_CMD) up -d
 
-.PHONY: run-consumer
+.PHONY: stop-consumer
 stop-consumer:
 	@cd consumer && \
 	SPID=$(SPID) \
