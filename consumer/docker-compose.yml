@@ -1,7 +1,17 @@
-version: "3"
+x-extra-hosts: &vddpi_hosts
+  extra_hosts:
+    - "registry01.vddpi:${REGISTRY_IP}"
+    - "consumer01.vddpi:${CONSUMER_IP}"
+    - "provider01.vddpi:${PROVIDER_IP}"
+
+x-svc-common: &svc_common
+  <<: *vddpi_hosts
+  restart: unless-stopped
+
 
 services:
   gramine-consumer:
+    <<: *svc_common
     image: gramine-consumer:latest
     container_name: gramine-consumer
     environment:

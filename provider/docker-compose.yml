@@ -1,7 +1,16 @@
-version: "3"
+x-extra-hosts: &vddpi_hosts
+  extra_hosts:
+    - "registry01.vddpi:${REGISTRY_IP}"
+    - "consumer01.vddpi:${CONSUMER_IP}"
+    - "provider01.vddpi:${PROVIDER_IP}"
+
+x-svc-common: &svc_common
+  <<: *vddpi_hosts
+  restart: unless-stopped
 
 services:
   server:
+    <<: *svc_common
     image: server-provider:latest
     container_name: provider-server
     tty: true
@@ -20,11 +29,13 @@ services:
     networks:
       provider-net:
   db:
+    <<: *svc_common
     image: db-provider:latest
     container_name: provider-db
     command: --default-authentication-plugin=mysql_native_password
     networks:
       provider-net:
+
 networks:
   provider-net:
 

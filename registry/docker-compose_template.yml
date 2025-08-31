@@ -1,3 +1,13 @@
+x-extra-hosts: &vddpi_hosts
+  extra_hosts:
+    - "registry01.vddpi:${REGISTRY_IP}"
+    - "consumer01.vddpi:${CONSUMER_IP}"
+    - "provider01.vddpi:${PROVIDER_IP}"
+
+x-svc-common: &svc_common
+  <<: *vddpi_hosts
+  restart: unless-stopped
+
 networks:
   FABLO_NETWORK:
     external: true
@@ -16,39 +26,46 @@ networks:
 
 services:
   v1-gramine:
+    <<: *svc_common
     image: gramine-registry:latest
     tty: true
     hostname: "gramine-container"
     networks:
       v1-network:
   v1-analyzer:
+    <<: *svc_common
     image: analyzer-registry:latest
     hostname: "analysis-container"
     networks:
       v1-network:
   v2-gramine:
+    <<: *svc_common
     image: gramine-registry:latest
     tty: true
     hostname: "gramine-container"
     networks:
       v2-network:
   v2-analyzer:
+    <<: *svc_common
     image: analyzer-registry:latest
     hostname: "analysis-container"
     networks:
       v2-network:
   v3-gramine:
+    <<: *svc_common
     image: gramine-registry:latest
     tty: true
     hostname: "gramine-container"
     networks:
       v3-network:
   v3-analyzer:
+    <<: *svc_common
     image: analyzer-registry:latest
     hostname: "analysis-container"
     networks:
       v3-network:
   v1-api:
+    <<: *svc_common
     image: api-registry:latest
     ports:
       - 80:80
@@ -58,6 +75,7 @@ services:
       v1-network:
       FABLO_NETWORK:
   v2-api:
+    <<: *svc_common
     image: api-registry:latest
     ports:
       - 81:80
@@ -67,6 +85,7 @@ services:
       v2-network:
       FABLO_NETWORK:
   v3-api:
+    <<: *svc_common
     image: api-registry:latest
     environment:
       - REGISTRY_ID=registry3.example.com
@@ -76,19 +95,23 @@ services:
       v3-network:
       FABLO_NETWORK:
   registry-ca:
+    <<: *svc_common
     image: ca-registry:latest
     ports:
       - 8001:8000
   datatype-api:
+    <<: *svc_common
     image: datatype-api:latest
     hostname: "datatype"
     ports:
       - 8003:80
   psuedo-ias:
+    <<: *svc_common
     image: psuedo-ias:latest
     ports:
       - 8004:80
   psuedo-api:
+    <<: *svc_common
     image: psuedo-api:latest
     ports:
       - 8005:80
