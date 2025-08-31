@@ -3,12 +3,15 @@ provider/files/*.pem
 !provider/files/psuedo_Attestation_RootCA.pem
 provider/files/*.key
 provider/files/*.csr
+provider/.env
 registry/fablo-target/
+registry/.env
 consumer/consumer.*
 consumer/code/RootCA.pem
 consumer/code/tokens
 consumer/code/__pycache__
 consumer/cache/*
+consumer/.env
 registry/docker-compose.yml
 *gramine-base_latest.tar.gz
 docker/psuedo_api/server.*
