@@ -16,6 +16,8 @@ REGISTRY_DOCKERCOMPOSE_FILE = registry/docker-compose.yml
 SERVER_PROVIDER_HOST_NAME = provider01.vddpi
 PRIVATE_CA = registry01.vddpi:8001
 
+MODE ?= demo# eval-01
+
 .PHONY: gramine-base
 gramine-base:
 	@echo "Building gramine-base:latest"
@@ -42,8 +44,8 @@ gramine-registry: gramine-base
 
 .PHONY: db-provider
 db-provider:
-	@echo "Building db-provider:latest"
-	@cd docker/db && ./set_allowed_program_hashes.sh
+	@echo "Building db-provider (mode:$(MODE))"
+	@cd docker/db && ./set_allowed_program_hashes.sh $(MODE)
 	@$(DOCKER_CMD) build -f docker/Dockerfile.dbprovider docker \
 	-t db-provider:latest
 

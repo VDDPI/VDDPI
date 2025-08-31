@@ -1,0 +1,18 @@
+#!/bin/sh
+set -euo pipefail
+
+function run_query() {
+	mrenclave="$1"
+	data_id="$2"
+	mysql -u root -p"$MYSQL_ROOT_PASSWORD" "provider" <<-EOSQL
+		INSERT INTO policy(data_provider, data_type, data_id, data_consumer, data_processing, data_disclosing, data_counter, data_location, data_duration, data_expiration_date)
+		VALUES ("provider.example.com", "person", "https://provider01.vddpi:443/data/person/personal-${data_id}", "consumer.example.com", "$mrenclave", "", 5, "JP", "90", "2026-12-01");
+	EOSQL
+}
+
+for i in $(seq 0 9); do
+	data_id=$(printf "%03d\n" "$i")
+	run_query <MRENCLAVE> $data_id
+done
+
+echo "Seeding initial data..."
