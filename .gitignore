@@ -4,6 +4,8 @@ provider/files/*.pem
 provider/files/*.key
 provider/files/*.csr
 provider/.env
+provider/data
+provider/data_eval_01/person/*
 registry/fablo-target/
 registry/.env
 consumer/consumer.*

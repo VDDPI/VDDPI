@@ -52,6 +52,12 @@ db-provider:
 .PHONY: provider
 provider:
 	@echo "Building server-provider:latest"
+	@rm -f provider/data/person/*
+	@if [ "$(MODE)" = "eval-01" ]; then \
+		cd provider && python3 make_test_data.py 100 0; \
+	else \
+		cp provider/data_demo/person/* provider/data/person/; \
+	fi
 	@$(DOCKER_CMD) build -f docker/Dockerfile.provider docker \
 	-t server-provider:latest
 
