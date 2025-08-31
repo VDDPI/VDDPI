@@ -16,7 +16,7 @@ TAINT_CONFIG_FILE = "/root/pysa/stubs/taint/taint.config"
 
 LEAKAGE_CODE = 5001
 
-DATATYPE_API_ENDPOINT = "http://192.168.220.5:8003"
+DATATYPE_API_ENDPOINT = "http://registry01.vddpi:8003"
 
 def analyzer(source_code):
 

@@ -73,7 +73,7 @@ krEL2VWGrv3IkBKvGUaSVu4rbwxqealC6vid1yi0TA==
 -----END CERTIFICATE-----
 """
     CERT_PATH = "./certs/api_ca_cert.pem"
-    TRUSTED_TIME_API_URL = "http://192.168.220.5:8005/time"
+    TRUSTED_TIME_API_URL = "http://registry01.vddpi:8005/time"
     expiration_date_cond = condition["expirationDate"]
     if (expiration_date_cond == ""):
         return True, 1
@@ -111,7 +111,7 @@ krEL2VWGrv3IkBKvGUaSVu4rbwxqealC6vid1yi0TA==
 -----END CERTIFICATE-----
 """
     CERT_PATH = "./certs/api_ca_cert.pem"
-    TRUSTED_GEOLOCATION_API_URL = "http://192.168.220.5:8005/location"
+    TRUSTED_GEOLOCATION_API_URL = "http://registry01.vddpi:8005/location"
     location_cond = condition["location"]
     if (location_cond == ""):
         return True, 1

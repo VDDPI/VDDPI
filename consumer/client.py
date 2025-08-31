@@ -7,7 +7,7 @@ client_key = 'consumer.key'
 
 ca_cert = 'cache/RootCA.pem'
 
-PRIVATE_CA_ISSUE_URL = "http://192.168.220.5:8001/issue"
+PRIVATE_CA_ISSUE_URL = "http://registry01.vddpi:8001/issue"
 SUBSCRIPTION_KEY = "1234567890abcdef1234567890abcdef"
 
 context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
@@ -17,8 +17,8 @@ context.check_hostname = False
 context.verify_mode = ssl.CERT_NONE
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-with context.wrap_socket(client_socket, server_hostname='192.168.220.6') as tls_socket:
-    tls_socket.connect(('192.168.220.6', 8001))
+with context.wrap_socket(client_socket, server_hostname='consumer01.vddpi') as tls_socket:
+    tls_socket.connect(('consumer01.vddpi', 8001))
     tls_socket.send((PRIVATE_CA_ISSUE_URL + "\n" + SUBSCRIPTION_KEY).encode())
 
     while True:
@@ -38,8 +38,8 @@ for _ in range(waiting_sec):
 print()
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-with context.wrap_socket(client_socket, server_hostname='192.168.220.6') as tls_socket:
-    tls_socket.connect(('192.168.220.6', 8002))
+with context.wrap_socket(client_socket, server_hostname='consumer01.vddpi') as tls_socket:
+    tls_socket.connect(('consumer01.vddpi', 8002))
 
     with open('cache/tokens', 'rb') as f:
         tokens = f.read()

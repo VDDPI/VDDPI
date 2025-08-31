@@ -10,7 +10,7 @@ read -p "If the registry is running, press Enter to continue..."
 
 echo "Registring..."
 curl -X 'POST' \
-  'http://192.168.220.5/register' \
+  'http://registry01.vddpi/register' \
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'program=@docker/gramine_consumer/code/main.py;type=text/x-python' \
@@ -29,9 +29,9 @@ echo "After that, start the provider (\$make run-provider)."
 echo ""
 read -p "Press Enter to continue once everything is ready..."
 
-curl 192.168.220.5:8001/root-crt > consumer/cache/RootCA.pem
+curl registry01.vddpi:8001/root-crt > consumer/cache/RootCA.pem
 (
-	cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 192.168.220.5:8001
+	cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py registry01.vddpi:8001
 )
 
 ./run_data_usage_application.sh $APP_ID

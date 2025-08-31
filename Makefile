@@ -13,8 +13,8 @@ PRIVATE_CA = 172.24.30.207:8001
 
 REGISTRY_DOCKERCOMPOSE_TEMPLATE_FILE = registry/docker-compose_template.yml
 REGISTRY_DOCKERCOMPOSE_FILE = registry/docker-compose.yml
-SERVER_PROVIDER_HOST_NAME = 192.168.220.7
-PRIVATE_CA = 192.168.220.5:8001
+SERVER_PROVIDER_HOST_NAME = provider01.vddpi
+PRIVATE_CA = registry01.vddpi:8001
 
 .PHONY: gramine-base
 gramine-base:
