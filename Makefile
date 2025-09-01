@@ -44,9 +44,9 @@ gramine-consumer-mrenclave:
 
 .PHONY: gramine-registry
 gramine-registry: gramine-base
-        @echo "Building gramine-registry:latest"
-        @$(DOCKER_CMD) build -f docker/Dockerfile.gramineregistry docker \
-        -t gramine-registry:latest
+	@echo "Building gramine-registry:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.gramineregistry docker \
+	-t gramine-registry:latest
 
 .PHONY: db-provider
 db-provider:
