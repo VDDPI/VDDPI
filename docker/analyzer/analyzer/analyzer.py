@@ -27,7 +27,8 @@ def analyzer(source_code):
         return 10, None
 
     ret, func = check_func(spec_dist, TARGET_FILE, "process_data")
-    if (ret == 1):
+    if (ret != 0):
+        print(f"Error check_func (result:{ret})")
         return 11, None
 
     config_source_text = ""
@@ -213,13 +214,14 @@ def check_func(spec_dist, target_file, specified_func_name):
                 if ('plib.' in func_name):
                     func_name = func_name.replace('plib.', '')
                 else:
-                    return 1, []
+                    print(f"func_name = {func_name}")
+                    return 21, []
                 for spec_func in spec_dist:
                     if (func_name == spec_func):
                         functions.append(func_name)
                         break
                 else:
-                    return 1, []
+                    return 22, []
     else:
         return 0, functions
 
