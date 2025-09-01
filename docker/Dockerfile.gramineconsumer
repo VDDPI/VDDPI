@@ -2,7 +2,6 @@ FROM gramine-base:latest
 
 ARG CODE=code
 
-COPY gramine_consumer/run.sh /root
 COPY gramine_consumer/$CODE  /root/code
 
 WORKDIR /cpython
@@ -12,5 +11,8 @@ WORKDIR /root
 RUN gramine-sgx-gen-private-key -f
 RUN make clean && make SGX=1 RA_TYPE=dcap RA_CLIENT_SPID=1234567890abcdef1234567890abcdef LINKABLE=0
 RUN mkdir data
+
+COPY gramine_consumer/run.sh /root
+COPY gramine_consumer/server.py /root
 
 CMD ["./run.sh"]

@@ -15,19 +15,26 @@ curl ${PRIVATE_CA}/root-crt > code/RootCA.pem
 
 ./../restart_aesm.sh 
 
-echo "========= Start build data processing app =========="
-# build gramine
-#gramine-sgx-gen-private-key -f > /dev/null
-#cd /root && make clean > /dev/null && make SGX=1 RA_TYPE=epid RA_CLIENT_SPID=${SPID} LINKABLE=${IS_LINKABLE}
-echo "========= Finish build data processing app =========="
+echo "=== Starting Python SGX Command Server ==="
 
-echo "========= Start generating certificate =========="
-gramine-sgx ./python -gencert
-echo "========= Finish generating certificate =========="
+# Check if Python3 is available
+if ! command -v /usr/bin/python3 >/dev/null 2>&1; then
+    echo "Error: Python3 is not installed"
+    exit 1
+fi
 
-# execute data processing 
-echo "========= Start data processing app =========="
-gramine-sgx ./python code/main.py
+# Create server.py if it doesn't exist
+if [ ! -f server.py ]; then
+    echo "Error: server.py not found in current directory"
+    echo "Please ensure server.py is in the same directory as this script"
+    exit 1
+fi
 
-echo "========= Finish data processing app =========="
-/bin/bash
+# Start Python server
+echo "Starting Python SGX server on port $SERVER_PORT..."
+if [ -n "$VERBOSE_FLAG" ]; then
+    echo "Verbose logging enabled"
+fi
+
+# Start the Python server
+/usr/bin/python3 server.py --port "$SERVER_PORT" --verbose

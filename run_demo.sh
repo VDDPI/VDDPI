@@ -1,6 +1,15 @@
 #!/bin/bash
 
-mode="${1:-demo}"
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <mode>"
+    echo ""
+    echo "Mode"
+    echo "  demo"
+    echo "  eval-01"
+    exit 1
+fi
+
+mode="$1"
 
 cp /dev/null consumer/cache/tokens
 
@@ -50,11 +59,13 @@ make MODE=$mode run-consumer
 echo "Waiting for 20 seconds to start consumer..."
 sleep 20
 
+(cd consumer && python3 client.py consumer01.vddpi 8080 http://registry01.vddpi:8001/issue gencert)
+
 if [ "$mode" = "eval-01" ]; then
 	for i in $(seq 1 10); do
 		num=$(printf "%03d" "$i")
-		(cd consumer && python3 client.py cache/token-$num)
+    (cd consumer && python3 client.py consumer01.vddpi 8080 http://registry01.vddpi:8001/issue process cache/token-$num)
 	done
 else
-	cd consumer && python3 client.py cache/tokens
+  (cd consumer && python3 client.py consumer01.vddpi 8080 http://registry01.vddpi:8001/issue process cache/tokens)
 fi
