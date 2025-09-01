@@ -50,7 +50,7 @@ curl registry01.vddpi:8001/root-crt > consumer/cache/RootCA.pem
 	cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py registry01.vddpi:8001
 )
 
-./run_data_usage_application.sh $APP_ID $mode
+./run.d/run_data_usage_application.sh $APP_ID $mode
 
 # Phase3: process data
 echo "============================== Phase3: Process data =============================="
@@ -59,13 +59,4 @@ make MODE=$mode run-consumer
 echo "Waiting for 20 seconds to start consumer..."
 sleep 20
 
-(cd consumer && python3 client.py consumer01.vddpi 8080 http://registry01.vddpi:8001/issue gencert)
-
-if [ "$mode" = "eval-01" ]; then
-	for i in $(seq 1 10); do
-		num=$(printf "%03d" "$i")
-    (cd consumer && python3 client.py consumer01.vddpi 8080 http://registry01.vddpi:8001/issue process cache/token-$num)
-	done
-else
-  (cd consumer && python3 client.py consumer01.vddpi 8080 http://registry01.vddpi:8001/issue process cache/tokens)
-fi
+./run.d/run_phase3.sh $mode

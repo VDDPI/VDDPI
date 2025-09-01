@@ -2,6 +2,7 @@ import socket
 import ssl
 import time
 import sys
+import argparse
 
 def send_sgx_command(command: str, sgx_host: str, sgx_port: int) -> bool:
     """

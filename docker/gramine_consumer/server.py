@@ -152,36 +152,30 @@ class SGXCommandServer:
             }
 
     def _run_system_command(self, cmd: str) -> Tuple[bool, str]:
-        """Execute system command and return success status and output"""
-        self.logger.debug(f"Executing: {cmd}")
+        """Execute system command in background and return immediately"""
+        self.logger.debug(f"Executing in background: {cmd}")
         
         start_time = time.time()
         try:
-            result = subprocess.run(
+            # Start process in background without waiting
+            process = subprocess.Popen(
                 cmd,
                 shell=True,
-                capture_output=True,
-                text=True,
-                timeout=300  # 5 minute timeout
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
             )
+
+            time.sleep(3)
+
+            self.logger.info(f"Started background process (PID:{process.pid}, command:{cmd})")
+
+            # Return immediately without waiting for completion
+            return True, f"Command started in background (PID:{process.pid}, command:{cmd})"
             
-            success = result.returncode == 0
-            output = result.stdout + result.stderr
-            
-            duration = time.time() - start_time
-            self.logger.debug(f"Command completed in {duration:.3f}s, exit code: {result.returncode}")
-            
-            if output.strip():
-                self.logger.debug(f"Output: {output.strip()}")
-            
-            return success, output.strip()
-            
-        except subprocess.TimeoutExpired:
-            self.logger.error(f"Command timeout: {cmd}")
-            return False, "Command timed out after 5 minutes"
         except Exception as e:
-            self.logger.error(f"Command execution error: {e}")
-            return False, f"Execution error: {e}"
+            self.logger.error(f"Failed to start background process: {e}")
+            return False, f"Failed to start background process: {e}"
 
     def _setup_signal_handlers(self):
         """Setup signal handlers for graceful shutdown"""
