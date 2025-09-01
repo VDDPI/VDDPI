@@ -29,18 +29,24 @@ load-gramine-base:
 
 .PHONY: gramine-consumer
 gramine-consumer: load-gramine-base
-	@echo "Building gramine-consumer:latest"
-	@$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
-	-t gramine-consumer:latest
+	@echo "Building gramine-consumer:latest (mode:$(MODE))"
+	@if [ "$(MODE)" = "eval-01" ]; then \
+		$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
+		--build-arg CODE=code_eval_01 \
+		-t gramine-consumer:latest; \
+	else \
+		$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
+		-t gramine-consumer:latest; \
+	fi
 
 gramine-consumer-mrenclave:
 	@$(DOCKER_CMD) run -it --rm --entrypoint gramine-sgx-sigstruct-view gramine-consumer:latest python.sig
 
 .PHONY: gramine-registry
 gramine-registry: gramine-base
-	@echo "Building gramine-registry:latest"
-	@$(DOCKER_CMD) build -f docker/Dockerfile.gramineregistry docker \
-	-t gramine-registry:latest
+        @echo "Building gramine-registry:latest"
+        @$(DOCKER_CMD) build -f docker/Dockerfile.gramineregistry docker \
+        -t gramine-registry:latest
 
 .PHONY: db-provider
 db-provider:

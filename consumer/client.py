@@ -1,6 +1,7 @@
 import socket
 import ssl
 import time
+import sys
 
 client_cert = 'consumer.crt'
 client_key = 'consumer.key'
@@ -41,7 +42,8 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 with context.wrap_socket(client_socket, server_hostname='consumer01.vddpi') as tls_socket:
     tls_socket.connect(('consumer01.vddpi', 8002))
 
-    with open('cache/tokens', 'rb') as f:
+    path_token = sys.argv[1]
+    with open(path_token, 'rb') as f:
         tokens = f.read()
     tls_socket.send(str(len(tokens.decode().split("\n")) - 1).encode())
     tls_socket.send(tokens)

@@ -1,7 +1,9 @@
 FROM gramine-base:latest
 
+ARG CODE=code
+
 COPY gramine_consumer/run.sh /root
-COPY gramine_consumer/code   /root/code
+COPY gramine_consumer/$CODE  /root/code
 
 WORKDIR /cpython
 RUN ./build_cpython.sh /root/code/main.py /root/gen_cert.py 2> /dev/null && cp python /usr/bin/mypython

@@ -66,7 +66,7 @@ def create_declaration(subject, app_id, data_id, arg_num, counter, location, dur
     }
     return ret
 
-def apply(usage_statement):
+def apply(usage_statement, output_path, write_mode):
     provider_addr = usage_statement["data_ID"].split("//")[1].split("/")[0]
     ret = json.loads(requests.post("https://" + provider_addr + "/apply", verify=CA_CERT, cert=(CLIENT_CERT, CLIENT_KEY), json=usage_statement).text)
 
@@ -74,7 +74,7 @@ def apply(usage_statement):
         print(ret)
         return
     
-    with open("./cache/tokens", "a") as f:
+    with open(output_path, write_mode) as f:
         f.write(ret["jwt"] + "," + ret["cert"].replace("\n", "\\n")[:-2] + "\n")
     
 if __name__ == "__main__":
@@ -89,10 +89,16 @@ if __name__ == "__main__":
     parser.add_argument("-dr", "--duration")
     parser.add_argument("-exd", "--expiration_date")
     parser.add_argument("-key")
+    parser.add_argument("-a", "--append-token", action="store_true")
+    parser.add_argument("-o", "--output-path", default="cache/tokens")
 
     args = parser.parse_args()
     
     usage_statement = create_declaration(args.subject, args.app_id, args.data_id, args.arg_num, args.counter, args.location, args.duration, args.expiration_date, args.key)
-    
-    apply(usage_statement)
+
+    write_mode = "w"
+    if args.append_token:
+        write_mode = "a"
+
+    apply(usage_statement, args.output_path, write_mode)
 
