@@ -13,6 +13,5 @@ RUN make clean && make SGX=1 RA_TYPE=dcap RA_CLIENT_SPID=1234567890abcdef1234567
 RUN mkdir data
 
 COPY gramine_consumer/run.sh /root
-COPY gramine_consumer/server.py /root
 
 CMD ["./run.sh"]
