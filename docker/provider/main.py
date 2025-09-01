@@ -154,7 +154,7 @@ def provide_data(data_type, data):
     if (num != 1):
         cur.close()
         conn.close()
-        msg =  "Failed to load data usage policy"
+        msg =  f"Failed to load data usage policy (query:{query})"
         print(msg)
         print(query)
         return msg, 400
@@ -250,7 +250,7 @@ class apply(Resource):
         if (providing_policy is None):
             return make_response(jsonify({
                         "status": "failed",
-                        "description": "Failed to get data providing policy"
+                        "description": f"Failed to get data providing policy (data_id:{usage_declaration.data_ID})"
                     }), 400)
         
         # determine whether or not to provide data
