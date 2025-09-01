@@ -4,6 +4,7 @@ import ssl
 import argparse
 import os
 import sys
+import time 
 
 # ===== TLS settings and constants =====
 client_cert = 'consumer.crt'
@@ -16,6 +17,8 @@ SUBSCRIPTION_KEY     = "1234567890abcdef1234567890abcdef"
 SERVER_HOST = 'consumer01.vddpi'
 ISSUE_PORT  = 8001   # for certificate issuance
 TOKEN_PORT  = 8002   # for token-driven processing
+
+RETRY_MAX   = 5
 # =====================================
 
 def create_context() -> ssl.SSLContext:
@@ -27,25 +30,51 @@ def create_context() -> ssl.SSLContext:
     ctx.verify_mode    = ssl.CERT_NONE
     return ctx
 
+def run_with_retry(attempt_fn, label: str):
+    """
+    Run the given attempt function with retry and exponential backoff.
+    - attempt_fn: a callable that performs one full attempt. It should raise on failure.
+    - label: short name for logging (e.g., 'gencert' or 'process').
+    """
+    for attempt in range(RETRY_MAX):
+        try:
+            return attempt_fn()
+        except (OSError, ssl.SSLError) as e:
+            if attempt + 1 < RETRY_MAX:
+                delay = 3
+                time.sleep(delay)
+                continue
+            else:
+                print(f"{label} failed permanently: {e}", file=sys.stderr)
+                sys.exit(1)
+        except Exception as e:
+            print(f"{label} unexpected error: {e}", file=sys.stderr)
+            sys.exit(1)
+
 def tls_gencert():
     """Trigger certificate issuance over TLS (port 8001)."""
     context = create_context()
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    try:
-        with context.wrap_socket(client_socket, server_hostname=SERVER_HOST) as tls_socket:
-            tls_socket.connect((SERVER_HOST, ISSUE_PORT))
-            # Send URL + newline + subscription key (protocol preserved)
-            payload = f"{PRIVATE_CA_ISSUE_URL}\n{SUBSCRIPTION_KEY}"
-            tls_socket.send(payload.encode())
+    def _attempt():
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            with context.wrap_socket(client_socket, server_hostname=SERVER_HOST) as tls_socket:
+                tls_socket.connect((SERVER_HOST, ISSUE_PORT))
+                # Send URL + newline + subscription key (protocol preserved)
+                payload = f"{PRIVATE_CA_ISSUE_URL}\n{SUBSCRIPTION_KEY}"
+                tls_socket.send(payload.encode())
 
-            while True:
-                data = tls_socket.recv(1024)
-                if not data:
-                    break
-                print(f"Received Result: {data.decode()}")
-        print("App certificate issued.")
-    finally:
-        client_socket.close()
+                while True:
+                    data = tls_socket.recv(1024)
+                    if not data:
+                        break
+                    print(f"Received Result: {data.decode()}")
+            print("App certificate issued.")
+        finally:
+            try:
+                client_socket.close()
+            except Exception:
+                pass
+    run_with_retry(_attempt, "gencert")
 
 def tls_process(path_token: str):
     """
@@ -69,20 +98,25 @@ def tls_process(path_token: str):
     lines_count = len(token_text.split("\n")) - 1
 
     context = create_context()
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    try:
-        with context.wrap_socket(client_socket, server_hostname=SERVER_HOST) as tls_socket:
-            tls_socket.connect((SERVER_HOST, TOKEN_PORT))
-            tls_socket.send(str(lines_count).encode())
-            tls_socket.send(tokens)
+    def _attempt():
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            with context.wrap_socket(client_socket, server_hostname=SERVER_HOST) as tls_socket:
+                tls_socket.connect((SERVER_HOST, TOKEN_PORT))
+                tls_socket.send(str(lines_count).encode())
+                tls_socket.send(tokens)
 
-            while True:
-                data = tls_socket.recv(1024)
-                if not data:
-                    break
-                print(f"Received: {data.decode()}")
-    finally:
-        client_socket.close()
+                while True:
+                    data = tls_socket.recv(1024)
+                    if not data:
+                        break
+                    print(f"Received: {data.decode()}")
+        finally:
+            try:
+                client_socket.close()
+            except Exception:
+                pass
+    run_with_retry(_attempt, "process")
 
 def main():
     parser = argparse.ArgumentParser(
