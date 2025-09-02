@@ -33,22 +33,27 @@ def process_data(person_1):
     #   ||+---- Intellectual Disability (move, information access)
     #   |+----- Hearing Impairment      (information access)
     #   +------ Visual Impairment       (information access)
-    barrier = []
-    #cond = int(person_1["disability"], 2)
+    barrier_move = False
+    barrier_info = False
     for d in person_1["disability"]:
         if d == "mobility-impairment":
-            barrier += ["move"]
+            barrier_move = True
         elif d == "invisible-disability":
-            barrier += ["move"]
+            barrier_move = True
         elif d == "intellectual-disability":
-            barrier += ["move"]
-            barrier += ["info"]
+            barrier_move = True
+            barrier_info = True
         elif d == "hearing-impairment":
-            barrier += ["info"]
+            barrier_info = True
         elif d == "visual-impairment":
-            barrier += ["info"]
+            barrier_info = True
+    barrier = []
+    if barrier_move:
+        barrier += ["move"]
+    if barrier_info:
+        barrier += ["info"]
     if not barrier:
-        barrier += ["none"]
+        barrier = ["none"]
 
     position = ""
     if person_1["loc"] < 100:
