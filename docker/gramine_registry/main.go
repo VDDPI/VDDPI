@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strings"
+	"time"
 	"log"
 	"io"
 )
@@ -40,9 +42,10 @@ func upload(web http.ResponseWriter, req *http.Request) {
 
 			log.Printf("Start building (SPID:%s, isLinkable:%s)", string(SPID), string(isLinkable))
 			start := time.Now()
-			MRENCLAVE, err := exec.Command("./../build.sh", SPID, isLinkable).Output()
+			mrenclave_bytes, err := exec.Command("./../build.sh", SPID, isLinkable).Output()
 			end := time.Now()
-			log.Printf("Finish building (MRENCLAVE:%s)", string(MRENCLAVE))
+			mrenclave := strings.TrimRight(string(mrenclave_bytes), "\r\n")
+			log.Printf("Finish building (MRENCLAVE:%s)", mrenclave)
 
 			if err != nil {
 				web.WriteHeader(http.StatusBadRequest)
@@ -52,12 +55,12 @@ func upload(web http.ResponseWriter, req *http.Request) {
 
 			duration := end.Sub(start)
 
-			log.Printf("___BENCH___ MRENCLAVE retrieval (Start:%s, End:%s, Duration_ms:%d)", start.Format(time.RFC3339), end.Format(time.RFC3339), duration.Milliseconds())
+			log.Printf("___BENCH___ MRENCLAVE retrieval (Start:%s, End:%s, Duration_ms:%d)", start.Format("2006-01-02 15:04:05"), end.Format("2006-01-02 15:04:05"), duration.Milliseconds())
 
-			log.Printf("MRENCLAVE: %s", string(MRENCLAVE))
+			log.Printf("MRENCLAVE: %s", mrenclave)
 
 			web.WriteHeader(http.StatusOK)
-			fmt.Fprint(web, string(MRENCLAVE))
+			fmt.Fprint(web, mrenclave)
 
 		default:
 			web.WriteHeader(http.StatusMethodNotAllowed)

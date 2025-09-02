@@ -1,6 +1,6 @@
 from fastapi import FastAPI, File, UploadFile, status, Response
 import shutil
-import time
+from datetime import datetime
 import analyzer
 
 app = FastAPI()
@@ -23,14 +23,14 @@ async def verify(response: Response, file: UploadFile = File(...)):
     with open(UPLOAD_PATH, "r") as f:
         file_content = f.read()
         print(f"Start analyzer (size:{len(file_content)})")
-        start = time.time()
+        start = datetime.now()
         result, spec = analyzer.analyzer(file_content)
-        end = time.time()
+        end = datetime.now()
         print(f"Finish analyzer (code:{result})")
 
     if (result == 0):
-        elapsed_ms = round((end - start) * 1000)
-        print(f"___BENCH___ Data processing code analysis (Start:{start}, End:{end}, Duration_ms:{elapsed_ms})")
+        elapsed_ms = round((end - start).total_seconds() * 1000)
+        print(f"___BENCH___ Data processing code analysis (Start:{start.strftime('%Y-%m-%d %H:%M:%S')}, End:{end.strftime('%Y-%m-%d %H:%M:%S')}, Duration_ms:{elapsed_ms})")
         response.status_code = status.HTTP_200_OK
         return {"Result": "OK", "ProcessingSpec": spec.__dict__}
     else:
