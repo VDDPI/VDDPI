@@ -16,7 +16,7 @@ fi
 > "$app_list"
 
 for i in $(seq 1 "$count"); do
-    echo -ne "\rRun $i/$count"
+    echo -ne "\rRun App Registration: $i/$count"
 
     start_ts=$(date +"%Y-%m-%d %H:%M:%S")
     start_epoch=$(date +%s%3N)
