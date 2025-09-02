@@ -35,6 +35,8 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     networks:
       provider-net:
+    ports:
+      - 3306:3306
 
 networks:
   provider-net:

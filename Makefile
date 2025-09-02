@@ -51,7 +51,6 @@ gramine-registry: gramine-base
 .PHONY: db-provider
 db-provider:
 	@echo "Building db-provider (mode:$(MODE))"
-	@cd docker/db && ./set_allowed_program_hashes.sh $(MODE)
 	@$(DOCKER_CMD) build -f docker/Dockerfile.dbprovider docker \
 	-t db-provider:latest
 
