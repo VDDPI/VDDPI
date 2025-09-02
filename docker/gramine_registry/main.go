@@ -37,16 +37,22 @@ func upload(web http.ResponseWriter, req *http.Request) {
 				fmt.Fprint(web, "isLinkable not specified")
 				return
 			}
-			
+
 			log.Printf("Start building (SPID:%s, isLinkable:%s)", string(SPID), string(isLinkable))
+			start := time.Now()
 			MRENCLAVE, err := exec.Command("./../build.sh", SPID, isLinkable).Output()
-			log.Printf("Finish buiding")
+			end := time.Now()
+			log.Printf("Finish building (MRENCLAVE:%s)", string(MRENCLAVE))
 
 			if err != nil {
 				web.WriteHeader(http.StatusBadRequest)
 				fmt.Fprint(web, "Cannot get MRENCLAVE")
 				return
 			}
+
+			duration := end.Sub(start)
+
+			log.Printf("___BENCH___ MRENCLAVE retrieval (Start:%s, End:%s, Duration_ms:%d)", start.Format(time.RFC3339), end.Format(time.RFC3339), duration.Milliseconds())
 
 			log.Printf("MRENCLAVE: %s", string(MRENCLAVE))
 
@@ -118,7 +124,7 @@ func updateFilters(web http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	log.Printf("Started gramine server prosess\n")
+	log.Printf("Started gramine server process\n")
 	http.HandleFunc("/upload", upload)
 	http.HandleFunc("/update", update)
 	http.HandleFunc("/updateFilters", updateFilters)
