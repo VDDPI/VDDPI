@@ -3,7 +3,7 @@
 # Usage: ./run_register.sh <file> <count>
 file="$1"
 count="$2"
-app_list="$3"
+app_id_list="$3"
 logfile="run_eval_01.d/result/eval_app_registration.log"
 
 if [ -z "$file" ] || [ -z "$count" ]; then
@@ -13,7 +13,7 @@ fi
 
 # Clear file with an empty file.
 > "$logfile"
-> "$app_list"
+> "$app_id_list"
 
 for i in $(seq 1 "$count"); do
     echo -ne "\rRun App Registration: $i/$count"
@@ -36,9 +36,9 @@ for i in $(seq 1 "$count"); do
 
     # Extract App_ID from response and append to list file
     APP_ID=$(jq -r '.DataProcessingSpec.App_ID' /tmp/response.json)
-    echo "$APP_ID" >> "$app_list"
+    echo "$APP_ID" >> "$app_id_list"
 
     echo "___BENCH___ App registration (Start:$start_ts, End:$end_ts, Duration_ms:$duration)" >> "$logfile"
 done
 
-echo -e "\nAll App_IDs saved to $app_list"
+echo -e "\nAll App_IDs saved to $app_id_list"
