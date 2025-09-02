@@ -96,7 +96,6 @@ def analyzer(source_code):
     # pysa
     result = subprocess.run(["cd pysa && source ~/.venvs/venv/bin/activate && pyre analyze --save-results-to ./"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, executable="/bin/bash")
     if (result.returncode != 0):
-        print("AA")
         return 14, None
     
     issue_info_arr = []
