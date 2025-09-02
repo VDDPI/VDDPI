@@ -3,7 +3,7 @@
 # Usage: ./run_register.sh <file> <count>
 file="$1"
 count="$2"
-app_list="./cache/app_id_list.txt"
+app_list="$3"
 logfile="run_eval_01.d/result/eval_app_registration.log"
 
 if [ -z "$file" ] || [ -z "$count" ]; then

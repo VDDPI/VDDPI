@@ -26,7 +26,8 @@ echo "Waiting for $sleep_time seconds..."
 sleep $sleep_time
 
 file="docker/gramine_consumer/code_eval_01/main.py"
-./run_eval_01.d/eval_app_registration.sh "$file" "$trial_count"
+app_list="./cache/app_id_list.txt"
+./run_eval_01.d/eval_app_registration.sh "$file" "$trial_count" "$app_list"
 
 ./run_eval_01.d/eval_obtaining_app_id.sh
 
