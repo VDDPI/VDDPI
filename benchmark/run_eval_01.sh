@@ -59,10 +59,11 @@ echo "Restart containers on consumer01.vddpi"
 echo "Setup provider for eval-01"
 ssh provider01.vddpi "docker exec -i provider-server bash ./init.sh eval-01"
 
-echo "After waiting for $SLEEP_TIME seconds, start recording stats of containers on registry01.vddpi"
-sleep $SLEEP_TIME
 scp $VDDPI_BENCH_DIR/record_stats.sh registry01.vddpi:$REMOTE_RECORD_STATS_SCRIPT
 ssh -T registry01.vddpi "nohup bash $REMOTE_RECORD_STATS_SCRIPT > /tmp/container_stats_${START_TIME}.csv 2>&1 & disown"
+
+echo "Measuring the baseline of stats of containers on registry01.vddpi (waiting for $SLEEP_TIME seconds)."
+sleep $SLEEP_TIME
 
 echo "=================== Phase1: Register your data processing app ==================="
 
@@ -91,7 +92,7 @@ echo "=================== Phase3: Data processing ==================="
 
 echo "=================== Finalization ==================="
 
-echo "After waiting for $SLEEP_TIME seconds, stop recording stats of containers on registry01.vddpi"
+echo "Measuring the baseline of stats of containers on registry01.vddpi (waiting for $SLEEP_TIME seconds)."
 sleep $SLEEP_TIME
 ssh registry01.vddpi "pkill -f $REMOTE_RECORD_STATS_SCRIPT"
 
