@@ -51,10 +51,10 @@ do
     index=$(printf "%04d" "$i")
     data_id="https://provider01.vddpi:443/data/person/personal-$index"
 
-    echo "Preparing data provision policy -- provider preparation (App ID:$app_id, Data ID:$data_id)"
+    echo "Preparing data provision policy -- provider preparation (app_id:$app_id, data_id:$data_id)"
     insert_policy "$data_id" "$app_id" "$provider_db_config"
 
-    echo "Applying for data usage (App ID:$app_id, Data ID:$data_id)"
+    echo "Applying for data usage (app_id:$app_id, data_id:$data_id)"
     start_ts=$(date +"%Y-%m-%d %H:%M:%S")
     start_epoch=$(date +%s%3N)
     python3 ../create_declaration.py \
