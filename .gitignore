@@ -12,13 +12,13 @@ consumer/consumer.*
 consumer/code/RootCA.pem
 consumer/code/tokens
 consumer/code/__pycache__
-consumer/cache/*
 consumer/.env
 registry/docker-compose.yml
 *gramine-base_latest.tar.gz
 docker/psuedo_api/server.*
 docker/psuedo_api/key.pem
 docker/db/02_create_data.sh
-cache/*
+
+**/cache/*
 
 !.gitkeep
