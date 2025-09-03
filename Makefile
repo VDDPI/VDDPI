@@ -50,7 +50,7 @@ gramine-registry: gramine-base
 
 .PHONY: db-provider
 db-provider:
-	@echo "Building db-provider (mode:$(MODE))"
+	@echo "Building db-provider"
 	@$(DOCKER_CMD) build -f docker/Dockerfile.dbprovider docker \
 	-t db-provider:latest
 
