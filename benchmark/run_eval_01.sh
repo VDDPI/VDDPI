@@ -9,7 +9,6 @@ VDDPI_DIR=$HOME/VDDPI
 VDDPI_BENCH_DIR=$HOME/VDDPI/benchmark
 VDDPI_EVAL_DIR=$VDDPI_BENCH_DIR/eval_01.d
 APP_ID_FILE=$VDDPI_EVAL_DIR/cache/app_id.txt
-START_TIME=$(date +%y%m%d-%H%M%S)
 REMOTE_RECORD_STATS_SCRIPT=/tmp/record_stats.sh
 PROVIDER_DB_CONFIG=$VDDPI_EVAL_DIR/cache/provider_db.cnf
 DATA_PROCESSING_CODE="$VDDPI_DIR/docker/gramine_consumer/code_eval_01/main.py"
@@ -25,6 +24,11 @@ fetch_logs() {
     local log_file="$3"
     ssh -T "$hostname" "docker logs $container_name" 2>&1 | grep "___BENCH___" > "$log_file"
 }
+
+########################################
+# Initialization
+########################################
+START_TIME=$(date +%y%m%d-%H%M%S)
 
 ########################################
 # Main
@@ -101,4 +105,11 @@ scp registry01.vddpi:/tmp/container_stats_${START_TIME}.csv ./result/container_s
 ssh registry01.vddpi "rm -f /tmp/container_stats_${START_TIME}.csv"
 
 echo "Benchmark finished."
+
+########################################
+# Finalization
+########################################
+END_TIME=$(date +%y%m%d-%H%M%S)
+echo "Start time: $START_TIME, End time: $END_TIME"
+
 popd > /dev/null
