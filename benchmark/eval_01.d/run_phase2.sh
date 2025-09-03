@@ -48,8 +48,8 @@ echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 ../get_cert.py regi
 
 for i in $(seq 1 $trial_count)
 do
-    index=$(printf "%03d" "$i")
-    data_id=$(printf "https://provider01.vddpi:443/data/person/personal-%03d" "$index")
+    index=$(printf "%04d" "$i")
+    data_id="https://provider01.vddpi:443/data/person/personal-$index"
 
     echo "Preparing data provision policy -- provider preparation (App ID:$app_id, Data ID:$data_id)"
     insert_policy "$data_id" "$app_id" "$provider_db_config"
