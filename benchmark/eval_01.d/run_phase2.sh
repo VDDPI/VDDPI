@@ -45,13 +45,14 @@ curl registry01.vddpi:8001/root-crt > ./cache/RootCA.pem
 
 for i in $(seq 1 $trial_count)
 do
-    data_id=$(printf "https://provider01.vddpi:443/data/person/personal-%03d" "$i")
+    index=$(printf "%03d" "$i")
+    data_id=$(printf "https://provider01.vddpi:443/data/person/personal-%03d" "$index")
     insert_policy "$data_id" "$app_id" "$provider_db_config"
 
     start_ts=$(date +"%Y-%m-%d %H:%M:%S")
     start_epoch=$(date +%s%3N)
     python3 ../create_declaration.py \
-        -o ./cache/token-$num \
+        -o ./cache/token-$index \
         consumer.example.com $app_id $data_id 1 ./cache/consumer.key
     end_ts=$(date +"%Y-%m-%d %H:%M:%S")
     end_epoch=$(date +%s%3N)
