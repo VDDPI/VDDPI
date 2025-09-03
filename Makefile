@@ -57,12 +57,6 @@ db-provider:
 .PHONY: provider
 provider:
 	@echo "Building server-provider:latest"
-	@rm -f provider/data/person/*
-	@if [ "$(MODE)" = "eval-01" ]; then \
-		cd provider && python3 make_test_data.py 100 0; \
-	else \
-		cp provider/data_demo/person/* provider/data/person/; \
-	fi
 	@$(DOCKER_CMD) build -f docker/Dockerfile.provider docker \
 	-t server-provider:latest
 
@@ -130,7 +124,6 @@ stop-consumer:
 # Provider
 .PHONY: run-provider
 run-provider: db-provider provider
-	@curl $(PRIVATE_CA)/root-crt > provider/files/RootCA.pem
 	@cd provider && \
 	SERVER_PORT=$(SERVER_PROVIDER_PORT) \
 	SERVER_HOST_NAME=$(SERVER_PROVIDER_HOST_NAME) \

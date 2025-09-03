@@ -2,10 +2,11 @@ import json
 import random
 import os
 import sys
+import shutil
 
 # --- 引数処理 ---
 if len(sys.argv) < 2:
-    print("Usage: python generate_json.py <num_files> [seed]")
+    print("Usage: python3 make_test_data.py <num_files> [seed]")
     sys.exit(1)
 
 num_files = int(sys.argv[1])  # 生成するファイル数
@@ -19,6 +20,7 @@ else:
 
 # --- 出力先ディレクトリ ---
 output_dir = "data/person"
+shutil.rmtree(output_dir, ignore_errors=True)
 os.makedirs(output_dir, exist_ok=True)
 
 disabilities = [

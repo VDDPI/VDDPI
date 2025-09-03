@@ -3,8 +3,11 @@ FROM python:3.8
 RUN apt update && apt -y install libmariadb-dev-compat libmariadb-dev
 RUN pip install flask flask_restx cryptography==38.0.1 pyOpenSSL==22.1.0 pycryptodomex requests mysqlclient pyjwt importlib-metadata
 
-COPY provider/main.py /root
-
 WORKDIR /root
 
-CMD ["./python3 main.py"]
+COPY provider/entrypoint.sh /
+COPY provider/main.py /root
+COPY provider/init.sh /root
+COPY provider/make_test_data.py /root
+
+CMD ["/entrypoint.sh"]

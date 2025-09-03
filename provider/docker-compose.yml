@@ -25,7 +25,6 @@ services:
       - ./data:/root/data
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
-    command: "python3 main.py"
     networks:
       provider-net:
   db:
