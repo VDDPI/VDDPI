@@ -268,6 +268,9 @@ def store_data(data):
         f.write(json.dumps(data))
 
 def request(client_cn, tokens):
+
+    cached = False
+
     with open(CA_CERT, "rb") as cert:
         with open(TRUSTED_CA_CERT, "wb") as trusted_cert:
             trusted_cert.write(cert.read())
@@ -303,6 +306,7 @@ def request(client_cn, tokens):
         if (os.path.isfile(file_path)):
             # cache acquisition phase
             provided_data_uc.append(read_data_from_cache("./data/" + usage_statement["data_ID"].replace("/", "-"), client_cn))
+            cached = True
         else:
             # data acquisition phase
             is_succeeded, data = data_acquisition(usage_statement["data_ID"], client_cn)
@@ -345,6 +349,8 @@ def request(client_cn, tokens):
         if (expired):
             remove_data(data)
 
+    return is_met_condition, cached
+
 if __name__ == "__main__":
     urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
     
@@ -376,7 +382,9 @@ if __name__ == "__main__":
         for _ in range(int(msg1)):
             msg2 += tls_socket.recv(2048).decode()
     
-        request(client_cn, msg2)
-        
-        tls_socket.send(b'Session completed.')
+        data_processed, cached = request(client_cn, msg2)
+
+        msg = f"Session completed (data_processed:{data_processed}, cached:{cached})"
+        tls_socket.send(msg.encode('utf-8'))
+
     client_socket.close()
