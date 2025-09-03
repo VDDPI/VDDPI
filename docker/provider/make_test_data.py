@@ -57,4 +57,4 @@ for i in range(1, num_files + 1):
     with open(filename, "w") as f:
         json.dump(record, f, indent=4)
 
-print(f"✅ {num_files} 個のJSONファイルを '{output_dir}' ディレクトリに出力しました")
+print(f"✅ {num_files} JSON files have been generated in the '{output_dir}' directory.")
