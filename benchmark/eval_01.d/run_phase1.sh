@@ -1,35 +1,27 @@
 #!/bin/bash
 
 ########################################
-# Variable validation
-########################################
-if [ -z "$VDDPI_DIR" ]; then
-    echo "Error: VDDPI_DIR is not set" >&2
-    exit 1
-fi
-
-########################################
 # Configuration
 ########################################
-file="$VDDPI_DIR/docker/gramine_consumer/code_eval_01/main.py"
+LOGFILE="result/eval_app_registration.log"
 
 ########################################
 # Arguments
 ########################################
-trial_count="$1"
-app_id_file="$2"
-logfile="$3"
+data_processing_code="$1"
+trial_count="$2"
+app_id_file="$3"
 
 ########################################
 # Initialization
 ########################################
-> "$logfile"
+> "$LOGFILE"
 
 ########################################
 # Main
 ########################################
 for i in $(seq 1 "$trial_count"); do
-    echo -ne "\rRun App Registration: $i/$trial_count"
+    echo "Run App Registration: $i/$trial_count"
 
     start_ts=$(date +"%Y-%m-%d %H:%M:%S")
     start_epoch=$(date +%s%3N)
@@ -38,7 +30,7 @@ for i in $(seq 1 "$trial_count"); do
         'http://registry01.vddpi/register' \
         -H 'accept: application/json' \
         -H 'Content-Type: multipart/form-data' \
-        -F "program=@${file};type=text/x-python" \
+        -F "program=@${data_processing_code};type=text/x-python" \
         -F 'SPID=1234567890abcdef1234567890abcdef' \
         -F 'isLinkable=0' \
         > /tmp/response.json
@@ -52,6 +44,7 @@ for i in $(seq 1 "$trial_count"); do
 
     # Since the APP ID does not change, only one record is kept by overwriting
     echo "$app_id" > "$app_id_file"
+    echo "App ID: $app_id"
 
-    echo "___BENCH___ App registration (Start:$start_ts, End:$end_ts, Duration_ms:$duration)" >> "$logfile"
+    echo "___BENCH___ App registration (Start:$start_ts, End:$end_ts, Duration_ms:$duration)" >> "$LOGFILE"
 done

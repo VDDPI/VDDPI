@@ -12,6 +12,9 @@ APP_ID_FILE=$VDDPI_EVAL_DIR/cache/app_id.txt
 START_TIME=$(date +%y%m%d-%H%M%S)
 REMOTE_RECORD_STATS_SCRIPT=/tmp/record_stats.sh
 PROVIDER_DB_CONFIG=$VDDPI_EVAL_DIR/cache/provider_db.cnf
+DATA_PROCESSING_CODE="$VDDPI_DIR/docker/gramine_consumer/code_eval_01/main.py"
+
+SKIP_RESTART_REGISTRY=${SKIP_RESTART_REGISTRY:-false}
 
 ########################################
 # Functions
@@ -32,15 +35,26 @@ echo "Starting benchmark for eval_01 at $START_TIME"
 
 echo "=================== Initialization ==================="
 
-echo "Restart containers on registry01.vddpi"
-ssh registry01.vddpi "cd $VDDPI_DIR && \
-    make stop-registry > /dev/null 2>&1; \
-    make run-registry"
+if [ "$SKIP_RESTART_REGISTRY" = false ]; then
+    echo "Restart containers on registry01.vddpi"
+    ssh registry01.vddpi "cd $VDDPI_DIR && \
+        make stop-registry > /dev/null 2>&1; \
+        make run-registry"
+else
+    echo "Skipping restart containers on registry01.vddpi"
+fi
 
 echo "Restart containers on provider01.vddpi"
 ssh provider01.vddpi "cd $VDDPI_DIR && \
     make stop-provider > /dev/null 2>&1; \
     make run-provider"
+
+echo "Restart containers on consumer01.vddpi"
+(
+    cd $VDDPI_DIR
+    make stop-consumer > /dev/null 2>&1
+    MODE=eval-01 make run-consumer
+)
 
 echo "Setup provider for eval-01"
 ssh provider01.vddpi "docker exec -i provider-server bash ./init.sh eval-01"
@@ -52,7 +66,7 @@ ssh -T registry01.vddpi "nohup bash $REMOTE_RECORD_STATS_SCRIPT > /tmp/container
 
 echo "=================== Phase1: Register your data processing app ==================="
 
-VDDPI_DIR=$VDDPI_DIR ./run_phase1.sh "$TRIAL_COUNT" "$APP_ID_FILE" "result/eval_app_registration.log"
+./run_phase1.sh "$DATA_PROCESSING_CODE" "$TRIAL_COUNT" "$APP_ID_FILE"
 
 # Fetch logs
 fetch_logs "registry01.vddpi" "registry-v1-gramine-1"  "result/eval_obtaining_app_id.log"
@@ -67,9 +81,13 @@ cat > $PROVIDER_DB_CONFIG <<- EOF
     password=root
     host=provider01.vddpi
 EOF
-./run_phase2.sh "$app_id" "$TRIAL_COUNT" "$PROVIDER_DB_CONFIG"
+./run_phase2.sh "$app_id" "$TRIAL_COUNT" "$PROVIDER_DB_CONFIG" "$VDDPI_EVAL_DIR/cache"
 
 fetch_logs "provider01.vddpi" "provider-server"  "result/eval_obtaining_processing_spec.log"
+
+echo "=================== Phase3: Data processing ==================="
+
+./run_phase3.sh "$VDDPI_EVAL_DIR/cache"
 
 echo "=================== Finalization ==================="
 
@@ -82,4 +100,4 @@ scp registry01.vddpi:/tmp/container_stats_${START_TIME}.csv ./result/container_s
 ssh registry01.vddpi "rm -f /tmp/container_stats_${START_TIME}.csv"
 
 echo "Benchmark finished."
-popd
+popd > /dev/null

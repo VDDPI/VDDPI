@@ -7,9 +7,6 @@ import sys
 import time 
 
 # ===== TLS settings and constants =====
-client_cert = 'consumer.crt'
-client_key  = 'consumer.key'
-ca_cert     = 'cache/RootCA.pem'
 
 PRIVATE_CA_ISSUE_URL = "http://registry01.vddpi:8001/issue"
 SUBSCRIPTION_KEY     = "1234567890abcdef1234567890abcdef"
@@ -21,8 +18,12 @@ TOKEN_PORT  = 8002   # for token-driven processing
 RETRY_MAX   = 5
 # =====================================
 
-def create_context() -> ssl.SSLContext:
+def create_context(cache_dir: str) -> ssl.SSLContext:
     """Create TLS context with client certificate; keep relaxed verification (same as original)."""
+    client_cert = f"{cache_dir}/consumer.crt"
+    client_key  = f"{cache_dir}/consumer.key"
+    ca_cert     = f"{cache_dir}/RootCA.pem"
+
     ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     ctx.load_cert_chain(certfile=client_cert, keyfile=client_key)
     ctx.load_verify_locations(cafile=ca_cert)
@@ -51,9 +52,9 @@ def run_with_retry(attempt_fn, label: str):
             print(f"{label} unexpected error: {e}", file=sys.stderr)
             sys.exit(1)
 
-def tls_gencert():
+def tls_gencert(cache_dir: str):
     """Trigger certificate issuance over TLS (port 8001)."""
-    context = create_context()
+    context = create_context(cache_dir)
     def _attempt():
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
@@ -76,7 +77,7 @@ def tls_gencert():
                 pass
     run_with_retry(_attempt, "gencert")
 
-def tls_process(path_token: str):
+def tls_process(path_token: str, cache_dir: str):
     """
     Send tokens over TLS (port 8002) to trigger server-side data processing.
     The server uses the information in the token file to run its processing program.
@@ -97,7 +98,7 @@ def tls_process(path_token: str):
     # Protocol preserved: send (line_count - 1) first, then the token content.
     lines_count = len(token_text.split("\n")) - 1
 
-    context = create_context()
+    context = create_context(cache_dir)
     def _attempt():
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
@@ -125,18 +126,20 @@ def main():
     subparsers = parser.add_subparsers(dest="mode", required=True)
 
     # gencert: certificate issuance only
-    subparsers.add_parser("gencert", help="Generate/issue app certificate over TLS (port 8001).")
+    p_gencert = subparsers.add_parser("gencert", help="Generate/issue app certificate over TLS (port 8001).")
+    p_gencert.add_argument("cache_dir", help="Path to the cache directory containing consumer.crt, consumer.key, and RootCA.pem.")
 
     # process: token-driven processing only
     p_process = subparsers.add_parser("process", help="Send tokens to trigger server-side processing (port 8002).")
     p_process.add_argument("path_token", help="Path to token file used by the server-side processing program.")
+    p_process.add_argument("cache_dir", help="Path to the cache directory containing consumer.crt, consumer.key, and RootCA.pem.")
 
     args = parser.parse_args()
 
     if args.mode == "gencert":
-        tls_gencert()
+        tls_gencert(args.cache_dir)
     elif args.mode == "process":
-        tls_process(args.path_token)
+        tls_process(args.path_token, args.cache_dir)
 
 if __name__ == "__main__":
     main()
