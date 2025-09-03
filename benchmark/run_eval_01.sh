@@ -6,11 +6,12 @@
 TRIAL_COUNT=5
 SLEEP_TIME=20
 VDDPI_DIR=$HOME/VDDPI
-VDDPI_BENCH_DIR=$HOME/VDDPI/benchmark/eval-01.d
-APP_ID_FILE=$VDDPI_BENCH_DIR/cache/app_id.txt
+VDDPI_BENCH_DIR=$HOME/VDDPI/benchmark
+VDDPI_EVAL_DIR=$VDDPI_BENCH_DIR/eval_01.d
+APP_ID_FILE=$VDDPI_EVAL_DIR/cache/app_id.txt
 START_TIME=$(date +%y%m%d-%H%M%S)
 REMOTE_RECORD_STATS_SCRIPT=/tmp/record_stats.sh
-PROVIDER_DB_CONFIG=$VDDPI_BENCH_DIR/cache/provider_db.cnf
+PROVIDER_DB_CONFIG=$VDDPI_EVAL_DIR/cache/provider_db.cnf
 
 ########################################
 # Functions
@@ -27,6 +28,8 @@ fetch_logs() {
 ########################################
 pushd eval_01.d
 
+echo "Starting benchmark for eval_01 at $START_TIME"
+
 echo "=================== Initialization ==================="
 
 echo "Restart containers on registry01.vddpi"
@@ -40,7 +43,7 @@ ssh provider01.vddpi "cd $VDDPI_DIR && \
     make run-provider"
 
 echo "Setup provider for eval-01"
-ssh provider01.vddpi "docker exec -it provider-server bash ./init.sh eval-01"
+ssh provider01.vddpi "docker exec -i provider-server bash ./init.sh eval-01"
 
 echo "After waiting for $SLEEP_TIME seconds, start recording stats of containers on registry01.vddpi"
 sleep $SLEEP_TIME
@@ -66,6 +69,8 @@ cat > $PROVIDER_DB_CONFIG <<- EOF
 EOF
 ./run_phase2.sh "$app_id" "$TRIAL_COUNT" "$PROVIDER_DB_CONFIG"
 
+fetch_logs "provider01.vddpi" "provider-server"  "result/eval_obtaining_processing_spec.log"
+
 echo "=================== Finalization ==================="
 
 echo "After waiting for $SLEEP_TIME seconds, stop recording stats of containers on registry01.vddpi"
@@ -73,7 +78,8 @@ sleep $SLEEP_TIME
 ssh registry01.vddpi "pkill -f $REMOTE_RECORD_STATS_SCRIPT"
 
 echo "Fetch stats result from registry01.vddpi"
-scp registry01.vddpi:/tmp/container_stats-${START_TIME}.csv ./result/container_stats.csv
+scp registry01.vddpi:/tmp/container_stats_${START_TIME}.csv ./result/container_stats.csv
+ssh registry01.vddpi "rm -f /tmp/container_stats_${START_TIME}.csv"
 
 echo "Benchmark finished."
 popd
