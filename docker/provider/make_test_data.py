@@ -53,7 +53,7 @@ for i in range(1, num_files + 1):
         "disability": selected_disabilities
     }
 
-    filename = os.path.join(output_dir, f"personal-{i:03}.json")
+    filename = os.path.join(output_dir, f"personal-{i:04}.json")
     with open(filename, "w") as f:
         json.dump(record, f, indent=4)
 
