@@ -316,7 +316,7 @@ def request(client_cn, tokens):
 
     return start, end, elapsed_ms, is_met_condition, cached
 
-def handle_client(context: ssl.SSLContext, client_socket: socket.socket, fromaddr)
+def handle_client(context: ssl.SSLContext, client_socket: socket.socket, fromaddr):
     with context.wrap_socket(client_socket, server_side=True) as tls_socket:
         print(f"Client connected: {fromaddr} ")
         
