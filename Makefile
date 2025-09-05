@@ -139,21 +139,26 @@ stop-provider:
 	$(DOCKER_COMPOSE_CMD) down
 
 .PHONY: run-registry
-run-registry: gramine-registry analyzer-registry ca-registry api-registry datatype-api psuedo-ias psuedo-api
-	@cd registry && ./fablo up fablo-config.json
-	@docker network ls -f "name=fablo_network" --format '{{.Name}}' | \
-	xargs -i sed -e "s/FABLO_NETWORK/{}/g" $(REGISTRY_DOCKERCOMPOSE_TEMPLATE_FILE) > $(REGISTRY_DOCKERCOMPOSE_FILE)
-	@cd registry && \
-	$(DOCKER_COMPOSE_CMD) up --build -d
+run-registry:
+	$(MAKE) run-registry-network
+	$(MAKE) run-registry-service
+
+.PHONY: run-registry-service
+run-registry-service: gramine-registry analyzer-registry ca-registry api-registry datatype-api psuedo-ias psuedo-api
+	@cd registry && $(DOCKER_COMPOSE_CMD) up --build -d
 	@cd registry && ./connect_registry_network.sh
+
+.PHONY: run-registry-network
+run-registry-network:
+	@cd registry && ./fablo generate fablo-config.json
+	@echo "COMPOSE_PROJECT_NAME=fablo_network" >> registry/fablo-target/fabric-docker/.env
+	@cd registry && ./fablo up fablo-config.json
 	@cd init && ./registry_setup.sh
-	@echo "Registry setup completed!"
 
 .PHONY: stop-registry
 stop-registry:
 	@cd registry && ./fablo down
-	@cd registry && \
-		$(DOCKER_COMPOSE_CMD) down
+	@cd registry && $(DOCKER_COMPOSE_CMD) down
 	@cd registry && ./fablo prune
 
 .PHONY: clean
