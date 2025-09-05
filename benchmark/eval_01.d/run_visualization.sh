@@ -1,4 +1,4 @@
-
+#!/bin/sh
 
 python3 lib/xxx.py \
     result/graph_app_registration.svg \

@@ -245,11 +245,15 @@ def create_cumulative_graph_with_memory(output_svg: str,
 
     # Lines: Duration (ms)
     if not df_cache.empty:
-        ax1.plot(x_c, df_cache["duration_ms"], marker="o", linewidth=1.6,
-                 label="Cache: Duration (ms)", color="#2E86AB")
+        #ax1.plot(x_c, df_cache["duration_ms"], marker="o", linewidth=1.6,
+        #         label="Cache: Duration (ms)", color="#2E86AB")
+        ax1.plot(x_c, df_cache["cumulative_ms"], marker="o", linewidth=1.6,
+                 label="Cache: Time (ms)", color="#2E86AB")
     if not df_nocache.empty:
-        ax1.plot(x_nc, df_nocache["duration_ms"], marker="o", linewidth=1.6,
-                 label="No-cache: Duration (ms)", color="#F18F01")
+        #ax1.plot(x_nc, df_nocache["duration_ms"], marker="o", linewidth=1.6,
+        #         label="No-cache: Duration (ms)", color="#F18F01")
+        ax1.plot(x_nc, df_nocache["cumulative_ms"], marker="o", linewidth=1.6,
+                 label="No-cache: TimeDuration (ms)", color="#F18F01")
 
     ax1.set_xlabel("Run #")
     ax1.set_ylabel("Duration (ms)")
