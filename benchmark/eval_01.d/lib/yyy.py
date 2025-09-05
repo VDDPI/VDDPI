@@ -30,48 +30,77 @@ import matplotlib.pyplot as plt
 
 def parse_benchmark_log(path: str, expected_cached: Optional[bool] = None) -> pd.DataFrame:
     """
-    Parse a benchmark log file.
-    Returns DataFrame with columns:
-        run, start_time, end_time, duration_ms, cached, median_time, cumulative_ms
-    If expected_cached is not None, only keep lines whose cached flag equals it.
+    Robust parser:
+      - key 大小文字を無視 (start/Start/START など全部OK)
+      - コロン後のスペース可
+      - 時刻は pandas.to_datetime で広く解釈（ミリ秒/ISO8601/タイムゾーン可）
     """
-    pattern = re.compile(
-        r"""___BENCH___ (.+?) \(
-            \s*Start:(?P<start>[^,]+),\s*
-            End:(?P<end>[^,]+),\s*
-            Duration_ms:(?P<dur>\d+),\s*
-            data_processed:(?P<processed>True|False),\s*
-            cached:(?P<cached>True|False)
-            \)""",
-        re.VERBOSE
+    outer = re.compile(
+        r"___BENCH___\s+Data\s+processing\s*\(\s*(?P<body>.*?)\s*\)\s*$",
+        re.IGNORECASE
     )
 
     rows = []
     try:
         with open(path, "r", encoding="utf-8") as f:
-            for ln, line in enumerate(f, 1):
-                m = pattern.search(line)
+            for ln, raw in enumerate(f, 1):
+                line = raw.strip()
+                m = outer.search(line)
                 if not m:
-                    # Non-matching lines are silently skipped
-                    continue
-                try:
-                    start = datetime.strptime(m.group("start").strip(), "%Y-%m-%d %H:%M:%S")
-                    end = datetime.strptime(m.group("end").strip(), "%Y-%m-%d %H:%M:%S")
-                    dur_ms = int(m.group("dur"))
-                    cached_flag = (m.group("cached") == "True")
-                except Exception as e:
-                    print(f"[WARN] {path}:{ln} parse error: {e}", file=sys.stderr)
                     continue
 
-                if expected_cached is not None and cached_flag != expected_cached:
-                    # Filter out lines for unexpected cached flag
-                    continue
+                body = m.group("body")
+                # カンマで分割 → "k:v" を辞書化（キーは小文字化）
+                kv = {}
+                for p in [x.strip() for x in body.split(",")]:
+                    if ":" not in p:
+                        continue
+                    k, v = p.split(":", 1)
+                    kv[k.strip().lower()] = v.strip()
 
-                median_time = start + (end - start) / 2
-                rows.append(
-                    dict(start_time=start, end_time=end, duration_ms=dur_ms,
-                         cached=cached_flag, median_time=median_time)
-                )
+                # 必須キー
+                for req in ("start", "end", "duration_ms", "cached"):
+                    if req not in kv:
+                        print(f"[WARN] {path}:{ln} missing key '{req}' in: {body}", file=sys.stderr)
+                        break
+                else:
+                    # 日時
+                    s = pd.to_datetime(kv["start"], errors="coerce")
+                    e = pd.to_datetime(kv["end"], errors="coerce")
+                    if pd.isna(s) or pd.isna(e):
+                        print(f"[WARN] {path}:{ln} datetime parse failed: start='{kv['start']}' end='{kv['end']}'", file=sys.stderr)
+                        continue
+                    start = s.to_pydatetime()
+                    end = e.to_pydatetime()
+
+                    # duration_ms
+                    dm = re.search(r"(-?\d+)", kv["duration_ms"])
+                    if not dm:
+                        print(f"[WARN] {path}:{ln} duration_ms parse failed: {kv['duration_ms']}", file=sys.stderr)
+                        continue
+                    dur_ms = int(dm.group(1))
+
+                    # cached
+                    cstr = kv["cached"].lower()
+                    if cstr in ("true", "t", "1", "yes", "y"):
+                        cached_flag = True
+                    elif cstr in ("false", "f", "0", "no", "n"):
+                        cached_flag = False
+                    else:
+                        print(f"[WARN] {path}:{ln} cached parse failed: {kv['cached']}", file=sys.stderr)
+                        continue
+
+                    # （必要なら）期待値フィルタ
+                    if expected_cached is not None and cached_flag != expected_cached:
+                        continue
+
+                    rows.append({
+                        "start_time": start,
+                        "end_time": end,
+                        "duration_ms": dur_ms,
+                        "cached": cached_flag,
+                        "median_time": start + (end - start) / 2,
+                    })
     except FileNotFoundError:
         print(f"[ERROR] File not found: {path}", file=sys.stderr)
         sys.exit(1)
@@ -84,14 +113,11 @@ def parse_benchmark_log(path: str, expected_cached: Optional[bool] = None) -> pd
 
     df = pd.DataFrame(rows)
     if df.empty:
-        # Ensure expected columns exist
         df = pd.DataFrame(columns=["start_time", "end_time", "duration_ms", "cached", "median_time"])
-
     df = df.sort_values("start_time").reset_index(drop=True)
     df.insert(0, "run", np.arange(1, len(df) + 1))
     df["cumulative_ms"] = df["duration_ms"].cumsum() if not df.empty else df.get("duration_ms")
     return df
-
 
 def parse_memory_usage_csv(path: str) -> pd.DataFrame:
     """
