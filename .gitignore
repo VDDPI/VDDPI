@@ -19,6 +19,7 @@ docker/psuedo_api/server.*
 docker/psuedo_api/key.pem
 docker/db/02_create_data.sh
 
+.DS_Store
 **/cache/*
 
 !.gitkeep
