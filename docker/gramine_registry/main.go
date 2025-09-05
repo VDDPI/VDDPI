@@ -55,7 +55,7 @@ func upload(web http.ResponseWriter, req *http.Request) {
 
 			duration := end.Sub(start)
 
-			log.Printf("___BENCH___ MRENCLAVE retrieval (Start:%s, End:%s, Duration_ms:%d)", start.Format("2006-01-02 15:04:05"), end.Format("2006-01-02 15:04:05"), duration.Milliseconds())
+			fmt.Printf("___BENCH___ MRENCLAVE retrieval (Start:%s, End:%s, Duration_ms:%d)\n", start.Format("2006-01-02 15:04:05"), end.Format("2006-01-02 15:04:05"), duration.Milliseconds())
 
 			log.Printf("MRENCLAVE: %s", mrenclave)
 
