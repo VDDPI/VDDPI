@@ -148,6 +148,11 @@ run-registry-service: gramine-registry analyzer-registry ca-registry api-registr
 	@cd registry && $(DOCKER_COMPOSE_CMD) up --build -d
 	@cd registry && ./connect_registry_network.sh
 
+.PHONY: restart-registry-service
+restart-registry-service:
+	@cd registry && $(DOCKER_COMPOSE_CMD) down
+	@cd registry && $(DOCKER_COMPOSE_CMD) up -d
+
 .PHONY: run-registry-network
 run-registry-network:
 	@cd registry && ./fablo generate fablo-config.json
