@@ -1,7 +1,6 @@
 import requests
 import json
 import urllib3
-import datetime
 import os
 import jwt
 import copy
@@ -12,6 +11,7 @@ from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
+from datetime import datetime
 import plib
 CA_CERT = "./code/RootCA.pem"
 TRUSTED_CA_CERT = "./certs/RootCA.pem"
@@ -81,8 +81,8 @@ krEL2VWGrv3IkBKvGUaSVu4rbwxqealC6vid1yi0TA==
         f.write(API_CA_CERT)
     res_time = json.loads(requests.get(TRUSTED_TIME_API_URL, verify=CERT_PATH).text)["datetime"]
     os.remove(CERT_PATH)
-    now = datetime.datetime.strptime(res_time[:19], "%Y-%m-%dT%H:%M:%S")
-    datetime_expiration_date_cond = datetime.datetime.strptime(expiration_date_cond, "%Y-%m-%d")
+    now = datetime.strptime(res_time[:19], "%Y-%m-%dT%H:%M:%S")
+    datetime_expiration_date_cond = datetime.strptime(expiration_date_cond, "%Y-%m-%d")
     if (now <= datetime_expiration_date_cond):
         return True, 1
     else:
@@ -249,9 +249,12 @@ def request(client_cn, tokens):
             traceback.print_exc()
 
             tls_socket.send("Invalid Certificate".encode())
+
     provided_data_uc = []
     provided_data = []
     is_met_condition = True
+
+    start = datetime.now()
     for usage_statement in providers:
         # is data cached?
         file_path = "./data/" + usage_statement["data_ID"].replace("/", "-")
@@ -301,7 +304,10 @@ def request(client_cn, tokens):
         if (expired):
             remove_data(data)
 
-    return is_met_condition, cached
+    end = datetime.now()
+    elapsed_ms = round((end - start).total_seconds() * 1000)
+
+    return start, end, elapsed_ms, is_met_condition, cached
 
 if __name__ == "__main__":
     urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
@@ -334,9 +340,9 @@ if __name__ == "__main__":
         for _ in range(int(msg1)):
             msg2 += tls_socket.recv(2048).decode()
     
-        data_processed, cached = request(client_cn, msg2)
+        start, end, elapsed_ms, data_processed, cached = request(client_cn, msg2)
 
-        msg = f"Session completed (data_processed:{data_processed}, cached:{cached})"
+        msg = f"Session completed (start:{start.strftime('%Y-%m-%d %H:%M:%S')}, end:{end.strftime('%Y-%m-%d %H:%M:%S')}, duration_ms:{elapsed_ms}, data_processed:{data_processed}, cached:{cached})"
         tls_socket.send(msg.encode('utf-8'))
 
     client_socket.close()
