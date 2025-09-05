@@ -54,13 +54,6 @@ ssh provider01.vddpi "cd $VDDPI_DIR && \
     make stop-provider > /dev/null 2>&1; \
     make run-provider"
 
-echo "Restart containers on consumer01.vddpi"
-(
-    cd $VDDPI_DIR
-    make stop-consumer > /dev/null 2>&1
-    MODE=eval-01 make run-consumer
-)
-
 echo "Setup provider for eval-01"
 ssh provider01.vddpi "docker exec -i provider-server bash ./init.sh eval-01"
 
@@ -95,7 +88,7 @@ fetch_logs "provider01.vddpi" "provider-server"  "result/eval_obtaining_processi
 
 echo "=================== Phase3: Data processing ==================="
 
-./run_phase3.sh "$VDDPI_EVAL_DIR/cache"
+./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "$VDDPI_EVAL_DIR/cache"
 
 echo "=================== Finalization ==================="
 

@@ -9,7 +9,9 @@ LOGFILE_NOCACHE="result/eval_data_processing_nocache.log"
 ########################################
 # Arguments
 ########################################
-cache_dir="$1"
+vddpi_dir="$1"
+vddpi_bench_dir="$2"
+cache_dir="$3"
 
 ########################################
 # Initialization
@@ -20,19 +22,27 @@ cache_dir="$1"
 ########################################
 # Main
 ########################################
-python3 ../client.py gencert "$cache_dir"
 
 # The first loop iteration retrieves data from the provider; the second iteration uses that data as cache.
 for scenario in "no_cache" "cache"
 do
+    echo "Restart containers on consumer01.vddpi"
+    (
+        cd $vddpi_dir
+        make stop-consumer > /dev/null 2>&1
+        MODE=eval-01 make run-consumer
+    )
+
+    echo "Run gencert (scenario:$scenario)"
+    python3 $vddpi_bench_dir/client.py gencert "$cache_dir"
+
     echo "Run processing data (scenario:$scenario)"
     for token in $cache_dir/token-*
     do
-
         start_ts=$(date +"%Y-%m-%d %H:%M:%S.%3N")
         start_epoch=$(date +%s%3N)
 
-        msg=$(python3 ../client.py process "$token" "$cache_dir")
+        msg=$(python3 $vddpi_bench_dir/client.py process "$token" "$cache_dir")
 
         end_ts=$(date +"%Y-%m-%d %H:%M:%S.%3N")
         end_epoch=$(date +%s%3N)
@@ -52,6 +62,6 @@ do
                 exit 1
                 ;;
         esac
-        echo "___BENCH___ Data processing (start:$start_ts, end:$end_ts, duration_ms:$duration, $log)" >> "$logfile"
+        echo "___BENCH___ Data processing (start_total:$start_ts, end_total:$end_ts, duration_total_ms:$duration, $log)" >> "$logfile"
     done
 done
