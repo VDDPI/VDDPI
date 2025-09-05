@@ -1,228 +1,322 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-累積Duration_ms折れ線グラフ作成プログラム
+Benchmark logs (cache / no-cache) + memory CSV -> SVG chart
 
-Usage:
-    python3 cumulative_graph.py
-    
-このプログラムは2つのログファイルを読み込み、
-横軸：実行回数（1回目、2回目、...）
-縦軸：Duration_msの累積値
-で折れ線グラフを作成します。
+- Parses benchmark logs:
+    ___BENCH___ Data processing (Start:YYYY-MM-DD HH:MM:SS, End:..., Duration_ms:1234, data_processed:True, cached:True|False)
+- Parses memory CSV like docker stats export:
+    Timestamp,Container,MemUsage,CPU%,NetI/O,BlockI/O
+    2025-09-05 02:58:56,gramine-consumer,38.56MiB / 7.708GiB,78.49%,2.56kB / 689B,34MB / 0B
+- Matches each run to the closest memory sample within 60s of the run's median time
+- Plots:
+    * Duration_ms as line charts (Cache blue #2E86AB, No-cache orange #F18F01)
+    * Matched MemUsage (MiB) as bar charts on a secondary Y-axis, same colors semi-transparent
+- X-axis is run index (1..N). If >=100, tick density is reduced automatically.
 """
+
+import argparse
+import sys
+import re
+from datetime import datetime, timedelta
+from typing import Optional, Tuple
 
 import pandas as pd
-import matplotlib.pyplot as plt
-import re
-from datetime import datetime
 import numpy as np
-from pathlib import Path
-import argparse
+import matplotlib.pyplot as plt
 
-def parse_benchmark_log(log_file):
+
+# ---------- Parsing functions ----------
+
+def parse_benchmark_log(path: str, expected_cached: Optional[bool] = None) -> pd.DataFrame:
     """
-    ベンチマークログファイルを解析してDataFrameに変換
-    
-    Parameters:
-    log_file: ログファイルのパス
-    
-    Returns:
-    pandas.DataFrame: 解析されたデータ
+    Parse a benchmark log file.
+    Returns DataFrame with columns:
+        run, start_time, end_time, duration_ms, cached, median_time, cumulative_ms
+    If expected_cached is not None, only keep lines whose cached flag equals it.
     """
-    data = []
-    log_path = Path(log_file)
-    
-    if not log_path.exists():
-        print(f"Warning: Log file not found: {log_file}")
-        return pd.DataFrame()
-    
-    print(f"Parsing log file: {log_file}")
-    
-    with open(log_file, 'r', encoding='utf-8') as f:
-        execution_count = 0
-        for line_num, line in enumerate(f, 1):
-            line = line.strip()
-            if not line or not line.startswith('___BENCH___'):
-                continue
-            
-            # 正規表現でデータを抽出
-            pattern = r'___BENCH___ (.+?) \(Start:([^,]+), End:([^,]+), Duration_ms:(\d+)(?:, scenario:([^,]+))?(?:, .*)?\)'
-            match = re.match(pattern, line)
-            
-            if match:
-                execution_count += 1
-                operation_name = match.group(1)
-                start_time = match.group(2)
-                end_time = match.group(3)
-                duration_ms = int(match.group(4))
-                scenario = match.group(5) if match.group(5) else 'unknown'
-                
-                data.append({
-                    'execution_number': execution_count,
-                    'operation': operation_name,
-                    'start_time': start_time,
-                    'end_time': end_time,
-                    'duration_ms': duration_ms,
-                    'scenario': scenario,
-                    'log_file': log_path.stem,
-                    'line_number': line_num
-                })
-            else:
-                print(f"Warning: Could not parse line {line_num} in {log_file}: {line}")
-    
-    df = pd.DataFrame(data)
-    if not df.empty:
-        # 累積Duration_msを計算
-        df['cumulative_duration_ms'] = df['duration_ms'].cumsum()
-        print(f"  Parsed {len(df)} records from {log_file}")
-        print(f"  Total duration: {df['cumulative_duration_ms'].iloc[-1]} ms")
-    else:
-        print(f"  No valid records found in {log_file}")
-    
+    pattern = re.compile(
+        r"""___BENCH___ (.+?) \(
+            \s*Start:(?P<start>[^,]+),\s*
+            End:(?P<end>[^,]+),\s*
+            Duration_ms:(?P<dur>\d+),\s*
+            data_processed:(?P<processed>True|False),\s*
+            cached:(?P<cached>True|False)
+            \)""",
+        re.VERBOSE
+    )
+
+    rows = []
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            for ln, line in enumerate(f, 1):
+                m = pattern.search(line)
+                if not m:
+                    # Non-matching lines are silently skipped
+                    continue
+                try:
+                    start = datetime.strptime(m.group("start").strip(), "%Y-%m-%d %H:%M:%S")
+                    end = datetime.strptime(m.group("end").strip(), "%Y-%m-%d %H:%M:%S")
+                    dur_ms = int(m.group("dur"))
+                    cached_flag = (m.group("cached") == "True")
+                except Exception as e:
+                    print(f"[WARN] {path}:{ln} parse error: {e}", file=sys.stderr)
+                    continue
+
+                if expected_cached is not None and cached_flag != expected_cached:
+                    # Filter out lines for unexpected cached flag
+                    continue
+
+                median_time = start + (end - start) / 2
+                rows.append(
+                    dict(start_time=start, end_time=end, duration_ms=dur_ms,
+                         cached=cached_flag, median_time=median_time)
+                )
+    except FileNotFoundError:
+        print(f"[ERROR] File not found: {path}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"[ERROR] Failed reading {path}: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if not rows:
+        print(f"[WARN] No valid BENCH lines found in {path}.", file=sys.stderr)
+
+    df = pd.DataFrame(rows)
+    if df.empty:
+        # Ensure expected columns exist
+        df = pd.DataFrame(columns=["start_time", "end_time", "duration_ms", "cached", "median_time"])
+
+    df = df.sort_values("start_time").reset_index(drop=True)
+    df.insert(0, "run", np.arange(1, len(df) + 1))
+    df["cumulative_ms"] = df["duration_ms"].cumsum() if not df.empty else df.get("duration_ms")
     return df
 
-def create_cumulative_graph(cache_log, nocache_log, output_file='cumulative_duration.svg'):
+
+def parse_memory_usage_csv(path: str) -> pd.DataFrame:
     """
-    2つのログファイルから累積Duration_msの折れ線グラフを作成
-    
-    Parameters:
-    cache_log: キャッシュありのログファイル
-    nocache_log: キャッシュなしのログファイル
-    output_file: 出力ファイル名
+    Parse memory CSV. Extract Timestamp and the FIRST value of MemUsage as MiB.
+    Returns DataFrame with columns: timestamp (datetime), mem_mib (float), container (str)
     """
-    
-    print("=== Cumulative Duration Analysis ===")
-    
-    # 各ログファイルを解析
-    df_cache = parse_benchmark_log(cache_log)
-    df_nocache = parse_benchmark_log(nocache_log)
-    
-    if df_cache.empty and df_nocache.empty:
-        print("Error: No valid data found in any log files")
-        return
-    
-    # グラフの作成
-    plt.figure(figsize=(12, 8))
-    
-    # キャッシュありのデータをプロット
-    if not df_cache.empty:
-        plt.plot(df_cache['execution_number'], df_cache['cumulative_duration_ms'],
-                linewidth=2.5, color='#2E86AB',
-                label=f'Cache (scenario: {df_cache["scenario"].iloc[0]})')
-    
-    # キャッシュなしのデータをプロット
-    if not df_nocache.empty:
-        plt.plot(df_nocache['execution_number'], df_nocache['cumulative_duration_ms'],
-                linewidth=2.5, color='#F18F01',
-                label=f'No Cache (scenario: {df_nocache["scenario"].iloc[0]})')
-    
-    # グラフの装飾
-    plt.xlabel('Number of Providers', fontsize=12, fontweight='bold')
-    plt.ylabel('Duration (ms)', fontsize=12, fontweight='bold')
-    plt.grid(True, alpha=0.3)
-    plt.legend(framealpha=0.9, fontsize=11)
-    
-    # X軸を整数に設定
-    max_executions = 0
-    if not df_cache.empty:
-        max_executions = max(max_executions, df_cache['execution_number'].max())
-    if not df_nocache.empty:
-        max_executions = max(max_executions, df_nocache['execution_number'].max())
-    
-    plt.xlim(0.5, max_executions + 0.5)
-
-    tick_interval = max(1, max_executions // 10)
-
-    # X軸の目盛りを設定
-    tick_positions = list(range(tick_interval, max_executions + 1, tick_interval))
-    
-    # 最初（1回目）と最後を必ず含める
-    if 1 not in tick_positions:
-        tick_positions.insert(0, 1)
-    if max_executions not in tick_positions:
-        tick_positions.append(max_executions)
-
-    plt.xticks(tick_positions)
-    
-    # Y軸のフォーマットを改善
-    ax = plt.gca()
-    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{int(x):,}'))
-    
-    # レイアウト調整
-    plt.tight_layout()
-    
-    # SVG形式で保存
-    plt.savefig(output_file, format='svg', dpi=300, bbox_inches='tight')
-    
-    # 詳細統計を出力
-    print("\n" + "="*60)
-    print("DETAILED ANALYSIS RESULTS")
-    print("="*60)
-    
-    if not df_cache.empty:
-        print(f"\nCache Scenario:")
-        print(f"  • Executions: {len(df_cache)}")
-        print(f"  • Individual durations: {df_cache['duration_ms'].min()}-{df_cache['duration_ms'].max()} ms")
-        print(f"  • Average per execution: {df_cache['duration_ms'].mean():.1f} ms")
-        print(f"  • Total cumulative: {df_cache['cumulative_duration_ms'].iloc[-1]:,} ms")
-        print(f"  • Final execution time: {df_cache['cumulative_duration_ms'].iloc[-1] / 1000:.1f} seconds")
-    
-    if not df_nocache.empty:
-        print(f"\nNo Cache Scenario:")
-        print(f"  • Executions: {len(df_nocache)}")
-        print(f"  • Individual durations: {df_nocache['duration_ms'].min()}-{df_nocache['duration_ms'].max()} ms")
-        print(f"  • Average per execution: {df_nocache['duration_ms'].mean():.1f} ms")
-        print(f"  • Total cumulative: {df_nocache['cumulative_duration_ms'].iloc[-1]:,} ms")
-        print(f"  • Final execution time: {df_nocache['cumulative_duration_ms'].iloc[-1] / 1000:.1f} seconds")
-    
-    # パフォーマンス比較
-    if not df_cache.empty and not df_nocache.empty:
-        print(f"\nPerformance Comparison:")
-        min_executions = min(len(df_cache), len(df_nocache))
-        cache_avg = df_cache['duration_ms'].mean()
-        nocache_avg = df_nocache['duration_ms'].mean()
-        avg_improvement = nocache_avg - cache_avg
-        avg_improvement_percent = (avg_improvement / nocache_avg) * 100
-        
-        print(f"  • Average improvement per execution: {avg_improvement:.1f} ms ({avg_improvement_percent:.1f}%)")
-        print(f"  • Cache efficiency: {cache_avg/nocache_avg*100:.1f}% of no-cache time")
-        
-        if min_executions > 1:
-            total_improvement = (df_nocache['cumulative_duration_ms'].iloc[min_executions-1] - 
-                               df_cache['cumulative_duration_ms'].iloc[min_executions-1])
-            print(f"  • Total time saved ({min_executions} executions): {total_improvement:,} ms ({total_improvement/1000:.1f} seconds)")
-    
-    print(f"\nGraph saved as: {output_file}")
-    plt.show()
-    
-    return df_cache, df_nocache
-
-def main(nocache_log_file, cache_log_file, output_svg):
-    """メイン関数"""
-    
     try:
-        # グラフ作成
-        df_cache, df_nocache = create_cumulative_graph(cache_log_file, nocache_log_file, output_svg)
-        
-        print(f"\n✓ Analysis completed successfully!")
-        print(f"✓ Graph saved to: {output_svg}")
-        
+        df = pd.read_csv(path)
+    except FileNotFoundError:
+        print(f"[ERROR] File not found: {path}", file=sys.stderr)
+        sys.exit(1)
     except Exception as e:
-        print(f"Error during analysis: {e}")
-        import traceback
-        traceback.print_exc()
+        print(f"[ERROR] Failed reading {path}: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if "Timestamp" not in df.columns or "MemUsage" not in df.columns:
+        print(f"[ERROR] memory CSV must have 'Timestamp' and 'MemUsage' columns.", file=sys.stderr)
+        sys.exit(1)
+
+    # Parse timestamps
+    df["timestamp"] = pd.to_datetime(df["Timestamp"], format="%Y-%m-%d %H:%M:%S", errors="coerce")
+    # Container (optional)
+    container_col = df["Container"] if "Container" in df.columns else ""
+
+    # Convert "38.56MiB / 7.708GiB" -> take left side "38.56MiB" and convert to MiB
+    def to_mib(s: str) -> Optional[float]:
+        if not isinstance(s, str):
+            return np.nan
+        left = s.split("/", 1)[0].strip()
+        m = re.match(r"^\s*([0-9]*\.?[0-9]+)\s*([KMGT]?i?B|[KMGT]?B)\s*$", left, flags=re.IGNORECASE)
+        if not m:
+            return np.nan
+        val = float(m.group(1))
+        unit = m.group(2).lower()
+
+        # Normalize units to MiB
+        # Accept both SI-ish (kB, MB, GB, TB) and IEC (KiB, MiB, GiB, TiB)
+        if unit in ("b",):
+            return val / (1024 ** 2)
+        if unit in ("kb", "kib"):
+            return val / 1024.0
+        if unit in ("mb", "mib"):
+            return val
+        if unit in ("gb", "gib"):
+            return val * 1024.0
+        if unit in ("tb", "tib"):
+            return val * 1024.0 * 1024.0
+        return np.nan
+
+    df["mem_mib"] = df["MemUsage"].apply(to_mib)
+    out = pd.DataFrame({"timestamp": df["timestamp"], "mem_mib": df["mem_mib"], "container": container_col})
+    out = out.dropna(subset=["timestamp", "mem_mib"]).sort_values("timestamp").reset_index(drop=True)
+    if out.empty:
+        print(f"[WARN] No valid memory rows parsed from {path}.", file=sys.stderr)
+    return out
+
+
+def find_closest_memory_usage(mem_df: pd.DataFrame, target_dt: pd.Timestamp,
+                              tolerance_seconds: int = 60) -> Tuple[Optional[float], Optional[pd.Timestamp], Optional[float]]:
+    """
+    Find the mem_mib closest to target_dt within tolerance_seconds.
+    Returns (mem_mib, found_timestamp, delta_seconds) or (np.nan, None, None) if not found.
+    """
+    if mem_df is None or mem_df.empty or pd.isna(target_dt):
+        return (np.nan, None, None)
+
+    # Compute absolute time difference
+    deltas = (mem_df["timestamp"] - target_dt).abs()
+    idx = deltas.idxmin()
+    delta_sec = abs((mem_df.loc[idx, "timestamp"] - target_dt).total_seconds())
+
+    if delta_sec <= tolerance_seconds:
+        return (float(mem_df.loc[idx, "mem_mib"]), pd.Timestamp(mem_df.loc[idx, "timestamp"]), float(delta_sec))
+    return (np.nan, None, None)
+
+
+# ---------- Plotting ----------
+
+def create_cumulative_graph_with_memory(output_svg: str,
+                                        df_nocache: pd.DataFrame,
+                                        df_cache: pd.DataFrame,
+                                        mem_df: pd.DataFrame) -> None:
+    """
+    Build an SVG:
+      - Left Y: duration_ms (line)
+      - Right Y: matched mem_mib (bars)
+      - Colors: cache=#2E86AB, nocache=#F18F01
+    """
+    # Prepare matched memory
+    def attach_memory(df: pd.DataFrame) -> pd.DataFrame:
+        if df is None or df.empty:
+            return df
+        mem_vals = []
+        mem_ts = []
+        deltas = []
+        for t in df["median_time"]:
+            m, ts, d = find_closest_memory_usage(mem_df, pd.Timestamp(t), tolerance_seconds=60)
+            mem_vals.append(m)
+            mem_ts.append(ts)
+            deltas.append(d)
+        df = df.copy()
+        df["matched_mem_mib"] = mem_vals
+        df["matched_mem_timestamp"] = mem_ts
+        df["matched_mem_delta_sec"] = deltas
+        return df
+
+    df_nocache = attach_memory(df_nocache)
+    df_cache = attach_memory(df_cache)
+
+    # X positions (offset so bars/lines don't fully overlap)
+    x_nc = df_nocache["run"].to_numpy() - 0.15 if not df_nocache.empty else np.array([])
+    x_c = df_cache["run"].to_numpy() + 0.15 if not df_cache.empty else np.array([])
+
+    max_runs = 0
+    if not df_nocache.empty:
+        max_runs = max(max_runs, int(df_nocache["run"].max()))
+    if not df_cache.empty:
+        max_runs = max(max_runs, int(df_cache["run"].max()))
+    if max_runs == 0:
+        print("[ERROR] Nothing to plot (no runs).", file=sys.stderr)
+        sys.exit(1)
+
+    # Figure
+    fig, ax1 = plt.subplots(figsize=(12, 6))
+
+    # Lines: Duration (ms)
+    if not df_cache.empty:
+        ax1.plot(x_c, df_cache["duration_ms"], marker="o", linewidth=1.6,
+                 label="Cache: Duration (ms)", color="#2E86AB")
+    if not df_nocache.empty:
+        ax1.plot(x_nc, df_nocache["duration_ms"], marker="o", linewidth=1.6,
+                 label="No-cache: Duration (ms)", color="#F18F01")
+
+    ax1.set_xlabel("Run #")
+    ax1.set_ylabel("Duration (ms)")
+    ax1.grid(True, axis="y", alpha=0.25)
+
+    # X ticks thinning if >=100 runs
+    if max_runs >= 100:
+        step = int(np.ceil(max_runs / 20.0))
+        ticks = np.arange(1, max_runs + 1, step)
+    else:
+        ticks = np.arange(1, max_runs + 1, 1)
+    ax1.set_xticks(ticks)
+
+    # Bars: Memory (MiB) on secondary axis
+    ax2 = ax1.twinx()
+    bar_w = 0.28
+    if not df_cache.empty:
+        ax2.bar(x_c, df_cache["matched_mem_mib"], width=bar_w, alpha=0.35,
+                label="Cache: Mem (MiB)", color="#2E86AB", zorder=1)
+    if not df_nocache.empty:
+        ax2.bar(x_nc, df_nocache["matched_mem_mib"], width=bar_w, alpha=0.35,
+                label="No-cache: Mem (MiB)", color="#F18F01", zorder=1)
+    ax2.set_ylabel("Memory (MiB)")
+
+    # Combined legend
+    h1, l1 = ax1.get_legend_handles_labels()
+    h2, l2 = ax2.get_legend_handles_labels()
+    ax1.legend(h1 + h2, l1 + l2, loc="upper left", frameon=False)
+
+    plt.tight_layout()
+    try:
+        plt.savefig(output_svg, format="svg", bbox_inches="tight")
+        print(f"[INFO] Saved SVG: {output_svg}")
+    except Exception as e:
+        print(f"[ERROR] Failed to save SVG: {e}", file=sys.stderr)
+        sys.exit(1)
+    finally:
+        plt.close(fig)
+
+
+# ---------- Stats printing ----------
+
+def _print_stats(tag: str, df: pd.DataFrame):
+    print(f"\n=== {tag} ===")
+    if df is None or df.empty:
+        print("No runs.")
+        return
+    n = len(df)
+    total = int(df["duration_ms"].sum())
+    mean = float(df["duration_ms"].mean())
+    med = float(df["duration_ms"].median())
+    dmin = int(df["duration_ms"].min())
+    dmax = int(df["duration_ms"].max())
+    t0 = df["start_time"].min()
+    t1 = df["end_time"].max()
+    print(f"Runs: {n}")
+    print(f"Time range: {t0} -> {t1}")
+    print(f"Duration_ms: total={total}, mean={mean:.1f}, median={med:.1f}, min={dmin}, max={dmax}")
+    print(f"Cumulative last (ms): {int(df['cumulative_ms'].iloc[-1]) if n>0 else 0}")
+
+    # Memory match stats
+    if "matched_mem_mib" in df.columns:
+        matched = df["matched_mem_mib"].notna().sum()
+        print(f"Memory matched within 60s: {matched}/{n}")
+        if matched > 0:
+            mem_mean = df["matched_mem_mib"].dropna().mean()
+            mem_med = df["matched_mem_mib"].dropna().median()
+            print(f"MemUsage (MiB): mean={mem_mean:.2f}, median={mem_med:.2f}")
+
+
+# ---------- CLI ----------
+
+def main():
+    ap = argparse.ArgumentParser(
+        description="Parse benchmark logs & memory CSV, then plot durations (lines) and memory (bars) as SVG."
+    )
+    ap.add_argument("output_svg", help="Path to output SVG file")
+    ap.add_argument("nocache_log", help="No-cache benchmark log file (cached:False)")
+    ap.add_argument("cache_log", help="Cache benchmark log file (cached:True)")
+    ap.add_argument("memory_csv", help="Memory usage CSV file")
+    args = ap.parse_args()
+
+    # Parse inputs
+    df_nc = parse_benchmark_log(args.nocache_log, expected_cached=False)
+    df_c = parse_benchmark_log(args.cache_log, expected_cached=True)
+    mem_df = parse_memory_usage_csv(args.memory_csv)
+
+    # Print stats
+    _print_stats("NO-CACHE (cached=False)", df_nc)
+    _print_stats("CACHE (cached=True)", df_c)
+
+    # Plot
+    create_cumulative_graph_with_memory(args.output_svg, df_nc, df_c, mem_df)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument("--show", action="store_true")
-    parser.add_argument("output_svg")
-    parser.add_argument("nocache_tee_file")
-    parser.add_argument("cache_tee_file")
-
-    args = parser.parse_args()
-
-    main(args.nocache_tee_file, args.cache_tee_file, args.output_svg)
-
-# 使用例:
-# python3 cumulative_graph.py
+    main()
