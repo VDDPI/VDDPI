@@ -316,29 +316,6 @@ def request(client_cn, tokens):
 
     return start, end, elapsed_ms, is_met_condition, cached
 
-def handle_client(context: ssl.SSLContext, client_socket: socket.socket, fromaddr):
-    with context.wrap_socket(client_socket, server_side=True) as tls_socket:
-        print(f"Client connected: {fromaddr} ")
-        
-        client_cert = tls_socket.getpeercert()
-        if not client_cert:
-            print("Client certificate not found.")
-            return
-
-        subject = dict(x[0] for x in client_cert['subject'])
-        client_cn = subject['commonName']
-        print(f"Common Name: {client_cn}")
-        
-        msg1 = tls_socket.recv(1024).decode()
-        msg2 = ""
-        for _ in range(int(msg1)):
-            msg2 += tls_socket.recv(2048).decode()
-    
-        start, end, elapsed_ms, data_processed, cached = request(client_cn, msg2)
-
-        msg = f"Session completed (start:{start.strftime('%Y-%m-%d %H:%M:%S')}, end:{end.strftime('%Y-%m-%d %H:%M:%S')}, duration_ms:{elapsed_ms}, data_processed:{data_processed}, cached:{cached})"
-        tls_socket.send(msg.encode('utf-8'))
-
 if __name__ == "__main__":
     urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
     
@@ -352,24 +329,28 @@ if __name__ == "__main__":
     bind_socket.bind(('0.0.0.0', 8002))
     bind_socket.listen(1)
     
-    try:
-        while True:
-            client_socket, fromaddr = bind_socket.accept()
-            try:
-                handle_client(context, client_socket, fromaddr)
-            except ssl.SSLError as e:
-                print(f"SSL error: {e}")
-            except Exception as e:
-                print(f"Error: {e}")
-            finally:
-                try:
-                    client_socket.close()
-                except:
-                    pass
-    except KeyboardInterrupt:
-        print("Shutting down server.")
-    finally:
-        try:
-            bind_socket.close()
-        except:
-            pass
+    client_socket, fromaddr = bind_socket.accept()
+    with context.wrap_socket(client_socket, server_side=True) as tls_socket:
+        print(f"Client connected: {fromaddr} ")
+        
+        client_cert = tls_socket.getpeercert()
+        if not client_cert:
+            print("Client certificate not found.")
+            exit(1)
+
+        subject = dict(x[0] for x in client_cert['subject'])
+        client_cn = subject['commonName']
+        print(f"Common Name: {client_cn}")
+        
+        msg1 = tls_socket.recv(1024).decode()
+        msg2 = ""
+        for _ in range(int(msg1)):
+            msg2 += tls_socket.recv(2048).decode()
+    
+        start, end, elapsed_ms, data_processed, cached = request(client_cn, msg2)
+
+        msg = f"Session completed (start:{start.strftime('%Y-%m-%d %H:%M:%S')}, end:{end.strftime('%Y-%m-%d %H:%M:%S')}, duration_ms:{elapsed_ms}, data_processed:{data_processed}, cached:{cached})"
+
+        tls_socket.send(msg.encode('utf-8'))
+
+    bind_socket.close()
