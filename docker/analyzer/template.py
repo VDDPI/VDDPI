@@ -322,28 +322,32 @@ if __name__ == "__main__":
     bind_socket.bind(('0.0.0.0', 8002))
     bind_socket.listen(1)
     
-    client_socket, fromaddr = bind_socket.accept()
-    with context.wrap_socket(client_socket, server_side=True) as tls_socket:
-        print(f"Client connected: {fromaddr} ")
-        
-        client_cert = tls_socket.getpeercert()
-        if not client_cert:
-            print("Client certificate not found.")
-            exit(1)
+    with open('/tmp/log.txt', 'w', encoding='utf-8') as f:
+        f.write('listening on port 8002\n')
+        while True:
+            client_socket, fromaddr = bind_socket.accept()
+            with context.wrap_socket(client_socket, server_side=True) as tls_socket:
+                f.write(f"Client connected: {fromaddr}\n")
 
-        subject = dict(x[0] for x in client_cert['subject'])
-        client_cn = subject['commonName']
-        print(f"Common Name: {client_cn}")
-        
-        msg1 = tls_socket.recv(1024).decode()
-        msg2 = ""
-        for _ in range(int(msg1)):
-            msg2 += tls_socket.recv(2048).decode()
-    
-        start, end, elapsed_ms, data_processed, cached = request(client_cn, msg2)
+                client_cert = tls_socket.getpeercert()
+                if not client_cert:
+                    f.write("Client certificate not found.\n")
+                    exit(1)
 
-        msg = f"Session completed (start:{start.strftime('%Y-%m-%d %H:%M:%S')}, end:{end.strftime('%Y-%m-%d %H:%M:%S')}, duration_ms:{elapsed_ms}, data_processed:{data_processed}, cached:{cached})"
+                subject = dict(x[0] for x in client_cert['subject'])
+                client_cn = subject['commonName']
+                f.write(f"Common Name: {client_cn}\n")
 
-        tls_socket.send(msg.encode('utf-8'))
+                msg1 = tls_socket.recv(1024).decode()
+                msg2 = ""
+                for _ in range(int(msg1)):
+                    msg2 += tls_socket.recv(2048).decode()
+
+                start, end, elapsed_ms, data_processed, cached = request(client_cn, msg2)
+
+                msg = f"Session completed (start:{start.strftime('%Y-%m-%d %H:%M:%S')}, end:{end.strftime('%Y-%m-%d %H:%M:%S')}, duration_ms:{elapsed_ms}, data_processed:{data_processed}, cached:{cached})"
+                f.write(msg + "\n")
+
+                tls_socket.send(msg.encode('utf-8'))
 
     bind_socket.close()
