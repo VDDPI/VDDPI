@@ -3,7 +3,7 @@
 ########################################
 # Configuration
 ########################################
-TRIAL_COUNT=10
+TRIAL_COUNT=20
 SLEEP_TIME=20
 VDDPI_DIR=$HOME/VDDPI
 VDDPI_BENCH_DIR=$HOME/VDDPI/benchmark
