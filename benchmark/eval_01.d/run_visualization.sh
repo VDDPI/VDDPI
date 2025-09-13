@@ -15,4 +15,5 @@ python3 lib/yyy.py \
     result/graph_data_processing.svg \
     result/eval_data_processing_nocache.log \
     result/eval_data_processing_cache.log \
+    result/eval_data_processing_nosgx.log \
     result/consumer_stats.csv
