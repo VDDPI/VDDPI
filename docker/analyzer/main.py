@@ -42,9 +42,11 @@ async def update(response: Response, lib: bytes = File(...)):
 
     if not lib:
         response.status_code = status.HTTP_400_BAD_REQUEST
+        print("file was not sent")
         return {"Result": "NG", "Error": "file was not sent"}
     with open(PLIB_PATH, "w", encoding="utf-8", newline="\n") as f:
         f.write(lib.decode())
 
     response.status_code = status.HTTP_200_OK
-    return "Updated"
+    print("Updated lib file of gramine-analyzer")
+    return "Updated lib file of gramine-analyzer"

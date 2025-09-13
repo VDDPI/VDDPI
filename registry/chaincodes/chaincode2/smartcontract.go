@@ -178,19 +178,18 @@ func (s *SmartContract) UpdateLib(ctx contractapi.TransactionContextInterface) e
 	
 		contentType := writer.FormDataContentType()
 	
+		fmt.Println("Start updating " + addr)
 		res, err := http.Post(addr + "/update", contentType, reqBody)
-	
 		if err != nil {
+			fmt.Println(err)
 			return err
 		}
-		body, err := io.ReadAll(res.Body)
-		if err != nil {
-			return err
+		defer res.Body.Close()
+
+		if res.StatusCode != http.StatusOK {
+			return fmt.Errorf("Error: status code %d\n", res.StatusCode)
 		}
-		fmt.Println(string(body))
-		if ((string(body) != "Updated") && (string(body) != "\"Updated\"")) {
-			return fmt.Errorf("Error\n")
-		}
+		fmt.Println("Finish updating: " + res.Status)
 	}
 	return nil
 }

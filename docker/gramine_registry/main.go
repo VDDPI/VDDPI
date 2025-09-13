@@ -90,7 +90,7 @@ func update(web http.ResponseWriter, req *http.Request) {
 			io.Copy(lib, file)
 
 			web.WriteHeader(http.StatusOK)
-			fmt.Fprint(web, "Updated")
+			fmt.Fprint(web, "Updated lib file of gramine-registry")
 		default:
 			web.WriteHeader(http.StatusMethodNotAllowed)
 			fmt.Fprint(web, "Method not allowed.\n")
@@ -119,7 +119,7 @@ func updateFilters(web http.ResponseWriter, req *http.Request) {
 			io.Copy(lib, file)
 
 			web.WriteHeader(http.StatusOK)
-			fmt.Fprint(web, "Updated")
+			fmt.Fprint(web, "Updated filters file of gramine-registry")
 		default:
 			web.WriteHeader(http.StatusMethodNotAllowed)
 			fmt.Fprint(web, "Method not allowed.\n")
