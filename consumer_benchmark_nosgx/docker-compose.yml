@@ -1,0 +1,8 @@
+services:
+  consumer-benchmark-nosgx:
+    image: consumer-benchmark-nosgx:latest
+    container_name: consumer-benchmark-nosgx
+    environment:
+      - DATA_NUM
+    volumes:
+      - ./cache:/root/cache

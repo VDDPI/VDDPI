@@ -1,0 +1,18 @@
+FROM python:3.13.7
+
+RUN pip install --no-cache-dir \
+    cryptography \
+    jwt \
+    requests
+
+WORKDIR /root
+
+COPY provider/make_test_data.py /root
+COPY gramine_consumer/code_eval_01/main.py /root/lib/code_eval_01_main.py
+COPY gramine_consumer/code_eval_01/plib.py /root/lib/plib.py
+
+COPY consumer_benchmark_nosgx/entrypoint.sh /root
+COPY consumer_benchmark_nosgx/encdec.py /root
+COPY consumer_benchmark_nosgx/eval_01.py /root
+
+CMD ["./entrypoint.sh"]

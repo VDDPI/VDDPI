@@ -39,6 +39,20 @@ gramine-consumer: load-gramine-base
 		-t gramine-consumer:latest; \
 	fi
 
+.PHONY: consumer-benchmark-nosgx
+consumer-benchmark-nosgx:
+	@echo "Building consumer-benchmark-nosgx:latest"
+	@$(DOCKER_CMD) build -f docker/Dockerfile.consumer.benchmark.nosgx docker \
+		-t consumer-benchmark-nosgx:latest
+
+.PHONY: run-consumer-benchmark-nosgx
+run-consumer-benchmark-nosgx: consumer-benchmark-nosgx
+	@echo "Running consumer-benchmark-nosgx:latest"
+	@cd consumer_benchmark_nosgx && \
+		$(DOCKER_COMPOSE_CMD) up
+	@cd consumer_benchmark_nosgx && \
+		$(DOCKER_COMPOSE_CMD) down
+	
 gramine-consumer-mrenclave:
 	@$(DOCKER_CMD) run -it --rm --entrypoint gramine-sgx-sigstruct-view gramine-consumer:latest python.sig
 
