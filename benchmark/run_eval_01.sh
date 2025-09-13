@@ -90,6 +90,11 @@ echo "=================== Phase3: Data processing ==================="
 
 ./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "$VDDPI_EVAL_DIR/cache"
 
+echo "=================== Phase4: Data processing (No SGX) ==================="
+
+./run_phase4.sh "$VDDPI_DIR" "$TRIAL_COUNT"
+scp consumer01.vddpi:$VDDPI_DIR/consumer_benchmark_nosgx/cache/eval_01/benchmark.log result/eval_data_processing_nosgx.log
+
 echo "=================== Finalization ==================="
 
 echo "Measuring the baseline of stats of containers on registry01.vddpi (waiting for $SLEEP_TIME seconds)."
