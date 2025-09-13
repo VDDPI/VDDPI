@@ -199,8 +199,8 @@ def main():
             logger.error(f"{p}: {e}")
             fail += 1
         end = datetime.now()
-        elapsed_ms = (end - start).total_seconds() * 1000
-        logger.info(f"___BENCH___ Data processing without SGX (Start:{start.strftime('%Y-%m-%d %H:%M:%S.%f')}, End:{end.strftime('%Y-%m-%d %H:%M:%S.%f')}, Duration_ms:{elapsed_ms:.3f})")
+        elapsed_ms = round((end - start).total_seconds() * 1000)
+        logger.info(f"___BENCH___ Data processing without SGX (Start:{start.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}, End:{end.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}, Duration_ms:{elapsed_ms})")
 
     logger.info(f"\nDone. files={total}, ok={ok}, failed={fail}")
 
