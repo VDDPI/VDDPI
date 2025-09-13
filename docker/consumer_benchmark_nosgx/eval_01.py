@@ -200,7 +200,7 @@ def main():
             fail += 1
         end = datetime.now()
         elapsed_ms = round((end - start).total_seconds() * 1000)
-        logger.info(f"___BENCH___ Data processing without SGX (Start:{start.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}, End:{end.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}, Duration_ms:{elapsed_ms})")
+        logger.info(f"___BENCH___ Data processing without SGX (start:{start.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}, end:{end.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}, duration_ms:{elapsed_ms}, cached:True)")
 
     logger.info(f"\nDone. files={total}, ok={ok}, failed={fail}")
 
