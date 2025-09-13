@@ -19,40 +19,9 @@ import matplotlib.pyplot as plt
 import re
 from datetime import datetime, timedelta
 import numpy as np
-import matplotlib.dates as mdates
+from matplotlib.ticker import MaxNLocator
 from pathlib import Path
 import argparse
-
-def find_best_legend_position(combined_df, ax):
-    """グラフ内でデータと重ならない最適な凡例位置を見つける"""
-    
-    # データの時間範囲を取得
-    time_min = combined_df['middle_time'].min()
-    time_max = combined_df['middle_time'].max()
-    
-    # 時間の中央値を計算
-    time_range = (time_max - time_min).total_seconds()
-    time_mid = time_min + pd.Timedelta(seconds=time_range/2)
-    
-    # Y軸の中央値
-    ylim = ax.get_ylim()
-    y_mid = ylim[0] + (ylim[1] - ylim[0]) / 2
-    
-    # 各象限のデータ点数をカウント
-    quadrants = {
-        'upper right': len(combined_df[(combined_df['middle_time'] >= time_mid) & 
-                                     (combined_df['duration_ms'] >= y_mid)]),
-        'upper left': len(combined_df[(combined_df['middle_time'] < time_mid) & 
-                                    (combined_df['duration_ms'] >= y_mid)]),
-        'lower right': len(combined_df[(combined_df['middle_time'] >= time_mid) & 
-                                     (combined_df['duration_ms'] < y_mid)]),
-        'lower left': len(combined_df[(combined_df['middle_time'] < time_mid) & 
-                                    (combined_df['duration_ms'] < y_mid)])
-    }
-    
-    # データ点が最も少ない象限を選択
-    best_position = min(quadrants, key=quadrants.get)
-    return best_position
 
 def parse_log_file(log_file):
     """
@@ -86,26 +55,11 @@ def parse_log_file(log_file):
             
             if match:
                 operation_name = match.group(1)
-                start_time = match.group(2)
-                end_time = match.group(3)
                 duration_ms = int(match.group(4))
-                
-                # 中央時間を計算
-                try:
-                    start_dt = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
-                    end_dt = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
-                    middle_time = start_dt + (end_dt - start_dt) / 2
-                except ValueError:
-                    print(f"Warning: Could not parse datetime on line {line_num} in {log_file}: {start_time}, {end_time}")
-                    continue
-                
                 data.append({
                     'operation': operation_name,
-                    'start_time': start_dt,
-                    'end_time': end_dt,
-                    'middle_time': middle_time,
                     'duration_ms': duration_ms,
-                    'log_name': log_path.stem,  # ファイル名（拡張子なし）
+                    'log_name': log_path.stem,
                     'line_number': line_num
                 })
             else:
@@ -149,11 +103,17 @@ def create_multi_log_graph(output_path, log_files, show_flag):
     
     # 全データを結合
     combined_df = pd.concat(all_dataframes, ignore_index=True)
-    combined_df = combined_df.sort_values('middle_time').reset_index(drop=True)
+
+    # 試行番号（同一ログ×同一オペレーション内で 1..N）を付与
+    # まず、同一ログ×オペレーション内での出現順に並べる（line_number があればそれを使用）
+    if 'line_number' in combined_df.columns:
+        combined_df = combined_df.sort_values(['log_name','operation','line_number']).reset_index(drop=True)
+    else:
+        combined_df = combined_df.sort_values(['log_name','operation']).reset_index(drop=True)
+    combined_df['trial_index'] = combined_df.groupby(['log_name','operation']).cumcount() + 1
     
     print(f"\n=== Combined Data Summary ===")
     print(f"Total records: {len(combined_df)}")
-    print(f"Time range: {combined_df['middle_time'].min()} to {combined_df['middle_time'].max()}")
     print(f"Duration range: {combined_df['duration_ms'].min()} - {combined_df['duration_ms'].max()} ms")
     print(f"Operations: {combined_df['operation'].unique()}")
     print(f"Log files: {combined_df['log_name'].unique()}")
@@ -173,16 +133,16 @@ def create_multi_log_graph(output_path, log_files, show_flag):
     
     # 同じログファイルのデータを線で結ぶ
     for log_name in log_names:
-        log_data = combined_df[combined_df['log_name'] == log_name].sort_values('middle_time')
+        log_data = combined_df[combined_df['log_name'] == log_name]
         for operation in log_data['operation'].unique():
-            op_data = log_data[log_data['operation'] == operation].sort_values('middle_time')
+            op_data = log_data[log_data['operation'] == operation]
             if len(op_data) > 1:
-                plt.plot(op_data['middle_time'], op_data['duration_ms'],
+                plt.plot(op_data['trial_index'], op_data['duration_ms'],
                         color=color_map[log_name], alpha=1.0, linewidth=2, linestyle='-',
                         label=f'{operation}')
 
     # グラフの装飾
-    plt.xlabel('Timestamp', fontsize=14, fontweight='bold')
+    plt.xlabel('Trial #', fontsize=14, fontweight='bold')
     plt.ylabel('Duration (ms)', fontsize=14, fontweight='bold')
     plt.grid(True, alpha=0.3)
     
@@ -191,24 +151,8 @@ def create_multi_log_graph(output_path, log_files, show_flag):
     y_max = combined_df['duration_ms'].max() * 1.05
     plt.ylim(y_min, y_max)
     
-    # X軸の時刻表示を調整
-    total_time = (combined_df['middle_time'].max() - combined_df['middle_time'].min()).total_seconds()
-    
-    if total_time <= 300:  # 5分以内
-        plt.gca().xaxis.set_major_locator(mdates.MinuteLocator(interval=1))
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
-    elif total_time <= 1800:  # 30分以内
-        plt.gca().xaxis.set_major_locator(mdates.MinuteLocator(interval=5))
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
-    elif total_time <= 3600:  # 1時間以内
-        plt.gca().xaxis.set_major_locator(mdates.MinuteLocator(interval=10))
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    else:  # 1時間以上
-        plt.gca().xaxis.set_major_locator(mdates.HourLocator(interval=1))
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    
-    # X軸ラベルを横向きに表示
-    plt.setp(plt.gca().xaxis.get_majorticklabels(), rotation=0, ha='center')
+    # X軸の試行番号表示を調整（整数目盛）
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
     
     plt.legend(loc='upper right', framealpha=0.9)
 
