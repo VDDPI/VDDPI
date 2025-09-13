@@ -36,7 +36,7 @@ def parse_benchmark_log(path: str, expected_cached: Optional[bool] = None) -> pd
       - Timestamps parsed with pandas.to_datetime (supports milliseconds/ISO8601/timezones)
     """
     outer = re.compile(
-        r"___BENCH___\s+Data\s+processing\s*\(\s*(?P<body>.*?)\s*\)\s*$",
+        r"___BENCH___\s+Data\s+processing\s+.*\(\s*(?P<body>.*?)\s*\)\s*$",
         re.IGNORECASE
     )
 
@@ -344,7 +344,7 @@ def main():
     # Parse inputs
     df_nc = parse_benchmark_log(args.nocache_log, expected_cached=False)
     df_c = parse_benchmark_log(args.cache_log, expected_cached=True)
-    df_nosgx = parse_benchmark_log(args.nosgx_log)  # No cache expectation
+    df_nosgx = parse_benchmark_log(args.nosgx_log, expected_cached=True)
     mem_df = parse_memory_usage_csv(args.memory_csv)
 
     # Print stats
