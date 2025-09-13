@@ -127,7 +127,7 @@ run-consumer: gramine-consumer
 	$(DOCKER_COMPOSE_CMD) up -d
 
 .PHONY: stop-consumer
-stop-consumer:
+stop-consumer: stop-consumer-benchmark-nosgx
 	@cd consumer && \
 	SPID=$(SPID) \
 	IS_LINKABLE=$(IS_LINKABLE) \
