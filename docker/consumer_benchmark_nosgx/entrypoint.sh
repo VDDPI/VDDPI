@@ -35,4 +35,4 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-grep "___BENCH___" ./cache/eval_01/log.txt > ./cache/eval_01/benchmark.log
+grep "___BENCH___" ./cache/eval_01/log.txt | sed 's/^.*___BENCH___/___BENCH___/' > ./cache/eval_01/benchmark.log
