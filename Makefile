@@ -180,6 +180,11 @@ stop-registry:
 	@cd registry && $(DOCKER_COMPOSE_CMD) down
 	@cd registry && ./fablo prune
 
+.PHONY: restart-registry
+restart-registry:
+	@$(MAKE) stop-registry
+	@$(MAKE) run-registry
+
 .PHONY: clean
 clean:
 	@echo "Removing images"
