@@ -265,8 +265,8 @@ def create_cumulative_graph_with_memory(output_svg: str,
 
     # X ticks thinning if >=100 runs
     if max_runs >= 100:
-        step = int(np.ceil(max_runs / 20.0))
-        ticks = np.arange(1, max_runs + 1, step)
+        # Start from 1, then 50, 100, 150, ...
+        ticks = [1] + list(range(50, max_runs + 1, 50))
     else:
         ticks = np.arange(1, max_runs + 1, 1)
     ax1.set_xticks(ticks)
