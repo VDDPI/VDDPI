@@ -50,9 +50,6 @@ run-consumer-benchmark-nosgx: consumer-benchmark-nosgx
 	@echo "Running consumer-benchmark-nosgx:latest"
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) up
-
-.PHONY: stop-consumer-benchmark-nosgx
-stop-consumer-benchmark-nosgx:
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) down
 	
@@ -127,7 +124,7 @@ run-consumer: gramine-consumer
 	$(DOCKER_COMPOSE_CMD) up -d
 
 .PHONY: stop-consumer
-stop-consumer: stop-consumer-benchmark-nosgx
+stop-consumer:
 	@cd consumer && \
 	SPID=$(SPID) \
 	IS_LINKABLE=$(IS_LINKABLE) \
