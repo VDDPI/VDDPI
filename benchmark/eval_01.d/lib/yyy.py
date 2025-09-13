@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Benchmark logs (cache / no-cache) + memory CSV -> SVG chart
+Benchmark logs (cache / no-cache / no-sgx) + memory CSV -> SVG chart
 
 - Parses benchmark logs:
     ___BENCH___ Data processing (Start:YYYY-MM-DD HH:MM:SS, End:..., Duration_ms:1234, data_processed:True, cached:True|False)
@@ -10,8 +10,8 @@ Benchmark logs (cache / no-cache) + memory CSV -> SVG chart
     2025-09-05 02:58:56,gramine-consumer,38.56MiB / 7.708GiB,78.49%,2.56kB / 689B,34MB / 0B
 - Matches each run to the closest memory sample within 60s of the run's median time
 - Plots:
-    * Duration_ms as line charts (Cache blue #2E86AB, No-cache orange #F18F01)
-    * Matched MemUsage (MiB) as bar charts on a secondary Y-axis, same colors semi-transparent
+    * Duration_ms as line charts (Cache blue #2E86AB, No-cache orange #F18F01, Third green #28A745)
+    * Matched MemUsage (MiB) as bar charts on a secondary Y-axis, same colors semi-transparent (cache/no-cache only)
 - X-axis is run index (1..N). If >=100, tick density is reduced automatically.
 """
 
@@ -31,9 +31,9 @@ import matplotlib.pyplot as plt
 def parse_benchmark_log(path: str, expected_cached: Optional[bool] = None) -> pd.DataFrame:
     """
     Robust parser:
-      - key 大小文字を無視 (start/Start/START など全部OK)
-      - コロン後のスペース可
-      - 時刻は pandas.to_datetime で広く解釈（ミリ秒/ISO8601/タイムゾーン可）
+      - Case-insensitive keys (start/Start/START all OK)
+      - Spaces after colons allowed
+      - Timestamps parsed with pandas.to_datetime (supports milliseconds/ISO8601/timezones)
     """
     outer = re.compile(
         r"___BENCH___\s+Data\s+processing\s*\(\s*(?P<body>.*?)\s*\)\s*$",
@@ -50,7 +50,7 @@ def parse_benchmark_log(path: str, expected_cached: Optional[bool] = None) -> pd
                     continue
 
                 body = m.group("body")
-                # カンマで分割 → "k:v" を辞書化（キーは小文字化）
+                # Split by comma -> convert "k:v" to dict (keys lowercased)
                 kv = {}
                 for p in [x.strip() for x in body.split(",")]:
                     if ":" not in p:
@@ -58,13 +58,13 @@ def parse_benchmark_log(path: str, expected_cached: Optional[bool] = None) -> pd
                     k, v = p.split(":", 1)
                     kv[k.strip().lower()] = v.strip()
 
-                # 必須キー
+                # Required keys
                 for req in ("start", "end", "duration_ms", "cached"):
                     if req not in kv:
                         print(f"[WARN] {path}:{ln} missing key '{req}' in: {body}", file=sys.stderr)
                         break
                 else:
-                    # 日時
+                    # Date/time
                     s = pd.to_datetime(kv["start"], errors="coerce")
                     e = pd.to_datetime(kv["end"], errors="coerce")
                     if pd.isna(s) or pd.isna(e):
@@ -90,7 +90,7 @@ def parse_benchmark_log(path: str, expected_cached: Optional[bool] = None) -> pd
                         print(f"[WARN] {path}:{ln} cached parse failed: {kv['cached']}", file=sys.stderr)
                         continue
 
-                    # （必要なら）期待値フィルタ
+                    # Filter by expected value if needed
                     if expected_cached is not None and cached_flag != expected_cached:
                         continue
 
@@ -199,14 +199,15 @@ def find_closest_memory_usage(mem_df: pd.DataFrame, target_dt: pd.Timestamp,
 def create_cumulative_graph_with_memory(output_svg: str,
                                         df_nocache: pd.DataFrame,
                                         df_cache: pd.DataFrame,
+                                        df_nosgx: pd.DataFrame,
                                         mem_df: pd.DataFrame) -> None:
     """
     Build an SVG:
-      - Left Y: duration_ms (line)
-      - Right Y: matched mem_mib (bars)
-      - Colors: cache=#2E86AB, nocache=#F18F01
+      - Left Y: duration_ms (line) - 3 lines: cache, nocache, nosgx
+      - Right Y: matched mem_mib (bars) - only for cache and nocache
+      - Colors: cache=#2E86AB, nocache=#F18F01, nosgx=#28A745
     """
-    # Prepare matched memory
+    # Prepare matched memory (only for cache and nocache)
     def attach_memory(df: pd.DataFrame) -> pd.DataFrame:
         if df is None or df.empty:
             return df
@@ -226,16 +227,20 @@ def create_cumulative_graph_with_memory(output_svg: str,
 
     df_nocache = attach_memory(df_nocache)
     df_cache = attach_memory(df_cache)
+    # df_nosgx does not get memory matching
 
-    # X positions (offset so bars/lines don't fully overlap)
-    x_nc = df_nocache["run"].to_numpy() - 0.15 if not df_nocache.empty else np.array([])
-    x_c = df_cache["run"].to_numpy() + 0.15 if not df_cache.empty else np.array([])
+    # X positions (offset so lines don't fully overlap)
+    x_nc = df_nocache["run"].to_numpy() - 0.2 if not df_nocache.empty else np.array([])
+    x_c = df_cache["run"].to_numpy() if not df_cache.empty else np.array([])
+    x_nosgx = df_nosgx["run"].to_numpy() + 0.2 if not df_nosgx.empty else np.array([])
 
     max_runs = 0
     if not df_nocache.empty:
         max_runs = max(max_runs, int(df_nocache["run"].max()))
     if not df_cache.empty:
         max_runs = max(max_runs, int(df_cache["run"].max()))
+    if not df_nosgx.empty:
+        max_runs = max(max_runs, int(df_nosgx["run"].max()))
     if max_runs == 0:
         print("[ERROR] Nothing to plot (no runs).", file=sys.stderr)
         sys.exit(1)
@@ -245,15 +250,14 @@ def create_cumulative_graph_with_memory(output_svg: str,
 
     # Lines: Duration (ms)
     if not df_cache.empty:
-        #ax1.plot(x_c, df_cache["duration_ms"], marker="o", linewidth=1.6,
-        #         label="Cache: Duration (ms)", color="#2E86AB")
         ax1.plot(x_c, df_cache["cumulative_ms"], marker="o", linewidth=1.6,
                  label="Cache: Time (ms)", color="#2E86AB")
     if not df_nocache.empty:
-        #ax1.plot(x_nc, df_nocache["duration_ms"], marker="o", linewidth=1.6,
-        #         label="No-cache: Duration (ms)", color="#F18F01")
         ax1.plot(x_nc, df_nocache["cumulative_ms"], marker="o", linewidth=1.6,
-                 label="No-cache: TimeDuration (ms)", color="#F18F01")
+                 label="No-cache: Time (ms)", color="#F18F01")
+    if not df_nosgx.empty:
+        ax1.plot(x_nosgx, df_nosgx["cumulative_ms"], marker="o", linewidth=1.6,
+                 label="Third: Time (ms)", color="#28A745")
 
     ax1.set_xlabel("Run #")
     ax1.set_ylabel("Duration (ms)")
@@ -267,14 +271,14 @@ def create_cumulative_graph_with_memory(output_svg: str,
         ticks = np.arange(1, max_runs + 1, 1)
     ax1.set_xticks(ticks)
 
-    # Bars: Memory (MiB) on secondary axis
+    # Bars: Memory (MiB) on secondary axis (only cache and nocache)
     ax2 = ax1.twinx()
-    bar_w = 0.28
+    bar_w = 0.18
     if not df_cache.empty:
-        ax2.bar(x_c, df_cache["matched_mem_mib"], width=bar_w, alpha=0.35,
+        ax2.bar(x_c - 0.1, df_cache["matched_mem_mib"], width=bar_w, alpha=0.35,
                 label="Cache: Mem (MiB)", color="#2E86AB", zorder=1)
     if not df_nocache.empty:
-        ax2.bar(x_nc, df_nocache["matched_mem_mib"], width=bar_w, alpha=0.35,
+        ax2.bar(x_nc + 0.1, df_nocache["matched_mem_mib"], width=bar_w, alpha=0.35,
                 label="No-cache: Mem (MiB)", color="#F18F01", zorder=1)
     ax2.set_ylabel("Memory (MiB)")
 
@@ -314,7 +318,7 @@ def _print_stats(tag: str, df: pd.DataFrame):
     print(f"Duration_ms: total={total}, mean={mean:.1f}, median={med:.1f}, min={dmin}, max={dmax}")
     print(f"Cumulative last (ms): {int(df['cumulative_ms'].iloc[-1]) if n>0 else 0}")
 
-    # Memory match stats
+    # Memory match stats (only if memory data exists)
     if "matched_mem_mib" in df.columns:
         matched = df["matched_mem_mib"].notna().sum()
         print(f"Memory matched within 60s: {matched}/{n}")
@@ -333,20 +337,23 @@ def main():
     ap.add_argument("output_svg", help="Path to output SVG file")
     ap.add_argument("nocache_log", help="No-cache benchmark log file (cached:False)")
     ap.add_argument("cache_log", help="Cache benchmark log file (cached:True)")
+    ap.add_argument("nosgx_log", help="No-SGX benchmark log file")
     ap.add_argument("memory_csv", help="Memory usage CSV file")
     args = ap.parse_args()
 
     # Parse inputs
     df_nc = parse_benchmark_log(args.nocache_log, expected_cached=False)
     df_c = parse_benchmark_log(args.cache_log, expected_cached=True)
+    df_nosgx = parse_benchmark_log(args.nosgx_log)  # No cache expectation
     mem_df = parse_memory_usage_csv(args.memory_csv)
 
     # Print stats
     _print_stats("NO-CACHE (cached=False)", df_nc)
     _print_stats("CACHE (cached=True)", df_c)
+    _print_stats("NO-SGX", df_nosgx)
 
     # Plot
-    create_cumulative_graph_with_memory(args.output_svg, df_nc, df_c, mem_df)
+    create_cumulative_graph_with_memory(args.output_svg, df_nc, df_c, df_nosgx, mem_df)
 
 if __name__ == "__main__":
     main()
