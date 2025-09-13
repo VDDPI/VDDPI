@@ -153,6 +153,36 @@ def create_multi_log_graph(output_path, log_files, show_flag):
     
     # X軸の試行番号表示を調整（整数目盛）
     plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
+    x_min = max(1, combined_df['trial_index'].min())
+    x_max = combined_df['trial_index'].max()
+    print(f"Debug: trial_index range: {x_min} to {x_max}")
+
+    plt.xlim(x_min, x_max)
+    if x_max - x_min <= 10:
+        plt.xticks(range(x_min, x_max + 1))  # 全ての値を表示
+    else:
+        # きりの良い間隔を計算
+        data_range = x_max - x_min
+        if data_range <= 50:
+            step = 10
+        elif data_range <= 200:
+            step = 50
+        elif data_range <= 500:
+            step = 100
+        else:
+            step = 200
+        # 1から始めて、きりの良い数字で目盛りを設定
+        ticks = [1]  # 必ず1を含める
+        current = ((x_min // step) + 1) * step  # 最初のきりの良い数字
+        while current <= x_max:
+            if current != 1:  # 1は既に追加済み
+                ticks.append(current)
+            current += step
+        # 最大値も追加（きりの良い数字でない場合）
+        if ticks[-1] != x_max:
+            ticks.append(x_max)
+        plt.xticks(ticks)
+
     
     plt.legend(loc='upper right', framealpha=0.9)
 
