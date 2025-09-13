@@ -5,21 +5,21 @@ import sys
 import shutil
 
 # --- 引数処理 ---
-if len(sys.argv) < 2:
-    print("Usage: python3 make_test_data.py <num_files> [seed]")
+if len(sys.argv) < 3:
+    print("Usage: python3 make_test_data.py <num_files> <output dir> [seed]")
     sys.exit(1)
 
 num_files = int(sys.argv[1])  # 生成するファイル数
+output_dir = sys.argv[2]  # 出力先ディレクトリ
 
-if len(sys.argv) > 2:
-    seed = int(sys.argv[2])
+if len(sys.argv) > 3:
+    seed = int(sys.argv[3])
     random.seed(seed)
     print(f"🔧 Using random seed = {seed}")
 else:
     print("🔧 No seed specified (random each run)")
 
 # --- 出力先ディレクトリ ---
-output_dir = "data/person"
 shutil.rmtree(output_dir, ignore_errors=True)
 os.makedirs(output_dir, exist_ok=True)
 

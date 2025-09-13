@@ -55,7 +55,7 @@ ssh provider01.vddpi "cd $VDDPI_DIR && \
     make run-provider"
 
 echo "Setup provider for eval-01"
-ssh provider01.vddpi "docker exec -i provider-server bash ./init.sh eval-01"
+ssh provider01.vddpi "docker exec -i provider-server bash ./init.sh eval-01 $TRIAL_COUNT"
 
 scp $VDDPI_BENCH_DIR/record_stats.sh registry01.vddpi:$REMOTE_RECORD_STATS_SCRIPT
 ssh -T registry01.vddpi "nohup bash $REMOTE_RECORD_STATS_SCRIPT registry-v1-analyzer-1 registry-v1-gramine-1 > /tmp/registry_stats_${START_TIME}.csv 2>&1 & disown"
