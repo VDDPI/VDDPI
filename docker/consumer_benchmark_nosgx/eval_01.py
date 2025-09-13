@@ -68,6 +68,85 @@ def setup_logger(module_name: str, log_file: Optional[str] = None, level: str = 
 
     return logger
 
+def check_condition_phase(condition):
+    is_valid_date = check_expiration_date(condition)
+    is_valid_location = check_location(condition)
+    return is_valid_date, is_valid_location
+
+def check_expiration_date(condition):
+    API_CA_CERT = """-----BEGIN CERTIFICATE-----
+MIIDSzCCAjMCFDd4rPNHr1Devfmp0NLzGcr+6ggnMA0GCSqGSIb3DQEBCwUAMGIx
+CzAJBgNVBAYTAkpQMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRl
+cm5ldCBXaWRnaXRzIFB0eSBMdGQxGzAZBgNVBAMMEnJvb3RjYS5leGFtcGxlLmNv
+bTAeFw0yNDA5MjcxMDE0MjBaFw0zNDA5MjUxMDE0MjBaMGIxCzAJBgNVBAYTAkpQ
+MRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRz
+IFB0eSBMdGQxGzAZBgNVBAMMEnJvb3RjYS5leGFtcGxlLmNvbTCCASIwDQYJKoZI
+hvcNAQEBBQADggEPADCCAQoCggEBAM4/mSYFhpuHrREzpC64/RbICurPBeWsl7/T
+2w21hXtS5z0FjD+sLaPAgr3C1mZkuh5GO/WzqIz9SNa9xMVMEMg+k7K6wIozgZzp
+YPQVNBky1TvXQpm20rH+l0vms17ULXbuX26hqQJADARrUOSXdF+wsa8/CHHWqtWa
+e06eoN79pqLZmTlRttCUBBMyWYXgEZy1iJczOgsi6u5iLlWj4zvmzUKcQev8BZV1
+WC1DhmUgksfclgXLaVemyn35WRgUwsULMR5lB/URPcAjLRIf3n4eHie8mmMKLEez
+9eOtvJImuwIWGNyT5cPv+jo9fY6y9lBt+Y6gXStFA5MPjAflIUkCAwEAATANBgkq
+hkiG9w0BAQsFAAOCAQEArV2X1bcTzSFY3AtdtkDuUeJGwWlV6lfzyMm9lzS3WJJ3
+rDOvQ8Q+G1ilJr4TC+xMIPcHS/XsUxmqPDlguPx9GaWxL/6MNczFsXhTllwBorZF
+RHBhv8uT6LgV03xVq/XM+t4RT8SlTYmfz8xjKshFR4jdqz2QFJ6GrH2Xdny0hN3V
+nwC3fcDP9wwIKMS5Jl8q9b0y7+uzjtB5qe3kW6cFNlJqDyP0cofH0cqGiRBDBZZC
+RpW24O8MGN5wyHW/5P+FZ3UcQ78wS+s4girINinciiIqPayAWJsSLgfOKW8ogZ8P
+krEL2VWGrv3IkBKvGUaSVu4rbwxqealC6vid1yi0TA==
+-----END CERTIFICATE-----
+"""
+    CERT_PATH = "./certs/api_ca_cert.pem"
+    TRUSTED_TIME_API_URL = "http://registry01.vddpi:8005/time"
+    expiration_date_cond = condition["expirationDate"]
+    if (expiration_date_cond == ""):
+        return True
+    with open(CERT_PATH, "w") as f:
+        f.write(API_CA_CERT)
+    res_time = json.loads(requests.get(TRUSTED_TIME_API_URL, verify=CERT_PATH).text)["datetime"]
+    os.remove(CERT_PATH)
+    now = datetime.strptime(res_time[:19], "%Y-%m-%dT%H:%M:%S")
+    datetime_expiration_date_cond = datetime.strptime(expiration_date_cond, "%Y-%m-%d")
+    if (now <= datetime_expiration_date_cond):
+        return True
+    else:
+        return False
+
+def check_location(condition):
+    API_CA_CERT = """-----BEGIN CERTIFICATE-----
+MIIDSzCCAjMCFDd4rPNHr1Devfmp0NLzGcr+6ggnMA0GCSqGSIb3DQEBCwUAMGIx
+CzAJBgNVBAYTAkpQMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRl
+cm5ldCBXaWRnaXRzIFB0eSBMdGQxGzAZBgNVBAMMEnJvb3RjYS5leGFtcGxlLmNv
+bTAeFw0yNDA5MjcxMDE0MjBaFw0zNDA5MjUxMDE0MjBaMGIxCzAJBgNVBAYTAkpQ
+MRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRz
+IFB0eSBMdGQxGzAZBgNVBAMMEnJvb3RjYS5leGFtcGxlLmNvbTCCASIwDQYJKoZI
+hvcNAQEBBQADggEPADCCAQoCggEBAM4/mSYFhpuHrREzpC64/RbICurPBeWsl7/T
+2w21hXtS5z0FjD+sLaPAgr3C1mZkuh5GO/WzqIz9SNa9xMVMEMg+k7K6wIozgZzp
+YPQVNBky1TvXQpm20rH+l0vms17ULXbuX26hqQJADARrUOSXdF+wsa8/CHHWqtWa
+e06eoN79pqLZmTlRttCUBBMyWYXgEZy1iJczOgsi6u5iLlWj4zvmzUKcQev8BZV1
+WC1DhmUgksfclgXLaVemyn35WRgUwsULMR5lB/URPcAjLRIf3n4eHie8mmMKLEez
+9eOtvJImuwIWGNyT5cPv+jo9fY6y9lBt+Y6gXStFA5MPjAflIUkCAwEAATANBgkq
+hkiG9w0BAQsFAAOCAQEArV2X1bcTzSFY3AtdtkDuUeJGwWlV6lfzyMm9lzS3WJJ3
+rDOvQ8Q+G1ilJr4TC+xMIPcHS/XsUxmqPDlguPx9GaWxL/6MNczFsXhTllwBorZF
+RHBhv8uT6LgV03xVq/XM+t4RT8SlTYmfz8xjKshFR4jdqz2QFJ6GrH2Xdny0hN3V
+nwC3fcDP9wwIKMS5Jl8q9b0y7+uzjtB5qe3kW6cFNlJqDyP0cofH0cqGiRBDBZZC
+RpW24O8MGN5wyHW/5P+FZ3UcQ78wS+s4girINinciiIqPayAWJsSLgfOKW8ogZ8P
+krEL2VWGrv3IkBKvGUaSVu4rbwxqealC6vid1yi0TA==
+-----END CERTIFICATE-----
+"""
+    CERT_PATH = "./certs/api_ca_cert.pem"
+    TRUSTED_GEOLOCATION_API_URL = "http://registry01.vddpi:8005/location"
+    location_cond = condition["location"]
+    if (location_cond == ""):
+        return True
+    with open(CERT_PATH, "w") as f:
+        f.write(API_CA_CERT)
+    loc_info = json.loads(requests.post(TRUSTED_GEOLOCATION_API_URL, verify=CERT_PATH, json={"address": "dummy_ipAddr"}).text)
+    os.remove(CERT_PATH)
+    if (loc_info["countryCode"] == location_cond):
+        return True
+    else:
+        return False
+
 def import_process_data(lib_path: Path, module_name: str):
     """
     lib_path    : モジュールを探すディレクトリ (例: /root/lib)
@@ -145,6 +224,15 @@ def main():
 
             # Decrypt and parse JSON -> person_1 dict
             person_1 = decrypt_json_file_to_json(p, key)
+
+            # 現在日時から30日後を計算し、YYYY-MM-DD形式の文字列として辞書に保存
+            condition["expirationDate"] = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d")
+            # 辞書に「ロケーション」を追加
+            condition["location"] = "JP"
+            # check condition
+            is_valid_date, is_valid_location = check_condition_phase(condition)
+            if is_valid_date == False or is_valid_location:
+                return False
             # Run
             result = process_data(person_1)
             logger.info(f"{p}")
@@ -162,6 +250,10 @@ def main():
         logger.info(f"___BENCH___ Data processing without SGX (Start:{start.strftime('%Y-%m-%d %H:%M:%S.%f')}, End:{end.strftime('%Y-%m-%d %H:%M:%S.%f')}, Duration_ms:{elapsed_ms:.3f})")
 
     logger.info(f"\nDone. files={total}, ok={ok}, failed={fail}")
+    return True
 
 if __name__ == "__main__":
-    main()
+    status = main()
+    if status == False:
+        sys.exit(1)
+    sys.exit(0)
