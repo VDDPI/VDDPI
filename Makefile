@@ -50,6 +50,9 @@ run-consumer-benchmark-nosgx: consumer-benchmark-nosgx
 	@echo "Running consumer-benchmark-nosgx:latest"
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) up
+
+.PHONY: stop-consumer-benchmark-nosgx
+stop-consumer-benchmark-nosgx:
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) down
 	
