@@ -30,4 +30,9 @@ python3 ./eval_01.py \
     ./cache/eval_01/log.txt \
     --silent
 
+if [ $? -ne 0 ]; then
+    echo "Error: consumer-benchmark-nosgx"
+    exit 1
+fi
+
 grep "___BENCH___" ./cache/eval_01/log.txt > ./cache/eval_01/benchmark.log
