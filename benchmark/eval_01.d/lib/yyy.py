@@ -10,7 +10,7 @@ Benchmark logs (cache / no-cache / no-sgx) + memory CSV -> SVG chart
     2025-09-05 02:58:56,gramine-consumer,38.56MiB / 7.708GiB,78.49%,2.56kB / 689B,34MB / 0B
 - Matches each run to the closest memory sample within 60s of the run's median time
 - Plots:
-    * Duration_ms as line charts (Cache blue #2E86AB, No-cache orange #F18F01, Third green #28A745)
+    * Duration_ms as line charts (Cache blue #2E86AB, No-cache orange #F18F01, No-SGX green #28A745)
     * Matched MemUsage (MiB) as bar charts on a secondary Y-axis, same colors semi-transparent (cache/no-cache only)
 - X-axis is run index (1..N). If >=100, tick density is reduced automatically.
 """
@@ -230,8 +230,8 @@ def create_cumulative_graph_with_memory(output_svg: str,
     # df_nosgx does not get memory matching
 
     # X positions (offset so lines don't fully overlap)
-    x_nc = df_nocache["run"].to_numpy() - 0.2 if not df_nocache.empty else np.array([])
-    x_c = df_cache["run"].to_numpy() if not df_cache.empty else np.array([])
+    x_c = df_cache["run"].to_numpy() - 0.2 if not df_cache.empty else np.array([])
+    x_nc = df_nocache["run"].to_numpy() if not df_nocache.empty else np.array([])
     x_nosgx = df_nosgx["run"].to_numpy() + 0.2 if not df_nosgx.empty else np.array([])
 
     max_runs = 0
@@ -250,14 +250,14 @@ def create_cumulative_graph_with_memory(output_svg: str,
 
     # Lines: Duration (ms)
     if not df_cache.empty:
-        ax1.plot(x_c, df_cache["cumulative_ms"], marker="o", linewidth=1.6,
+        ax1.plot(x_c, df_cache["cumulative_ms"], marker="o", markersize=4, linewidth=1.6,
                  label="Cache: Time (ms)", color="#2E86AB")
     if not df_nocache.empty:
-        ax1.plot(x_nc, df_nocache["cumulative_ms"], marker="o", linewidth=1.6,
+        ax1.plot(x_nc, df_nocache["cumulative_ms"], marker="o", markersize=4, linewidth=1.6,
                  label="No-cache: Time (ms)", color="#F18F01")
     if not df_nosgx.empty:
-        ax1.plot(x_nosgx, df_nosgx["cumulative_ms"], marker="o", linewidth=1.6,
-                 label="Third: Time (ms)", color="#28A745")
+        ax1.plot(x_nosgx, df_nosgx["cumulative_ms"], marker="o", markersize=4, linewidth=1.6,
+                 label="No-SGX: Time (ms)", color="#28A745")
 
     ax1.set_xlabel("Run #")
     ax1.set_ylabel("Duration (ms)")
@@ -273,12 +273,12 @@ def create_cumulative_graph_with_memory(output_svg: str,
 
     # Bars: Memory (MiB) on secondary axis (only cache and nocache)
     ax2 = ax1.twinx()
-    bar_w = 0.18
+    bar_w = 0.2
     if not df_cache.empty:
-        ax2.bar(x_c - 0.1, df_cache["matched_mem_mib"], width=bar_w, alpha=0.35,
+        ax2.bar(x_c, df_cache["matched_mem_mib"], width=bar_w, alpha=0.35,
                 label="Cache: Mem (MiB)", color="#2E86AB", zorder=1)
     if not df_nocache.empty:
-        ax2.bar(x_nc + 0.1, df_nocache["matched_mem_mib"], width=bar_w, alpha=0.35,
+        ax2.bar(x_nc, df_nocache["matched_mem_mib"], width=bar_w, alpha=0.35,
                 label="No-cache: Mem (MiB)", color="#F18F01", zorder=1)
     ax2.set_ylabel("Memory (MiB)")
 
