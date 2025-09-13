@@ -29,3 +29,5 @@ python3 ./eval_01.py \
     ./cache/eval_01/secret.key \
     ./cache/eval_01/log.txt \
     --silent
+
+grep "___BENCH___" ./cache/eval_01/log.txt > ./cache/eval_01/benchmark.log
