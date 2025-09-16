@@ -22,12 +22,9 @@ services:
       - COUNTRY=${COUNTRY}
       - CNAME=${CNAME}
       - HOST_NAME=${CONSUMER_HOST_NAME}
-      - SERVER_PORT=8080
     ports:
-      - 443:443
       - 8001:8001
       - 8002:8002
-      - 8080:8080
     tty: true
     devices:
       - "/dev/sgx_enclave:/dev/sgx_enclave"
