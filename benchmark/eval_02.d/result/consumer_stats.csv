@@ -1,0 +1,9 @@
+Timestamp,Container,MemUsage,CPU%,NetI/O,BlockI/O
+2025-09-16 16:46:05,gramine-consumer,21.41MiB / 7.708GiB,0.00%,19.7kB / 16.4kB,0B / 3.26MB
+2025-09-16 16:46:12,gramine-consumer,21.41MiB / 7.708GiB,0.00%,19.7kB / 16.4kB,0B / 3.26MB
+2025-09-16 16:46:18,gramine-consumer,21.41MiB / 7.708GiB,0.00%,19.7kB / 16.4kB,0B / 3.26MB
+2025-09-16 16:46:25,gramine-consumer,21.41MiB / 7.708GiB,0.00%,19.7kB / 16.4kB,0B / 3.26MB
+2025-09-16 16:46:31,gramine-consumer,21.41MiB / 7.708GiB,0.00%,19.7kB / 16.4kB,0B / 3.26MB
+2025-09-16 16:46:38,gramine-consumer,21.41MiB / 7.708GiB,0.00%,19.7kB / 16.4kB,0B / 3.26MB
+2025-09-16 16:46:50,gramine-consumer,19.89MiB / 7.708GiB,35.67%,2.93kB / 839B,0B / 0B
+2025-09-16 16:46:57,gramine-consumer,19.92MiB / 7.708GiB,39.22%,19.5kB / 16.3kB,0B / 3.14MB
