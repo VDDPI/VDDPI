@@ -9,5 +9,6 @@ COPY provider/entrypoint.sh /
 COPY provider/main.py /root
 COPY provider/init.sh /root
 COPY provider/make_test_data.py /root
+COPY provider/svm_data/ /svm_data/
 
 CMD ["/entrypoint.sh"]
