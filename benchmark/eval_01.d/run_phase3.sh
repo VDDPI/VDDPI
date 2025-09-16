@@ -31,11 +31,11 @@ echo "Restart containers on consumer01.vddpi"
 )
 
 # The first loop iteration retrieves data from the provider; the second iteration uses that data as cache.
+echo "Run gencert (scenario:$scenario)"
+python3 $vddpi_bench_dir/client.py gencert "$cache_dir"
+
 for scenario in "no_cache" "cache"
 do
-
-    echo "Run gencert (scenario:$scenario)"
-    python3 $vddpi_bench_dir/client.py gencert "$cache_dir"
 
     echo "Run processing data (scenario:$scenario)"
     for token in $cache_dir/token-*
