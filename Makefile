@@ -172,7 +172,7 @@ run-registry-network:
 	@cd registry && ./fablo generate fablo-config.json
 	@echo "COMPOSE_PROJECT_NAME=fablo_network" >> registry/fablo-target/fabric-docker/.env
 	@cd registry && ./fablo up fablo-config.json
-	@cd init && ./registry_setup.sh
+	@cd init && sleep 5 && ./registry_setup.sh
 
 .PHONY: stop-registry
 stop-registry:

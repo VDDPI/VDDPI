@@ -33,6 +33,7 @@ RUN cp /usr/local/bin/python3 /usr/bin/mypython
 RUN pip3 install future asn1
 RUN pip3 install "pip>=20"
 RUN pip3 install pyOpenSSL
+RUN pip3 install libsvm
 
 # for JWT verification
 RUN pip3 install PyJWT cryptography

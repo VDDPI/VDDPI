@@ -142,7 +142,7 @@ func (s *SmartContract) UpdateLib(ctx contractapi.TransactionContextInterface) e
 	var acceptedFunc string
 	for _, funcInfo := range suggestedFunc {
 		if (funcInfo.Status == "Accepted") {
-			acceptedFunc += funcInfo.Func
+			acceptedFunc += funcInfo.Func + "\n"
 		}
 	}
 
@@ -204,7 +204,7 @@ func (s *SmartContract) GetCurrentLib(ctx contractapi.TransactionContextInterfac
 	var acceptedFunc string
 	for _, funcInfo := range suggestedFunc {
 		if (funcInfo.Status == "Accepted") {
-			acceptedFunc += funcInfo.Func
+			acceptedFunc += funcInfo.Func + "\n"
 		}
 	}
 	return acceptedFunc, nil
