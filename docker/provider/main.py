@@ -155,8 +155,6 @@ def provide_data(data_type, data):
         cur.close()
         conn.close()
         msg =  f"Failed to load data usage policy (query:{query})"
-        print(msg)
-        print(query)
         return msg, 400
     else:
         res = cur.fetchone()
@@ -193,13 +191,13 @@ def provide_data(data_type, data):
                     ret["condition"]["expirationDate"] = res[6]
                 else:
                     ret["condition"]["expirationDate"] = ""
-            print("="*10 + "Data and Condition" + "=" * 10)
-            print(ret)
+            print("="*10 + "Condition" + "=" * 10)
+            print(ret["condition"])
             print("="*38)
             
             return jsonify(ret), 200
-        except:
-            return "Failed to get requested data", 500
+        except Exception as e:
+            return f"Failed to get requested data ({str(e)})", 500
 
 app_res_doc = {
     200: "Success",
