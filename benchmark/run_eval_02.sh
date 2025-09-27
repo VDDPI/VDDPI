@@ -45,6 +45,7 @@ if [ "$SKIP_RESTART_REGISTRY" = false ]; then
     ssh registry01.vddpi "cd $VDDPI_DIR && \
         make stop-registry > /dev/null 2>&1; \
         make run-registry"
+    sleep 10
 else
     echo "Skipping restart containers on registry01.vddpi"
 fi
