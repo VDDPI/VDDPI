@@ -21,13 +21,13 @@ function insert_policy() {
     local mrenclave="$2"
     local provider_db_config="$3"
 
-    local values="('provider.example.com','svm','$data_id','consumer.example.com','$mrenclave','svm.data',5,'JP',90,'2026-12-01')"
+    local values="('provider.example.com','svm','$data_id','consumer.example.com','$mrenclave','svm.data',100,'JP',90,'2026-12-01')"
     local sql="REPLACE INTO policy (data_provider, data_type, data_id, data_consumer, data_processing, data_disclosing, data_counter, data_location, data_duration, data_expiration_date) VALUES $values"
 
     mysql --defaults-file=$provider_db_config provider -e "$sql"
 }
 
-svm.########################################
+########################################
 # Main
 ########################################
 # Clear file
@@ -46,20 +46,22 @@ curl registry01.vddpi:8001/root-crt > $cache_dir/RootCA.pem
 echo "Get consumer certificate"
 echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 ../get_cert.py registry01.vddpi:8001 $cache_dir
 
+for f in 1k 2k 3k 4k 5k 6k 7k 8k 9k 10k; do
+    echo "Get data file svm/$f"
+    data_id="https://provider01.vddpi:443/data/svm/$f"
 
-data_id="https://provider01.vddpi:443/data/svm/1k"
+    echo "Preparing data provision policy -- provider preparation (app_id:$app_id, data_id:$data_id)"
+    insert_policy "$data_id" "$app_id" "$provider_db_config"
 
-echo "Preparing data provision policy -- provider preparation (app_id:$app_id, data_id:$data_id)"
-insert_policy "$data_id" "$app_id" "$provider_db_config"
+    echo "Applying for data usage (app_id:$app_id, data_id:$data_id)"
+    start_ts=$(date +"%Y-%m-%d %H:%M:%S")
+    start_epoch=$(date +%s%3N)
+    python3 ../create_declaration.py \
+        -o $cache_dir/token-$f \
+        consumer.example.com "$app_id" "$data_id" 1 $cache_dir/consumer.key
+    end_ts=$(date +"%Y-%m-%d %H:%M:%S")
+    end_epoch=$(date +%s%3N)
 
-echo "Applying for data usage (app_id:$app_id, data_id:$data_id)"
-start_ts=$(date +"%Y-%m-%d %H:%M:%S")
-start_epoch=$(date +%s%3N)
-python3 ../create_declaration.py \
-    -o $cache_dir/token-$index \
-    consumer.example.com "$app_id" "$data_id" 1 $cache_dir/consumer.key
-end_ts=$(date +"%Y-%m-%d %H:%M:%S")
-end_epoch=$(date +%s%3N)
-
-duration=$((end_epoch - start_epoch))
-echo "___BENCH___ Data usage application (Start:$start_ts, End:$end_ts, Duration_ms:$duration)" >> "$LOGFILE"
+    duration=$((end_epoch - start_epoch))
+    echo "___BENCH___ Data usage application (Data:$f, Start:$start_ts, End:$end_ts, Duration_ms:$duration)" >> "$LOGFILE"
+done

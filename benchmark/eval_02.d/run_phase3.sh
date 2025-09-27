@@ -3,8 +3,7 @@
 ########################################
 # Configuration
 ########################################
-LOGFILE_CACHE="result/eval_data_processing_cache.log"
-LOGFILE_NOCACHE="result/eval_data_processing_nocache.log"
+PATH_LOGFILE_BASE="result/eval_data_processing_cache"
 
 ########################################
 # Arguments
@@ -13,11 +12,6 @@ vddpi_dir="$1"
 vddpi_bench_dir="$2"
 cache_dir="$3"
 
-########################################
-# Initialization
-########################################
-> "$LOGFILE_CACHE"
-> "$LOGFILE_NOCACHE"
 
 ########################################
 # Main
@@ -31,18 +25,24 @@ echo "Restart containers on consumer01.vddpi"
 )
 
 # The first loop iteration retrieves data from the provider; the second iteration uses that data as cache.
-echo "Run gencert (scenario:$scenario)"
+echo "Run gencert"
 python3 $vddpi_bench_dir/client.py gencert "$cache_dir"
 
-for scenario in "no_cache" "cache"
+for f in 1k 2k 3k 4k 5k 6k 7k 8k 9k 10k
 do
+    logfile=$PATH_LOGFILE_BASE-$f.log
 
-    echo "Run processing data (scenario:$scenario)"
-    for token in $cache_dir/token-*
+    # Clear file
+    > "$logfile"
+
+    for scenario in "no_cache" "cache01" "cache02" "cache03" "cache04" "cache05" "cache06" "cache07" "cache08" "cache09" "cache10"
     do
+
+        echo "Run processing data (scenario:$scenario)"
         start_ts=$(date +"%Y-%m-%d %H:%M:%S.%3N")
         start_epoch=$(date +%s%3N)
 
+        token=$cache_dir/token-$f
         msg=$(python3 $vddpi_bench_dir/client.py process "$token" "$cache_dir")
 
         end_ts=$(date +"%Y-%m-%d %H:%M:%S.%3N")
@@ -51,18 +51,9 @@ do
 
         echo "$msg" | head -n 1
         log=$(echo "$msg" | grep "Session completed" | sed -n 's/.*(\(.*\)).*/\1/p')
-        case "$scenario" in
-            "no_cache")
-                logfile="$LOGFILE_NOCACHE"
-                ;;
-            "cache")
-                logfile="$LOGFILE_CACHE"
-                ;;
-            *)
-                echo "Error: Unexpected log format: $log"
-                exit 1
-                ;;
-        esac
-        echo "___BENCH___ Data processing (start_total:$start_ts, end_total:$end_ts, duration_total_ms:$duration, $log)" >> "$logfile"
+
+        if [[ $scenario == cache* ]]; then
+            echo "___BENCH___ Data processing (start_total:$start_ts, end_total:$end_ts, duration_total_ms:$duration, $log)" >> "$logfile"
+        fi
     done
 done
