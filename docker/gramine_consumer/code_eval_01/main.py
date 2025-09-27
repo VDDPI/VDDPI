@@ -335,6 +335,7 @@ def request(client_cn, tokens):
                 tls_socket.send("Invalid argument number".encode())
                 continue
     
+    start_process_data = datetime.now()
     if (is_met_condition):
         processed_data = process_data(*provided_data)
         
@@ -347,15 +348,20 @@ def request(client_cn, tokens):
         tls_socket.send(processed_data.encode())
     
     # data storing
+    start_store_data = datetime.now()
     for data in provided_data_uc:
         expired = data_saving(data)
         if (expired):
             remove_data(data)
 
     end = datetime.now()
-    elapsed_ms = round((end - start).total_seconds() * 1000)
 
-    return start, end, elapsed_ms, is_met_condition, cached
+    elapsed_check_policy_ms = round((start_process_data - start).total_seconds() * 1000)
+    elapsed_process_data_ms = round((start_store_data - start_process_data).total_seconds() * 1000)
+    elapsed_store_data_ms   = round((end - start_store_data).total_seconds() * 1000)
+    elapsed_ms              = round((end - start).total_seconds() * 1000)
+
+    return elapsed_check_policy_ms, elapsed_process_data_ms, elapsed_store_data_ms, elapsed_ms, is_met_condition, cached
 
 if __name__ == "__main__":
     urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
@@ -391,9 +397,9 @@ if __name__ == "__main__":
                 for _ in range(int(msg1)):
                     msg2 += tls_socket.recv(2048).decode()
 
-                start, end, elapsed_ms, data_processed, cached = request(client_cn, msg2)
+                elapsed_check_policy_ms, elapsed_process_data_ms, elapsed_store_data_ms, elapsed_ms, is_met_condition, cached = request(client_cn, msg2)
 
-                msg = f"Session completed (start:{start.strftime('%Y-%m-%d %H:%M:%S')}, end:{end.strftime('%Y-%m-%d %H:%M:%S')}, duration_ms:{elapsed_ms}, data_processed:{data_processed}, cached:{cached})"
+                msg = f"Session completed (elapsed_check_policy_ms:{elapsed_check_policy_ms}, elapsed_process_data_ms:{elapsed_process_data_ms}, elapsed_store_data_ms:{elapsed_store_data_ms}, elapsed_ms:{elapsed_ms}, is_met_condition:{is_met_condition}, cached:{cached})"
                 f.write(msg + "\n")
 
                 tls_socket.send(msg.encode('utf-8'))
