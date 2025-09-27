@@ -314,7 +314,7 @@ def request(client_cn, tokens):
     elapsed_store_data_ms   = round((end - start_store_data).total_seconds() * 1000)
     elapsed_ms              = round((end - start).total_seconds() * 1000)
 
-    return elapsed_check_policy_ms, elapsed_process_data_ms, elapsed_store_data_ms, elapsed_ms, is_met_condition, cached
+    return start, end, elapsed_check_policy_ms, elapsed_process_data_ms, elapsed_store_data_ms, elapsed_ms, is_met_condition, cached
 
 if __name__ == "__main__":
     urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
@@ -350,9 +350,9 @@ if __name__ == "__main__":
                 for _ in range(int(msg1)):
                     msg2 += tls_socket.recv(2048).decode()
 
-                elapsed_check_policy_ms, elapsed_process_data_ms, elapsed_store_data_ms, elapsed_ms, is_met_condition, cached = request(client_cn, msg2)
+                start, end, elapsed_check_policy_ms, elapsed_process_data_ms, elapsed_store_data_ms, elapsed_ms, is_met_condition, cached = request(client_cn, msg2)
 
-                msg = f"Session completed (elapsed_check_policy_ms:{elapsed_check_policy_ms}, elapsed_process_data_ms:{elapsed_process_data_ms}, elapsed_store_data_ms:{elapsed_store_data_ms}, elapsed_ms:{elapsed_ms}, is_met_condition:{is_met_condition}, cached:{cached})"
+                msg = f"Session completed (start:{start.isoformat(sep=' ', timespec='milliseconds')}, end:{end.isoformat(sep=' ', timespec='milliseconds')}, elapsed_check_policy_ms:{elapsed_check_policy_ms}, elapsed_process_data_ms:{elapsed_process_data_ms}, elapsed_store_data_ms:{elapsed_store_data_ms}, elapsed_ms:{elapsed_ms}, is_met_condition:{is_met_condition}, cached:{cached})"
                 f.write(msg + "\n")
 
                 tls_socket.send(msg.encode('utf-8'))
