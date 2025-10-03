@@ -363,34 +363,45 @@ def request(client_cn, tokens):
 
     return start, end, elapsed_check_policy_ms, elapsed_process_data_ms, elapsed_store_data_ms, elapsed_ms, is_met_condition, cached
 
+def log_message(f, message):
+    """
+    Write a timestamped message to the file object f.
+    """
+    # Get the current time in "YYYY-MM-DD HH:MM:SS" format
+    timestamp = datetime.now().isoformat(timespec="milliseconds")
+    # Write a log line
+    f.write(f"[{timestamp}] {message}\n")
+    # Flush the buffer to ensure the message is written immediately
+    f.flush()
+
 if __name__ == "__main__":
-    urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
-    
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    context.load_cert_chain(certfile=DUMMY_CERT, keyfile=DUMMY_KEY)
-    context.load_verify_locations(cafile=CA_CERT)
-    context.verify_mode = ssl.CERT_REQUIRED
-    
-    bind_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    bind_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    bind_socket.bind(('0.0.0.0', 8002))
-    bind_socket.listen(1)
-    
-    with open('/tmp/log.txt', 'w', encoding='utf-8') as f:
-        f.write('listening on port 8002\n')
+    with open('/logs/app.log', 'w', encoding='utf-8') as f:
+        urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
+        
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        context.load_cert_chain(certfile=DUMMY_CERT, keyfile=DUMMY_KEY)
+        context.load_verify_locations(cafile=CA_CERT)
+        context.verify_mode = ssl.CERT_REQUIRED
+        
+        bind_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        bind_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        bind_socket.bind(('0.0.0.0', 8002))
+        bind_socket.listen(1)
+        
+        log_message(f, 'listening on port 8002')
         while True:
             client_socket, fromaddr = bind_socket.accept()
             with context.wrap_socket(client_socket, server_side=True) as tls_socket:
-                f.write(f"Client connected: {fromaddr}\n")
+                log_message(f, f"Client connected: {fromaddr}")
 
                 client_cert = tls_socket.getpeercert()
                 if not client_cert:
-                    f.write("Client certificate not found.\n")
+                    log_message(f, "Client certificate not found.")
                     exit(1)
 
                 subject = dict(x[0] for x in client_cert['subject'])
                 client_cn = subject['commonName']
-                f.write(f"Common Name: {client_cn}\n")
+                log_message(f, f"Common Name: {client_cn}")
 
                 msg1 = tls_socket.recv(1024).decode()
                 msg2 = ""
@@ -400,7 +411,7 @@ if __name__ == "__main__":
                 start, end, elapsed_check_policy_ms, elapsed_process_data_ms, elapsed_store_data_ms, elapsed_ms, is_met_condition, cached = request(client_cn, msg2)
 
                 msg = f"Session completed (start:{start.isoformat(sep=' ', timespec='milliseconds')}, end:{end.isoformat(sep=' ', timespec='milliseconds')}, elapsed_check_policy_ms:{elapsed_check_policy_ms}, elapsed_process_data_ms:{elapsed_process_data_ms}, elapsed_store_data_ms:{elapsed_store_data_ms}, elapsed_ms:{elapsed_ms}, is_met_condition:{is_met_condition}, cached:{cached})"
-                f.write(msg + "\n")
+                log_message(f, msg)
 
                 tls_socket.send(msg.encode('utf-8'))
 

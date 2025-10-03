@@ -25,6 +25,8 @@ services:
     ports:
       - 8001:8001
       - 8002:8002
+    volumes:
+      - ./logs:/logs
     tty: true
     devices:
       - "/dev/sgx_enclave:/dev/sgx_enclave"

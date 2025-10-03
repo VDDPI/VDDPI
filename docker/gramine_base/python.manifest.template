@@ -16,6 +16,7 @@ fs.mounts = [
   { path = "{{ python.distlib }}", uri = "file:{{ python.distlib }}" },
   { path = "/etc", uri = "file:/etc" },
   { type = "tmpfs", path = "/tmp" },
+  { path = "/logs", uri = "file:./logs", type = "chroot" }
   { path = "/certs/", uri = "file:certs/", type = "encrypted", key_name = "_sgx_mrenclave"},
   { path = "/data/", uri = "file:data/", type = "encrypted", key_name = "_sgx_mrenclave"},
 ]
@@ -51,5 +52,6 @@ sgx.allowed_files = [
   "file:/usr/local/lib/", # Python lib path
   "file:{{ python.distlib }}/",
   "file:./code",
+  "file:/logs/",
   "file:./datauserRootCA.pem"
 ]
