@@ -1,0 +1,600 @@
+[2025-10-03 01:48:05.514] 01_start_app
+[2025-10-03 01:48:05.560] 02_Start main function
+[2025-10-03 01:48:06.701] 03_Enclave Initialized
+[2025-10-03 01:48:06.702] 04_Start processing
+[2025-10-03 01:48:06.759] 05_Finished processing
+[2025-10-03 01:48:06.903] 06_finished_app
+[2025-10-03 01:48:06.904] 01_start_app
+[2025-10-03 01:48:06.906] 02_Start main function
+[2025-10-03 01:48:08.030] 03_Enclave Initialized
+[2025-10-03 01:48:08.031] 04_Start processing
+[2025-10-03 01:48:08.089] 05_Finished processing
+[2025-10-03 01:48:08.234] 06_finished_app
+[2025-10-03 01:48:08.235] 01_start_app
+[2025-10-03 01:48:08.237] 02_Start main function
+[2025-10-03 01:48:09.349] 03_Enclave Initialized
+[2025-10-03 01:48:09.350] 04_Start processing
+[2025-10-03 01:48:09.406] 05_Finished processing
+[2025-10-03 01:48:09.548] 06_finished_app
+[2025-10-03 01:48:09.549] 01_start_app
+[2025-10-03 01:48:09.551] 02_Start main function
+[2025-10-03 01:48:10.663] 03_Enclave Initialized
+[2025-10-03 01:48:10.664] 04_Start processing
+[2025-10-03 01:48:10.723] 05_Finished processing
+[2025-10-03 01:48:10.864] 06_finished_app
+[2025-10-03 01:48:10.865] 01_start_app
+[2025-10-03 01:48:10.867] 02_Start main function
+[2025-10-03 01:48:12.005] 03_Enclave Initialized
+[2025-10-03 01:48:12.006] 04_Start processing
+[2025-10-03 01:48:12.062] 05_Finished processing
+[2025-10-03 01:48:12.204] 06_finished_app
+[2025-10-03 01:48:12.205] 01_start_app
+[2025-10-03 01:48:12.207] 02_Start main function
+[2025-10-03 01:48:13.328] 03_Enclave Initialized
+[2025-10-03 01:48:13.329] 04_Start processing
+[2025-10-03 01:48:13.386] 05_Finished processing
+[2025-10-03 01:48:13.527] 06_finished_app
+[2025-10-03 01:48:13.528] 01_start_app
+[2025-10-03 01:48:13.530] 02_Start main function
+[2025-10-03 01:48:14.640] 03_Enclave Initialized
+[2025-10-03 01:48:14.641] 04_Start processing
+[2025-10-03 01:48:14.697] 05_Finished processing
+[2025-10-03 01:48:14.838] 06_finished_app
+[2025-10-03 01:48:14.838] 01_start_app
+[2025-10-03 01:48:14.841] 02_Start main function
+[2025-10-03 01:48:15.966] 03_Enclave Initialized
+[2025-10-03 01:48:15.967] 04_Start processing
+[2025-10-03 01:48:16.023] 05_Finished processing
+[2025-10-03 01:48:16.165] 06_finished_app
+[2025-10-03 01:48:16.166] 01_start_app
+[2025-10-03 01:48:16.168] 02_Start main function
+[2025-10-03 01:48:17.287] 03_Enclave Initialized
+[2025-10-03 01:48:17.288] 04_Start processing
+[2025-10-03 01:48:17.344] 05_Finished processing
+[2025-10-03 01:48:17.485] 06_finished_app
+[2025-10-03 01:48:17.486] 01_start_app
+[2025-10-03 01:48:17.488] 02_Start main function
+[2025-10-03 01:48:18.601] 03_Enclave Initialized
+[2025-10-03 01:48:18.602] 04_Start processing
+[2025-10-03 01:48:18.659] 05_Finished processing
+[2025-10-03 01:48:18.800] 06_finished_app
+[2025-10-03 01:48:18.811] 01_start_app
+[2025-10-03 01:48:18.813] 02_Start main function
+[2025-10-03 01:48:19.933] 03_Enclave Initialized
+[2025-10-03 01:48:19.935] 04_Start processing
+[2025-10-03 01:48:20.159] 05_Finished processing
+[2025-10-03 01:48:20.300] 06_finished_app
+[2025-10-03 01:48:20.302] 01_start_app
+[2025-10-03 01:48:20.304] 02_Start main function
+[2025-10-03 01:48:21.432] 03_Enclave Initialized
+[2025-10-03 01:48:21.433] 04_Start processing
+[2025-10-03 01:48:21.657] 05_Finished processing
+[2025-10-03 01:48:21.798] 06_finished_app
+[2025-10-03 01:48:21.799] 01_start_app
+[2025-10-03 01:48:21.801] 02_Start main function
+[2025-10-03 01:48:22.926] 03_Enclave Initialized
+[2025-10-03 01:48:22.927] 04_Start processing
+[2025-10-03 01:48:23.153] 05_Finished processing
+[2025-10-03 01:48:23.295] 06_finished_app
+[2025-10-03 01:48:23.296] 01_start_app
+[2025-10-03 01:48:23.298] 02_Start main function
+[2025-10-03 01:48:24.411] 03_Enclave Initialized
+[2025-10-03 01:48:24.412] 04_Start processing
+[2025-10-03 01:48:24.637] 05_Finished processing
+[2025-10-03 01:48:24.782] 06_finished_app
+[2025-10-03 01:48:24.784] 01_start_app
+[2025-10-03 01:48:24.786] 02_Start main function
+[2025-10-03 01:48:25.923] 03_Enclave Initialized
+[2025-10-03 01:48:25.925] 04_Start processing
+[2025-10-03 01:48:26.149] 05_Finished processing
+[2025-10-03 01:48:26.290] 06_finished_app
+[2025-10-03 01:48:26.291] 01_start_app
+[2025-10-03 01:48:26.293] 02_Start main function
+[2025-10-03 01:48:27.411] 03_Enclave Initialized
+[2025-10-03 01:48:27.413] 04_Start processing
+[2025-10-03 01:48:27.638] 05_Finished processing
+[2025-10-03 01:48:27.780] 06_finished_app
+[2025-10-03 01:48:27.781] 01_start_app
+[2025-10-03 01:48:27.783] 02_Start main function
+[2025-10-03 01:48:28.898] 03_Enclave Initialized
+[2025-10-03 01:48:28.899] 04_Start processing
+[2025-10-03 01:48:29.123] 05_Finished processing
+[2025-10-03 01:48:29.264] 06_finished_app
+[2025-10-03 01:48:29.265] 01_start_app
+[2025-10-03 01:48:29.267] 02_Start main function
+[2025-10-03 01:48:30.380] 03_Enclave Initialized
+[2025-10-03 01:48:30.381] 04_Start processing
+[2025-10-03 01:48:30.606] 05_Finished processing
+[2025-10-03 01:48:30.747] 06_finished_app
+[2025-10-03 01:48:30.748] 01_start_app
+[2025-10-03 01:48:30.750] 02_Start main function
+[2025-10-03 01:48:31.871] 03_Enclave Initialized
+[2025-10-03 01:48:31.872] 04_Start processing
+[2025-10-03 01:48:32.102] 05_Finished processing
+[2025-10-03 01:48:32.244] 06_finished_app
+[2025-10-03 01:48:32.245] 01_start_app
+[2025-10-03 01:48:32.247] 02_Start main function
+[2025-10-03 01:48:33.361] 03_Enclave Initialized
+[2025-10-03 01:48:33.362] 04_Start processing
+[2025-10-03 01:48:33.585] 05_Finished processing
+[2025-10-03 01:48:33.726] 06_finished_app
+[2025-10-03 01:48:33.738] 01_start_app
+[2025-10-03 01:48:33.740] 02_Start main function
+[2025-10-03 01:48:34.849] 03_Enclave Initialized
+[2025-10-03 01:48:34.851] 04_Start processing
+[2025-10-03 01:48:35.325] 05_Finished processing
+[2025-10-03 01:48:35.466] 06_finished_app
+[2025-10-03 01:48:35.467] 01_start_app
+[2025-10-03 01:48:35.469] 02_Start main function
+[2025-10-03 01:48:36.583] 03_Enclave Initialized
+[2025-10-03 01:48:36.585] 04_Start processing
+[2025-10-03 01:48:37.064] 05_Finished processing
+[2025-10-03 01:48:37.210] 06_finished_app
+[2025-10-03 01:48:37.211] 01_start_app
+[2025-10-03 01:48:37.213] 02_Start main function
+[2025-10-03 01:48:38.330] 03_Enclave Initialized
+[2025-10-03 01:48:38.332] 04_Start processing
+[2025-10-03 01:48:38.805] 05_Finished processing
+[2025-10-03 01:48:38.949] 06_finished_app
+[2025-10-03 01:48:38.950] 01_start_app
+[2025-10-03 01:48:38.952] 02_Start main function
+[2025-10-03 01:48:40.076] 03_Enclave Initialized
+[2025-10-03 01:48:40.078] 04_Start processing
+[2025-10-03 01:48:40.552] 05_Finished processing
+[2025-10-03 01:48:40.693] 06_finished_app
+[2025-10-03 01:48:40.694] 01_start_app
+[2025-10-03 01:48:40.696] 02_Start main function
+[2025-10-03 01:48:41.826] 03_Enclave Initialized
+[2025-10-03 01:48:41.827] 04_Start processing
+[2025-10-03 01:48:42.307] 05_Finished processing
+[2025-10-03 01:48:42.449] 06_finished_app
+[2025-10-03 01:48:42.449] 01_start_app
+[2025-10-03 01:48:42.452] 02_Start main function
+[2025-10-03 01:48:43.576] 03_Enclave Initialized
+[2025-10-03 01:48:43.578] 04_Start processing
+[2025-10-03 01:48:44.051] 05_Finished processing
+[2025-10-03 01:48:44.192] 06_finished_app
+[2025-10-03 01:48:44.194] 01_start_app
+[2025-10-03 01:48:44.195] 02_Start main function
+[2025-10-03 01:48:45.311] 03_Enclave Initialized
+[2025-10-03 01:48:45.313] 04_Start processing
+[2025-10-03 01:48:45.786] 05_Finished processing
+[2025-10-03 01:48:45.939] 06_finished_app
+[2025-10-03 01:48:45.940] 01_start_app
+[2025-10-03 01:48:45.942] 02_Start main function
+[2025-10-03 01:48:47.058] 03_Enclave Initialized
+[2025-10-03 01:48:47.061] 04_Start processing
+[2025-10-03 01:48:47.542] 05_Finished processing
+[2025-10-03 01:48:47.683] 06_finished_app
+[2025-10-03 01:48:47.684] 01_start_app
+[2025-10-03 01:48:47.686] 02_Start main function
+[2025-10-03 01:48:48.799] 03_Enclave Initialized
+[2025-10-03 01:48:48.800] 04_Start processing
+[2025-10-03 01:48:49.279] 05_Finished processing
+[2025-10-03 01:48:49.420] 06_finished_app
+[2025-10-03 01:48:49.421] 01_start_app
+[2025-10-03 01:48:49.423] 02_Start main function
+[2025-10-03 01:48:50.534] 03_Enclave Initialized
+[2025-10-03 01:48:50.536] 04_Start processing
+[2025-10-03 01:48:51.022] 05_Finished processing
+[2025-10-03 01:48:51.162] 06_finished_app
+[2025-10-03 01:48:51.175] 01_start_app
+[2025-10-03 01:48:51.177] 02_Start main function
+[2025-10-03 01:48:52.294] 03_Enclave Initialized
+[2025-10-03 01:48:52.296] 04_Start processing
+[2025-10-03 01:48:53.150] 05_Finished processing
+[2025-10-03 01:48:53.292] 06_finished_app
+[2025-10-03 01:48:53.293] 01_start_app
+[2025-10-03 01:48:53.295] 02_Start main function
+[2025-10-03 01:48:54.413] 03_Enclave Initialized
+[2025-10-03 01:48:54.415] 04_Start processing
+[2025-10-03 01:48:55.276] 05_Finished processing
+[2025-10-03 01:48:55.420] 06_finished_app
+[2025-10-03 01:48:55.421] 01_start_app
+[2025-10-03 01:48:55.423] 02_Start main function
+[2025-10-03 01:48:56.547] 03_Enclave Initialized
+[2025-10-03 01:48:56.549] 04_Start processing
+[2025-10-03 01:48:57.411] 05_Finished processing
+[2025-10-03 01:48:57.552] 06_finished_app
+[2025-10-03 01:48:57.553] 01_start_app
+[2025-10-03 01:48:57.555] 02_Start main function
+[2025-10-03 01:48:58.668] 03_Enclave Initialized
+[2025-10-03 01:48:58.669] 04_Start processing
+[2025-10-03 01:48:59.528] 05_Finished processing
+[2025-10-03 01:48:59.671] 06_finished_app
+[2025-10-03 01:48:59.672] 01_start_app
+[2025-10-03 01:48:59.674] 02_Start main function
+[2025-10-03 01:49:00.787] 03_Enclave Initialized
+[2025-10-03 01:49:00.789] 04_Start processing
+[2025-10-03 01:49:01.663] 05_Finished processing
+[2025-10-03 01:49:01.804] 06_finished_app
+[2025-10-03 01:49:01.805] 01_start_app
+[2025-10-03 01:49:01.807] 02_Start main function
+[2025-10-03 01:49:02.925] 03_Enclave Initialized
+[2025-10-03 01:49:02.927] 04_Start processing
+[2025-10-03 01:49:03.781] 05_Finished processing
+[2025-10-03 01:49:03.922] 06_finished_app
+[2025-10-03 01:49:03.924] 01_start_app
+[2025-10-03 01:49:03.925] 02_Start main function
+[2025-10-03 01:49:05.040] 03_Enclave Initialized
+[2025-10-03 01:49:05.041] 04_Start processing
+[2025-10-03 01:49:05.910] 05_Finished processing
+[2025-10-03 01:49:06.051] 06_finished_app
+[2025-10-03 01:49:06.052] 01_start_app
+[2025-10-03 01:49:06.054] 02_Start main function
+[2025-10-03 01:49:07.186] 03_Enclave Initialized
+[2025-10-03 01:49:07.187] 04_Start processing
+[2025-10-03 01:49:08.049] 05_Finished processing
+[2025-10-03 01:49:08.190] 06_finished_app
+[2025-10-03 01:49:08.191] 01_start_app
+[2025-10-03 01:49:08.193] 02_Start main function
+[2025-10-03 01:49:09.307] 03_Enclave Initialized
+[2025-10-03 01:49:09.308] 04_Start processing
+[2025-10-03 01:49:10.164] 05_Finished processing
+[2025-10-03 01:49:10.306] 06_finished_app
+[2025-10-03 01:49:10.307] 01_start_app
+[2025-10-03 01:49:10.309] 02_Start main function
+[2025-10-03 01:49:11.444] 03_Enclave Initialized
+[2025-10-03 01:49:11.445] 04_Start processing
+[2025-10-03 01:49:12.308] 05_Finished processing
+[2025-10-03 01:49:12.449] 06_finished_app
+[2025-10-03 01:49:12.464] 01_start_app
+[2025-10-03 01:49:12.466] 02_Start main function
+[2025-10-03 01:49:13.580] 03_Enclave Initialized
+[2025-10-03 01:49:13.584] 04_Start processing
+[2025-10-03 01:49:14.880] 05_Finished processing
+[2025-10-03 01:49:15.024] 06_finished_app
+[2025-10-03 01:49:15.025] 01_start_app
+[2025-10-03 01:49:15.027] 02_Start main function
+[2025-10-03 01:49:16.150] 03_Enclave Initialized
+[2025-10-03 01:49:16.152] 04_Start processing
+[2025-10-03 01:49:17.454] 05_Finished processing
+[2025-10-03 01:49:17.595] 06_finished_app
+[2025-10-03 01:49:17.596] 01_start_app
+[2025-10-03 01:49:17.598] 02_Start main function
+[2025-10-03 01:49:18.711] 03_Enclave Initialized
+[2025-10-03 01:49:18.713] 04_Start processing
+[2025-10-03 01:49:20.012] 05_Finished processing
+[2025-10-03 01:49:20.154] 06_finished_app
+[2025-10-03 01:49:20.155] 01_start_app
+[2025-10-03 01:49:20.157] 02_Start main function
+[2025-10-03 01:49:21.276] 03_Enclave Initialized
+[2025-10-03 01:49:21.279] 04_Start processing
+[2025-10-03 01:49:22.583] 05_Finished processing
+[2025-10-03 01:49:22.725] 06_finished_app
+[2025-10-03 01:49:22.726] 01_start_app
+[2025-10-03 01:49:22.728] 02_Start main function
+[2025-10-03 01:49:23.846] 03_Enclave Initialized
+[2025-10-03 01:49:23.848] 04_Start processing
+[2025-10-03 01:49:25.143] 05_Finished processing
+[2025-10-03 01:49:25.285] 06_finished_app
+[2025-10-03 01:49:25.286] 01_start_app
+[2025-10-03 01:49:25.288] 02_Start main function
+[2025-10-03 01:49:26.420] 03_Enclave Initialized
+[2025-10-03 01:49:26.422] 04_Start processing
+[2025-10-03 01:49:27.725] 05_Finished processing
+[2025-10-03 01:49:27.867] 06_finished_app
+[2025-10-03 01:49:27.868] 01_start_app
+[2025-10-03 01:49:27.870] 02_Start main function
+[2025-10-03 01:49:28.983] 03_Enclave Initialized
+[2025-10-03 01:49:28.985] 04_Start processing
+[2025-10-03 01:49:30.280] 05_Finished processing
+[2025-10-03 01:49:30.436] 06_finished_app
+[2025-10-03 01:49:30.437] 01_start_app
+[2025-10-03 01:49:30.439] 02_Start main function
+[2025-10-03 01:49:31.576] 03_Enclave Initialized
+[2025-10-03 01:49:31.578] 04_Start processing
+[2025-10-03 01:49:32.881] 05_Finished processing
+[2025-10-03 01:49:33.023] 06_finished_app
+[2025-10-03 01:49:33.024] 01_start_app
+[2025-10-03 01:49:33.026] 02_Start main function
+[2025-10-03 01:49:34.139] 03_Enclave Initialized
+[2025-10-03 01:49:34.141] 04_Start processing
+[2025-10-03 01:49:35.445] 05_Finished processing
+[2025-10-03 01:49:35.586] 06_finished_app
+[2025-10-03 01:49:35.587] 01_start_app
+[2025-10-03 01:49:35.589] 02_Start main function
+[2025-10-03 01:49:36.718] 03_Enclave Initialized
+[2025-10-03 01:49:36.720] 04_Start processing
+[2025-10-03 01:49:38.025] 05_Finished processing
+[2025-10-03 01:49:38.166] 06_finished_app
+[2025-10-03 01:49:38.183] 01_start_app
+[2025-10-03 01:49:38.185] 02_Start main function
+[2025-10-03 01:49:39.298] 03_Enclave Initialized
+[2025-10-03 01:49:39.300] 04_Start processing
+[2025-10-03 01:49:41.201] 05_Finished processing
+[2025-10-03 01:49:41.344] 06_finished_app
+[2025-10-03 01:49:41.345] 01_start_app
+[2025-10-03 01:49:41.347] 02_Start main function
+[2025-10-03 01:49:42.466] 03_Enclave Initialized
+[2025-10-03 01:49:42.469] 04_Start processing
+[2025-10-03 01:49:44.367] 05_Finished processing
+[2025-10-03 01:49:44.508] 06_finished_app
+[2025-10-03 01:49:44.510] 01_start_app
+[2025-10-03 01:49:44.511] 02_Start main function
+[2025-10-03 01:49:45.626] 03_Enclave Initialized
+[2025-10-03 01:49:45.628] 04_Start processing
+[2025-10-03 01:49:47.533] 05_Finished processing
+[2025-10-03 01:49:47.674] 06_finished_app
+[2025-10-03 01:49:47.675] 01_start_app
+[2025-10-03 01:49:47.677] 02_Start main function
+[2025-10-03 01:49:48.793] 03_Enclave Initialized
+[2025-10-03 01:49:48.795] 04_Start processing
+[2025-10-03 01:49:50.687] 05_Finished processing
+[2025-10-03 01:49:50.830] 06_finished_app
+[2025-10-03 01:49:50.831] 01_start_app
+[2025-10-03 01:49:50.833] 02_Start main function
+[2025-10-03 01:49:51.964] 03_Enclave Initialized
+[2025-10-03 01:49:51.966] 04_Start processing
+[2025-10-03 01:49:53.852] 05_Finished processing
+[2025-10-03 01:49:53.993] 06_finished_app
+[2025-10-03 01:49:53.994] 01_start_app
+[2025-10-03 01:49:53.996] 02_Start main function
+[2025-10-03 01:49:55.111] 03_Enclave Initialized
+[2025-10-03 01:49:55.114] 04_Start processing
+[2025-10-03 01:49:57.027] 05_Finished processing
+[2025-10-03 01:49:57.168] 06_finished_app
+[2025-10-03 01:49:57.169] 01_start_app
+[2025-10-03 01:49:57.171] 02_Start main function
+[2025-10-03 01:49:58.287] 03_Enclave Initialized
+[2025-10-03 01:49:58.290] 04_Start processing
+[2025-10-03 01:50:00.176] 05_Finished processing
+[2025-10-03 01:50:00.318] 06_finished_app
+[2025-10-03 01:50:00.319] 01_start_app
+[2025-10-03 01:50:00.321] 02_Start main function
+[2025-10-03 01:50:01.441] 03_Enclave Initialized
+[2025-10-03 01:50:01.443] 04_Start processing
+[2025-10-03 01:50:03.340] 05_Finished processing
+[2025-10-03 01:50:03.482] 06_finished_app
+[2025-10-03 01:50:03.483] 01_start_app
+[2025-10-03 01:50:03.485] 02_Start main function
+[2025-10-03 01:50:04.602] 03_Enclave Initialized
+[2025-10-03 01:50:04.606] 04_Start processing
+[2025-10-03 01:50:06.507] 05_Finished processing
+[2025-10-03 01:50:06.647] 06_finished_app
+[2025-10-03 01:50:06.649] 01_start_app
+[2025-10-03 01:50:06.651] 02_Start main function
+[2025-10-03 01:50:07.785] 03_Enclave Initialized
+[2025-10-03 01:50:07.787] 04_Start processing
+[2025-10-03 01:50:09.674] 05_Finished processing
+[2025-10-03 01:50:09.814] 06_finished_app
+[2025-10-03 01:50:09.834] 01_start_app
+[2025-10-03 01:50:09.835] 02_Start main function
+[2025-10-03 01:50:10.964] 03_Enclave Initialized
+[2025-10-03 01:50:10.966] 04_Start processing
+[2025-10-03 01:50:13.774] 05_Finished processing
+[2025-10-03 01:50:13.915] 06_finished_app
+[2025-10-03 01:50:13.916] 01_start_app
+[2025-10-03 01:50:13.918] 02_Start main function
+[2025-10-03 01:50:15.027] 03_Enclave Initialized
+[2025-10-03 01:50:15.029] 04_Start processing
+[2025-10-03 01:50:17.835] 05_Finished processing
+[2025-10-03 01:50:17.977] 06_finished_app
+[2025-10-03 01:50:17.978] 01_start_app
+[2025-10-03 01:50:17.980] 02_Start main function
+[2025-10-03 01:50:19.091] 03_Enclave Initialized
+[2025-10-03 01:50:19.094] 04_Start processing
+[2025-10-03 01:50:21.897] 05_Finished processing
+[2025-10-03 01:50:22.044] 06_finished_app
+[2025-10-03 01:50:22.045] 01_start_app
+[2025-10-03 01:50:22.047] 02_Start main function
+[2025-10-03 01:50:23.162] 03_Enclave Initialized
+[2025-10-03 01:50:23.165] 04_Start processing
+[2025-10-03 01:50:25.969] 05_Finished processing
+[2025-10-03 01:50:26.111] 06_finished_app
+[2025-10-03 01:50:26.113] 01_start_app
+[2025-10-03 01:50:26.114] 02_Start main function
+[2025-10-03 01:50:27.234] 03_Enclave Initialized
+[2025-10-03 01:50:27.236] 04_Start processing
+[2025-10-03 01:50:30.023] 05_Finished processing
+[2025-10-03 01:50:30.165] 06_finished_app
+[2025-10-03 01:50:30.166] 01_start_app
+[2025-10-03 01:50:30.168] 02_Start main function
+[2025-10-03 01:50:31.298] 03_Enclave Initialized
+[2025-10-03 01:50:31.300] 04_Start processing
+[2025-10-03 01:50:34.095] 05_Finished processing
+[2025-10-03 01:50:34.237] 06_finished_app
+[2025-10-03 01:50:34.238] 01_start_app
+[2025-10-03 01:50:34.240] 02_Start main function
+[2025-10-03 01:50:35.344] 03_Enclave Initialized
+[2025-10-03 01:50:35.347] 04_Start processing
+[2025-10-03 01:50:38.165] 05_Finished processing
+[2025-10-03 01:50:38.307] 06_finished_app
+[2025-10-03 01:50:38.309] 01_start_app
+[2025-10-03 01:50:38.311] 02_Start main function
+[2025-10-03 01:50:39.416] 03_Enclave Initialized
+[2025-10-03 01:50:39.418] 04_Start processing
+[2025-10-03 01:50:42.223] 05_Finished processing
+[2025-10-03 01:50:42.366] 06_finished_app
+[2025-10-03 01:50:42.366] 01_start_app
+[2025-10-03 01:50:42.369] 02_Start main function
+[2025-10-03 01:50:43.486] 03_Enclave Initialized
+[2025-10-03 01:50:43.489] 04_Start processing
+[2025-10-03 01:50:46.295] 05_Finished processing
+[2025-10-03 01:50:46.437] 06_finished_app
+[2025-10-03 01:50:46.438] 01_start_app
+[2025-10-03 01:50:46.440] 02_Start main function
+[2025-10-03 01:50:47.560] 03_Enclave Initialized
+[2025-10-03 01:50:47.563] 04_Start processing
+[2025-10-03 01:50:50.355] 05_Finished processing
+[2025-10-03 01:50:50.497] 06_finished_app
+[2025-10-03 01:50:50.519] 01_start_app
+[2025-10-03 01:50:50.521] 02_Start main function
+[2025-10-03 01:50:51.648] 03_Enclave Initialized
+[2025-10-03 01:50:51.651] 04_Start processing
+[2025-10-03 01:50:55.071] 05_Finished processing
+[2025-10-03 01:50:55.212] 06_finished_app
+[2025-10-03 01:50:55.213] 01_start_app
+[2025-10-03 01:50:55.215] 02_Start main function
+[2025-10-03 01:50:56.348] 03_Enclave Initialized
+[2025-10-03 01:50:56.351] 04_Start processing
+[2025-10-03 01:50:59.772] 05_Finished processing
+[2025-10-03 01:50:59.913] 06_finished_app
+[2025-10-03 01:50:59.915] 01_start_app
+[2025-10-03 01:50:59.916] 02_Start main function
+[2025-10-03 01:51:01.041] 03_Enclave Initialized
+[2025-10-03 01:51:01.044] 04_Start processing
+[2025-10-03 01:51:04.468] 05_Finished processing
+[2025-10-03 01:51:04.610] 06_finished_app
+[2025-10-03 01:51:04.610] 01_start_app
+[2025-10-03 01:51:04.613] 02_Start main function
+[2025-10-03 01:51:05.726] 03_Enclave Initialized
+[2025-10-03 01:51:05.729] 04_Start processing
+[2025-10-03 01:51:09.170] 05_Finished processing
+[2025-10-03 01:51:09.312] 06_finished_app
+[2025-10-03 01:51:09.313] 01_start_app
+[2025-10-03 01:51:09.315] 02_Start main function
+[2025-10-03 01:51:10.418] 03_Enclave Initialized
+[2025-10-03 01:51:10.420] 04_Start processing
+[2025-10-03 01:51:13.856] 05_Finished processing
+[2025-10-03 01:51:13.997] 06_finished_app
+[2025-10-03 01:51:13.998] 01_start_app
+[2025-10-03 01:51:14.000] 02_Start main function
+[2025-10-03 01:51:15.114] 03_Enclave Initialized
+[2025-10-03 01:51:15.116] 04_Start processing
+[2025-10-03 01:51:18.542] 05_Finished processing
+[2025-10-03 01:51:18.684] 06_finished_app
+[2025-10-03 01:51:18.685] 01_start_app
+[2025-10-03 01:51:18.687] 02_Start main function
+[2025-10-03 01:51:19.802] 03_Enclave Initialized
+[2025-10-03 01:51:19.805] 04_Start processing
+[2025-10-03 01:51:23.236] 05_Finished processing
+[2025-10-03 01:51:23.377] 06_finished_app
+[2025-10-03 01:51:23.379] 01_start_app
+[2025-10-03 01:51:23.380] 02_Start main function
+[2025-10-03 01:51:24.494] 03_Enclave Initialized
+[2025-10-03 01:51:24.497] 04_Start processing
+[2025-10-03 01:51:27.931] 05_Finished processing
+[2025-10-03 01:51:28.073] 06_finished_app
+[2025-10-03 01:51:28.074] 01_start_app
+[2025-10-03 01:51:28.076] 02_Start main function
+[2025-10-03 01:51:29.187] 03_Enclave Initialized
+[2025-10-03 01:51:29.189] 04_Start processing
+[2025-10-03 01:51:32.622] 05_Finished processing
+[2025-10-03 01:51:32.763] 06_finished_app
+[2025-10-03 01:51:32.764] 01_start_app
+[2025-10-03 01:51:32.766] 02_Start main function
+[2025-10-03 01:51:33.880] 03_Enclave Initialized
+[2025-10-03 01:51:33.883] 04_Start processing
+[2025-10-03 01:51:37.312] 05_Finished processing
+[2025-10-03 01:51:37.453] 06_finished_app
+[2025-10-03 01:51:37.474] 01_start_app
+[2025-10-03 01:51:37.475] 02_Start main function
+[2025-10-03 01:51:38.599] 03_Enclave Initialized
+[2025-10-03 01:51:38.602] 04_Start processing
+[2025-10-03 01:51:42.915] 05_Finished processing
+[2025-10-03 01:51:43.057] 06_finished_app
+[2025-10-03 01:51:43.059] 01_start_app
+[2025-10-03 01:51:43.060] 02_Start main function
+[2025-10-03 01:51:44.183] 03_Enclave Initialized
+[2025-10-03 01:51:44.186] 04_Start processing
+[2025-10-03 01:51:48.500] 05_Finished processing
+[2025-10-03 01:51:48.642] 06_finished_app
+[2025-10-03 01:51:48.643] 01_start_app
+[2025-10-03 01:51:48.645] 02_Start main function
+[2025-10-03 01:51:49.759] 03_Enclave Initialized
+[2025-10-03 01:51:49.762] 04_Start processing
+[2025-10-03 01:51:54.069] 05_Finished processing
+[2025-10-03 01:51:54.211] 06_finished_app
+[2025-10-03 01:51:54.212] 01_start_app
+[2025-10-03 01:51:54.214] 02_Start main function
+[2025-10-03 01:51:55.319] 03_Enclave Initialized
+[2025-10-03 01:51:55.322] 04_Start processing
+[2025-10-03 01:51:59.631] 05_Finished processing
+[2025-10-03 01:51:59.772] 06_finished_app
+[2025-10-03 01:51:59.774] 01_start_app
+[2025-10-03 01:51:59.775] 02_Start main function
+[2025-10-03 01:52:00.900] 03_Enclave Initialized
+[2025-10-03 01:52:00.907] 04_Start processing
+[2025-10-03 01:52:05.210] 05_Finished processing
+[2025-10-03 01:52:05.352] 06_finished_app
+[2025-10-03 01:52:05.353] 01_start_app
+[2025-10-03 01:52:05.355] 02_Start main function
+[2025-10-03 01:52:06.482] 03_Enclave Initialized
+[2025-10-03 01:52:06.485] 04_Start processing
+[2025-10-03 01:52:10.798] 05_Finished processing
+[2025-10-03 01:52:10.952] 06_finished_app
+[2025-10-03 01:52:10.953] 01_start_app
+[2025-10-03 01:52:10.955] 02_Start main function
+[2025-10-03 01:52:12.077] 03_Enclave Initialized
+[2025-10-03 01:52:12.080] 04_Start processing
+[2025-10-03 01:52:16.400] 05_Finished processing
+[2025-10-03 01:52:16.542] 06_finished_app
+[2025-10-03 01:52:16.544] 01_start_app
+[2025-10-03 01:52:16.545] 02_Start main function
+[2025-10-03 01:52:17.664] 03_Enclave Initialized
+[2025-10-03 01:52:17.667] 04_Start processing
+[2025-10-03 01:52:21.975] 05_Finished processing
+[2025-10-03 01:52:22.118] 06_finished_app
+[2025-10-03 01:52:22.119] 01_start_app
+[2025-10-03 01:52:22.121] 02_Start main function
+[2025-10-03 01:52:23.223] 03_Enclave Initialized
+[2025-10-03 01:52:23.226] 04_Start processing
+[2025-10-03 01:52:27.539] 05_Finished processing
+[2025-10-03 01:52:27.681] 06_finished_app
+[2025-10-03 01:52:27.682] 01_start_app
+[2025-10-03 01:52:27.684] 02_Start main function
+[2025-10-03 01:52:28.799] 03_Enclave Initialized
+[2025-10-03 01:52:28.802] 04_Start processing
+[2025-10-03 01:52:33.112] 05_Finished processing
+[2025-10-03 01:52:33.254] 06_finished_app
+[2025-10-03 01:52:33.278] 01_start_app
+[2025-10-03 01:52:33.280] 02_Start main function
+[2025-10-03 01:52:34.390] 03_Enclave Initialized
+[2025-10-03 01:52:34.393] 04_Start processing
+[2025-10-03 01:52:39.756] 05_Finished processing
+[2025-10-03 01:52:39.897] 06_finished_app
+[2025-10-03 01:52:39.897] 01_start_app
+[2025-10-03 01:52:39.900] 02_Start main function
+[2025-10-03 01:52:41.017] 03_Enclave Initialized
+[2025-10-03 01:52:41.020] 04_Start processing
+[2025-10-03 01:52:46.381] 05_Finished processing
+[2025-10-03 01:52:46.522] 06_finished_app
+[2025-10-03 01:52:46.523] 01_start_app
+[2025-10-03 01:52:46.525] 02_Start main function
+[2025-10-03 01:52:47.642] 03_Enclave Initialized
+[2025-10-03 01:52:47.645] 04_Start processing
+[2025-10-03 01:52:53.014] 05_Finished processing
+[2025-10-03 01:52:53.156] 06_finished_app
+[2025-10-03 01:52:53.157] 01_start_app
+[2025-10-03 01:52:53.159] 02_Start main function
+[2025-10-03 01:52:54.274] 03_Enclave Initialized
+[2025-10-03 01:52:54.277] 04_Start processing
+[2025-10-03 01:52:59.629] 05_Finished processing
+[2025-10-03 01:52:59.771] 06_finished_app
+[2025-10-03 01:52:59.772] 01_start_app
+[2025-10-03 01:52:59.774] 02_Start main function
+[2025-10-03 01:53:00.883] 03_Enclave Initialized
+[2025-10-03 01:53:00.888] 04_Start processing
+[2025-10-03 01:53:06.250] 05_Finished processing
+[2025-10-03 01:53:06.391] 06_finished_app
+[2025-10-03 01:53:06.393] 01_start_app
+[2025-10-03 01:53:06.394] 02_Start main function
+[2025-10-03 01:53:07.526] 03_Enclave Initialized
+[2025-10-03 01:53:07.530] 04_Start processing
+[2025-10-03 01:53:12.891] 05_Finished processing
+[2025-10-03 01:53:13.032] 06_finished_app
+[2025-10-03 01:53:13.034] 01_start_app
+[2025-10-03 01:53:13.035] 02_Start main function
+[2025-10-03 01:53:14.147] 03_Enclave Initialized
+[2025-10-03 01:53:14.150] 04_Start processing
+[2025-10-03 01:53:19.506] 05_Finished processing
+[2025-10-03 01:53:19.650] 06_finished_app
+[2025-10-03 01:53:19.651] 01_start_app
+[2025-10-03 01:53:19.653] 02_Start main function
+[2025-10-03 01:53:20.770] 03_Enclave Initialized
+[2025-10-03 01:53:20.773] 04_Start processing
+[2025-10-03 01:53:26.132] 05_Finished processing
+[2025-10-03 01:53:26.274] 06_finished_app
+[2025-10-03 01:53:26.275] 01_start_app
+[2025-10-03 01:53:26.277] 02_Start main function
+[2025-10-03 01:53:27.391] 03_Enclave Initialized
+[2025-10-03 01:53:27.394] 04_Start processing
+[2025-10-03 01:53:32.752] 05_Finished processing
+[2025-10-03 01:53:32.893] 06_finished_app
+[2025-10-03 01:53:32.895] 01_start_app
+[2025-10-03 01:53:32.896] 02_Start main function
+[2025-10-03 01:53:34.009] 03_Enclave Initialized
+[2025-10-03 01:53:34.013] 04_Start processing
+[2025-10-03 01:53:39.363] 05_Finished processing
+[2025-10-03 01:53:39.504] 06_finished_app
