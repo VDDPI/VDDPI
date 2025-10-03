@@ -327,7 +327,7 @@ def log_message(f, message):
     f.flush()
 
 if __name__ == "__main__":
-    with open('/logs/app.log', 'w', encoding='utf-8') as f:
+    with open('/logs/app.log', mode='a', encoding='utf-8') as f:
         urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
         
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
@@ -337,11 +337,14 @@ if __name__ == "__main__":
         
         bind_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         bind_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        bind_socket.bind(('0.0.0.0', 8002))
+
+        port = 8002
+        bind_socket.bind(('0.0.0.0', port))
         bind_socket.listen(1)
         
-        log_message(f, 'listening on port 8002')
+        log_message(f, f"Start server (port:{port})")
         while True:
+            log_message(f, f"Waiting for a connection...")
             client_socket, fromaddr = bind_socket.accept()
             with context.wrap_socket(client_socket, server_side=True) as tls_socket:
                 log_message(f, f"Client connected: {fromaddr}")
