@@ -52,6 +52,6 @@ sgx.allowed_files = [
   "file:/usr/local/lib/", # Python lib path
   "file:{{ python.distlib }}/",
   "file:./code",
-  "file:/logs/",
+  "file:./logs",
   "file:./datauserRootCA.pem"
 ]
