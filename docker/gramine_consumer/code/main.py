@@ -327,7 +327,7 @@ def log_message(f, message):
     Write a timestamped message to the file object f.
     """
     # Get the current time in "YYYY-MM-DD HH:MM:SS" format
-    timestamp = datetime.now().isoformat(timespec="milliseconds")
+    timestamp = datetime.now().isoformat(sep=' ', timespec="milliseconds")
     # Write a log line
     f.write(f"[{timestamp}] {message}\n")
     # Flush the buffer to ensure the message is written immediately
