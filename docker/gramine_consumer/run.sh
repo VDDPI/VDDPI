@@ -15,9 +15,13 @@ curl ${PRIVATE_CA}/root-crt > code/RootCA.pem
 
 ./../restart_aesm.sh 
 
-echo "========= Start generating certificate =========="
-gramine-sgx ./python -gencert
-echo "========= Finish generating certificate =========="
+if [ ! -f certs/client.pem ]; then
+    echo "========= Start generating certificate =========="
+    gramine-sgx ./python -gencert
+    echo "========= Finish generating certificate =========="
+else
+    echo "Certificate already exists, skip generating certificate"
+fi
 
 # execute data processing 
 echo "========= Start data processing app =========="

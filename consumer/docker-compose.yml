@@ -27,6 +27,7 @@ services:
       - 8002:8002
     volumes:
       - ./logs:/logs
+      - ./certs:/root/certs
     tty: true
     devices:
       - "/dev/sgx_enclave:/dev/sgx_enclave"

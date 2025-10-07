@@ -9,9 +9,8 @@ LOGFILE="result/eval_data_usage_application.log"
 # Arguments
 ########################################
 app_id="$1"
-trial_count="$2"
-provider_db_config="$3"
-cache_dir="$4"
+provider_db_config="$2"
+cache_dir="$3"
 
 ########################################
 # Functions

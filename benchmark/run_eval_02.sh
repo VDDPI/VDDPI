@@ -3,7 +3,7 @@
 ########################################
 # Configuration
 ########################################
-TRIAL_COUNT=1
+TRIAL_COUNT=10
 SLEEP_TIME=2
 VDDPI_DIR=$HOME/VDDPI
 VDDPI_BENCH_DIR=$HOME/VDDPI/benchmark
@@ -56,7 +56,7 @@ ssh provider01.vddpi "cd $VDDPI_DIR && \
     make run-provider"
 
 echo "Setup provider for eval-02"
-ssh provider01.vddpi "docker exec -i provider-server bash ./init.sh eval-02 $TRIAL_COUNT"
+ssh provider01.vddpi "docker exec -i provider-server bash ./init.sh eval-02"
 
 scp $VDDPI_BENCH_DIR/record_stats.sh registry01.vddpi:$REMOTE_RECORD_STATS_SCRIPT
 ssh -T registry01.vddpi "nohup bash $REMOTE_RECORD_STATS_SCRIPT registry-v1-analyzer-1 registry-v1-gramine-1 > /tmp/registry_stats_${START_TIME}.csv 2>&1 & disown"
@@ -68,7 +68,7 @@ sleep $SLEEP_TIME
 
 echo "=================== Phase1: Register your data processing app ==================="
 
-./run_phase1.sh "$DATA_PROCESSING_CODE" "$TRIAL_COUNT" "$APP_ID_FILE"
+./run_phase1.sh "$DATA_PROCESSING_CODE" 1 "$APP_ID_FILE"
 
 # Fetch logs
 fetch_logs "registry01.vddpi" "registry-v1-gramine-1"  "result/eval_obtaining_app_id.log"
@@ -83,13 +83,13 @@ cat > $PROVIDER_DB_CONFIG <<- EOF
     password=root
     host=provider01.vddpi
 EOF
-./run_phase2.sh "$app_id" "$TRIAL_COUNT" "$PROVIDER_DB_CONFIG" "$VDDPI_EVAL_DIR/cache"
+./run_phase2.sh "$app_id" "$PROVIDER_DB_CONFIG" "$VDDPI_EVAL_DIR/cache"
 
 fetch_logs "provider01.vddpi" "provider-server"  "result/eval_obtaining_processing_spec.log"
 
 echo "=================== Phase3: Data processing ==================="
 
-./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "$VDDPI_EVAL_DIR/cache"
+./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "$VDDPI_EVAL_DIR" "$TRIAL_COUNT" "$VDDPI_EVAL_DIR/cache"
 
 echo "=================== Finalization ==================="
 
