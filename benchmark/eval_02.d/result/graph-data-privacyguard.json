@@ -6,7 +6,7 @@
   },
   "groups": [
     {
-      "group_index": 0,
+      "training_data": "1k",
       "block_range_inclusive": [
         1,
         10
@@ -43,7 +43,7 @@
       }
     },
     {
-      "group_index": 1,
+      "training_data": "2k",
       "block_range_inclusive": [
         11,
         20
@@ -80,7 +80,7 @@
       }
     },
     {
-      "group_index": 2,
+      "training_data": "3k",
       "block_range_inclusive": [
         21,
         30
@@ -117,7 +117,7 @@
       }
     },
     {
-      "group_index": 3,
+      "training_data": "4k",
       "block_range_inclusive": [
         31,
         40
@@ -154,7 +154,7 @@
       }
     },
     {
-      "group_index": 4,
+      "training_data": "5k",
       "block_range_inclusive": [
         41,
         50
@@ -191,7 +191,7 @@
       }
     },
     {
-      "group_index": 5,
+      "training_data": "6k",
       "block_range_inclusive": [
         51,
         60
@@ -228,7 +228,7 @@
       }
     },
     {
-      "group_index": 6,
+      "training_data": "7k",
       "block_range_inclusive": [
         61,
         70
@@ -265,7 +265,7 @@
       }
     },
     {
-      "group_index": 7,
+      "training_data": "8k",
       "block_range_inclusive": [
         71,
         80
@@ -302,7 +302,7 @@
       }
     },
     {
-      "group_index": 8,
+      "training_data": "9k",
       "block_range_inclusive": [
         81,
         90
@@ -339,7 +339,7 @@
       }
     },
     {
-      "group_index": 9,
+      "training_data": "10k",
       "block_range_inclusive": [
         91,
         100

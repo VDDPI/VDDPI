@@ -103,7 +103,7 @@ def avg(xs: List[float]) -> float:
     return round(sum(xs) / len(xs), 3) if xs else 0.0
 
 
-def build_group(group_index: int, benchlog_path: Path, applog_path: Path) -> Dict[str, Any]:
+def build_group(training_data: str, benchlog_path: Path, applog_path: Path) -> Dict[str, Any]:
     benchlog_lines = load_lines(benchlog_path)
     applog_lines = load_lines(applog_path)
 
@@ -111,7 +111,7 @@ def build_group(group_index: int, benchlog_path: Path, applog_path: Path) -> Dic
     start_servers = parse_applog_start_servers_no_regex(applog_lines)
     if len(start_servers) < len(benchlog_lines):
         raise ValueError(
-            f"Group {group_index}: Not enough 'Start server' lines in {applog_path.name}. "
+            f"Training data {training_data}: Not enough 'Start server' lines in {applog_path.name}. "
             f"Expected >= {len(benchlog_lines)}, got {len(start_servers)}"
         )
 
@@ -130,8 +130,8 @@ def build_group(group_index: int, benchlog_path: Path, applog_path: Path) -> Dic
         check_vals.append(float(check_ms))
 
     group = {
-        "group_index": group_index,
-        "block_range_inclusive": [group_index * 10 + 1, group_index * 10 + len(enclave_initializing_vals)],
+        "training_data": training_data,
+        #"block_range_inclusive": [group_index * 10 + 1, group_index * 10 + len(enclave_initializing_vals)],
         "averages_ms": {
             # ご指定のマッピング
             "enclave_initializing": avg(enclave_initializing_vals),
@@ -162,15 +162,16 @@ def main():
 
     test_num = 10 # 1k ... 10k
 
-    for gi in range(1, test_num + 1):
-        benchlog = base / f"eval_data_processing_cache-{gi}k.log"
-        applog = base / f"app-{gi}k.log"
+    for size in range(1, test_num + 1):
+        training_data = f"{size}k"
+        benchlog = base / f"eval_data_processing_cache-{size}k.log"
+        applog = base / f"app-{size}k.log"
         if not benchlog.exists():
             raise FileNotFoundError(f"Missing {benchlog}")
         if not applog.exists():
             raise FileNotFoundError(f"Missing {applog}")
 
-        g = build_group(gi, benchlog, applog)
+        g = build_group(training_data, benchlog, applog)
         groups.append(g)
         total_blocks += len(g["values_ms"]["enclave_initializing"])
 

@@ -67,8 +67,9 @@ def group_by_group_size_and_average(blocks: List[Dict[str, float]], group_size: 
         avg_enclave_initializing = sum(vals_enclave_initializing) / group_size
         avg_processing = sum(vals_processing) / group_size
 
+        training_data = f"{g+1}k"
         groups.append({
-            "group_index": g,                      # 0始まり
+            "training_data": training_data,
             "block_range_inclusive": [start + 1, end],  # 1始まりで表示（例: 1〜10）
             "averages_ms": {
                 "enclave_initializing": avg_enclave_initializing,

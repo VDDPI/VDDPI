@@ -6,11 +6,7 @@
   },
   "groups": [
     {
-      "group_index": 1,
-      "block_range_inclusive": [
-        11,
-        20
-      ],
+      "training_data": "1k",
       "averages_ms": {
         "enclave_initializing": 5939.3,
         "policy_checking": 265.8,
@@ -56,11 +52,7 @@
       }
     },
     {
-      "group_index": 2,
-      "block_range_inclusive": [
-        21,
-        30
-      ],
+      "training_data": "2k",
       "averages_ms": {
         "enclave_initializing": 6006.9,
         "policy_checking": 268.4,
@@ -106,11 +98,7 @@
       }
     },
     {
-      "group_index": 3,
-      "block_range_inclusive": [
-        31,
-        40
-      ],
+      "training_data": "3k",
       "averages_ms": {
         "enclave_initializing": 5921.8,
         "policy_checking": 272.6,
@@ -156,11 +144,7 @@
       }
     },
     {
-      "group_index": 4,
-      "block_range_inclusive": [
-        41,
-        50
-      ],
+      "training_data": "4k",
       "averages_ms": {
         "enclave_initializing": 5917.1,
         "policy_checking": 283.8,
@@ -206,11 +190,7 @@
       }
     },
     {
-      "group_index": 5,
-      "block_range_inclusive": [
-        51,
-        60
-      ],
+      "training_data": "5k",
       "averages_ms": {
         "enclave_initializing": 5941.5,
         "policy_checking": 284.9,
@@ -256,11 +236,7 @@
       }
     },
     {
-      "group_index": 6,
-      "block_range_inclusive": [
-        61,
-        70
-      ],
+      "training_data": "6k",
       "averages_ms": {
         "enclave_initializing": 5917.6,
         "policy_checking": 291.7,
@@ -306,11 +282,7 @@
       }
     },
     {
-      "group_index": 7,
-      "block_range_inclusive": [
-        71,
-        80
-      ],
+      "training_data": "7k",
       "averages_ms": {
         "enclave_initializing": 5954.5,
         "policy_checking": 299.3,
@@ -356,11 +328,7 @@
       }
     },
     {
-      "group_index": 8,
-      "block_range_inclusive": [
-        81,
-        90
-      ],
+      "training_data": "8k",
       "averages_ms": {
         "enclave_initializing": 5966.8,
         "policy_checking": 308.7,
@@ -406,11 +374,7 @@
       }
     },
     {
-      "group_index": 9,
-      "block_range_inclusive": [
-        91,
-        100
-      ],
+      "training_data": "9k",
       "averages_ms": {
         "enclave_initializing": 5957.3,
         "policy_checking": 308.9,
@@ -456,11 +420,7 @@
       }
     },
     {
-      "group_index": 10,
-      "block_range_inclusive": [
-        101,
-        110
-      ],
+      "training_data": "10k",
       "averages_ms": {
         "enclave_initializing": 5951.6,
         "policy_checking": 317.5,
