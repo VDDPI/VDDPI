@@ -230,9 +230,9 @@ def create_cumulative_graph_with_memory(output_svg: str,
     # df_nosgx does not get memory matching
 
     # X positions (offset so lines don't fully overlap)
-    x_c = df_cache["run"].to_numpy() - 0.2 if not df_cache.empty else np.array([])
+    x_c = df_cache["run"].to_numpy() if not df_cache.empty else np.array([])
     x_nc = df_nocache["run"].to_numpy() if not df_nocache.empty else np.array([])
-    x_nosgx = df_nosgx["run"].to_numpy() + 0.2 if not df_nosgx.empty else np.array([])
+    x_nosgx = df_nosgx["run"].to_numpy() if not df_nosgx.empty else np.array([])
 
     max_runs = 0
     if not df_nocache.empty:
@@ -250,13 +250,13 @@ def create_cumulative_graph_with_memory(output_svg: str,
 
     # Lines: Duration (ms)
     if not df_cache.empty:
-        ax1.plot(x_c, df_cache["cumulative_ms"], marker="o", markersize=4, linewidth=1.6,
+        ax1.plot(x_c, df_cache["cumulative_ms"], marker="", markersize=4, linewidth=2,
                  label="Cache: Time (ms)", color="#2E86AB")
     if not df_nocache.empty:
-        ax1.plot(x_nc, df_nocache["cumulative_ms"], marker="o", markersize=4, linewidth=1.6,
+        ax1.plot(x_nc, df_nocache["cumulative_ms"], marker="", markersize=4, linewidth=2,
                  label="No-cache: Time (ms)", color="#F18F01")
     if not df_nosgx.empty:
-        ax1.plot(x_nosgx, df_nosgx["cumulative_ms"], marker="o", markersize=4, linewidth=1.6,
+        ax1.plot(x_nosgx, df_nosgx["cumulative_ms"], marker="", markersize=4, linewidth=2,
                  label="No-SGX: Time (ms)", color="#28A745")
 
     ax1.set_xlabel("Run #")
@@ -273,19 +273,45 @@ def create_cumulative_graph_with_memory(output_svg: str,
 
     # Bars: Memory (MiB) on secondary axis (only cache and nocache)
     ax2 = ax1.twinx()
-    bar_w = 0.2
+    alpha_mem = 1.0
     if not df_cache.empty:
-        ax2.bar(x_c, df_cache["matched_mem_mib"], width=bar_w, alpha=0.35,
-                label="Cache: Mem (MiB)", color="#2E86AB", zorder=1)
+        ax2.plot(x_c, df_cache["matched_mem_mib"], linewidth=2, alpha=alpha_mem,
+                label="Cache: Mem (MiB)", color="#C0EDFF", zorder=1)
+        ax2.fill_between(
+            x_c, df_cache["matched_mem_mib"], 0,
+            color="#C0EDFF", zorder=1, alpha=alpha_mem
+        )
     if not df_nocache.empty:
-        ax2.bar(x_nc, df_nocache["matched_mem_mib"], width=bar_w, alpha=0.35,
-                label="No-cache: Mem (MiB)", color="#F18F01", zorder=1)
+        ax2.plot(x_nc, df_nocache["matched_mem_mib"], linewidth=2, alpha=alpha_mem,
+                label="No-cache: Mem (MiB)", color="#FFE5BF", zorder=1)
+        ax2.fill_between(
+            x_nc, df_nocache["matched_mem_mib"], 0,
+            color="#FFE5BF", zorder=1, alpha=alpha_mem
+        )
     ax2.set_ylabel("Memory (MiB)")
 
     # Combined legend
     h1, l1 = ax1.get_legend_handles_labels()
     h2, l2 = ax2.get_legend_handles_labels()
-    ax1.legend(h1 + h2, l1 + l2, loc="upper left", frameon=False)
+    ax2.legend(
+        h1 + h2, l1 + l2,
+        loc="lower right",
+        facecolor='white',
+        edgecolor='grey',
+        frameon=True,
+        framealpha=1.0
+    )
+
+    ax1.patch.set_alpha(0)
+    ax1.set_zorder(2)
+    ax2.set_zorder(1)
+
+    ax1.set_ylim(bottom=0)
+    ax1.margins(x=0)
+    ax1.margins(y=0)
+    ax2.set_ylim(bottom=0)
+    ax2.margins(x=0)
+    ax2.margins(y=0)
 
     plt.tight_layout()
     try:
@@ -296,7 +322,6 @@ def create_cumulative_graph_with_memory(output_svg: str,
         sys.exit(1)
     finally:
         plt.close(fig)
-
 
 # ---------- Stats printing ----------
 
