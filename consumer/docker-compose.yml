@@ -23,8 +23,8 @@ services:
       - CNAME=${CNAME}
       - HOST_NAME=${CONSUMER_HOST_NAME}
     ports:
-      - 8001:8001
-      - 8002:8002
+      - ${MANAGE_PORT}:8001
+      - ${APP_PORT}:8002
     volumes:
       - ./logs:/logs
       - ./certs:/root/certs

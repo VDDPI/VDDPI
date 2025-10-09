@@ -56,14 +56,14 @@ do
             echo "Run gencert"
             for j in {1..10}; do
                 sleep 1
-                python3 $vddpi_bench_dir/client.py gencert "$cache_dir" && break
+                python3 $vddpi_bench_dir/client.py gencert "$cache_dir" "consumer01.vddpi" 8001 && break
             done
         fi
 
         token=$cache_dir/token-$f
         for j in {1..10}; do
             sleep 1
-            msg=$(python3 $vddpi_bench_dir/client.py process "$token" "$cache_dir") && break
+            msg=$(python3 $vddpi_bench_dir/client.py process "$token" "$cache_dir" "consumer01.vddpi" 8002) && break
         done
 
         end_ts=$(date +"%Y-%m-%d %H:%M:%S.%3N")

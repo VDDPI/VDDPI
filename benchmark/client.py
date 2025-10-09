@@ -52,14 +52,14 @@ def run_with_retry(attempt_fn, label: str):
             print(f"{label} unexpected error: {e}", file=sys.stderr)
             sys.exit(1)
 
-def tls_gencert(cache_dir: str):
+def tls_gencert(cache_dir: str, consumer: str, port: int):
     """Trigger certificate issuance over TLS (port 8001)."""
     context = create_context(cache_dir)
     def _attempt():
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            with context.wrap_socket(client_socket, server_hostname=SERVER_HOST) as tls_socket:
-                tls_socket.connect((SERVER_HOST, ISSUE_PORT))
+            with context.wrap_socket(client_socket, server_hostname=consumer) as tls_socket:
+                tls_socket.connect((consumer, port))
                 # Send URL + newline + subscription key (protocol preserved)
                 payload = f"{PRIVATE_CA_ISSUE_URL}\n{SUBSCRIPTION_KEY}"
                 tls_socket.send(payload.encode())
@@ -77,7 +77,7 @@ def tls_gencert(cache_dir: str):
                 pass
     run_with_retry(_attempt, "gencert")
 
-def tls_process(path_token: str, cache_dir: str):
+def tls_process(path_token: str, cache_dir: str, consumer: str, port: int):
     """
     Send tokens over TLS (port 8002) to trigger server-side data processing.
     The server uses the information in the token file to run its processing program.
@@ -102,8 +102,8 @@ def tls_process(path_token: str, cache_dir: str):
     def _attempt():
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            with context.wrap_socket(client_socket, server_hostname=SERVER_HOST) as tls_socket:
-                tls_socket.connect((SERVER_HOST, TOKEN_PORT))
+            with context.wrap_socket(client_socket, server_hostname=consumer) as tls_socket:
+                tls_socket.connect((consumer, port))
                 tls_socket.send(str(lines_count).encode())
                 tls_socket.send(tokens)
 
@@ -128,18 +128,22 @@ def main():
     # gencert: certificate issuance only
     p_gencert = subparsers.add_parser("gencert", help="Generate/issue app certificate over TLS (port 8001).")
     p_gencert.add_argument("cache_dir", help="Path to the cache directory containing consumer.crt, consumer.key, and RootCA.pem.")
+    p_gencert.add_argument("consumer", help="Host to use for the management interface.")
+    p_gencert.add_argument("port", help="Port to use for the management interface.")
 
     # process: token-driven processing only
     p_process = subparsers.add_parser("process", help="Send tokens to trigger server-side processing (port 8002).")
     p_process.add_argument("path_token", help="Path to token file used by the server-side processing program.")
     p_process.add_argument("cache_dir", help="Path to the cache directory containing consumer.crt, consumer.key, and RootCA.pem.")
+    p_process.add_argument("consumer", help="Host to use for the processing interface.")
+    p_process.add_argument("port", help="Port to use for the processing interface.")
 
     args = parser.parse_args()
 
     if args.mode == "gencert":
-        tls_gencert(args.cache_dir)
+        tls_gencert(args.cache_dir, args.consumer, args.port)
     elif args.mode == "process":
-        tls_process(args.path_token, args.cache_dir)
+        tls_process(args.path_token, args.cache_dir, args.consumer, args.port)
 
 if __name__ == "__main__":
     main()

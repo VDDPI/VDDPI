@@ -32,7 +32,7 @@ echo "Restart containers on consumer01.vddpi"
 
 # The first loop iteration retrieves data from the provider; the second iteration uses that data as cache.
 echo "Run gencert (scenario:$scenario)"
-python3 $vddpi_bench_dir/client.py gencert "$cache_dir"
+python3 $vddpi_bench_dir/client.py gencert "$cache_dir" "consumer01.vddpi" 8001
 
 for scenario in "no_cache" "cache"
 do
@@ -43,7 +43,7 @@ do
         start_ts=$(date +"%Y-%m-%d %H:%M:%S.%3N")
         start_epoch=$(date +%s%3N)
 
-        msg=$(python3 $vddpi_bench_dir/client.py process "$token" "$cache_dir")
+        msg=$(python3 $vddpi_bench_dir/client.py process "$token" "$cache_dir" "consumer01.vddpi" 8002)
 
         end_ts=$(date +"%Y-%m-%d %H:%M:%S.%3N")
         end_epoch=$(date +%s%3N)
