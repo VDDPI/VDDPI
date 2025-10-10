@@ -8,12 +8,13 @@ x-svc-common: &svc_common
   <<: *vddpi_hosts
   restart: unless-stopped
 
-
 services:
   gramine-consumer:
     <<: *svc_common
     image: gramine-consumer:latest
-    container_name: gramine-consumer
+    # Container name can be overridden for experimental runs using the environment variable below.
+    # This is useful when you want to launch multiple containers for testing without renaming the base one.
+    container_name: ${EXPERIMENT_CONTAINER_NAME:-gramine-consumer}
     environment:
       - SPID=${SPID}
       - IS_LINKABLE=${IS_LINKABLE}

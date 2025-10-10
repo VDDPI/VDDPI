@@ -11,7 +11,13 @@ SERVER_PROVIDER_PORT = 443
 SERVER_PROVIDER_HOST_NAME = provider01.vddpi
 PRIVATE_CA = registry01.vddpi:8001
 
+CONSUMER_DIR_NAME ?= consumer
+
 MODE ?= demo# eval-01
+
+ifneq ($(strip $(EXPERIMENT_CONTAINER_NAME)),)
+ENV_EXPERIMENT := EXPERIMENT_CONTAINER_NAME=$(EXPERIMENT_CONTAINER_NAME)
+endif
 
 .PHONY: gramine-base
 gramine-base:
@@ -49,11 +55,12 @@ run-consumer-benchmark-nosgx: consumer-benchmark-nosgx
 	@echo "Running consumer-benchmark-nosgx:latest"
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) up
+
 .PHONY: stop-consumer-benchmark-nosgx
 stop-consumer-benchmark-nosgx: consumer-benchmark-nosgx
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) down
-	
+
 gramine-consumer-mrenclave:
 	@$(DOCKER_CMD) run -it --rm --entrypoint gramine-sgx-sigstruct-view gramine-consumer:latest python.sig
 
@@ -114,7 +121,7 @@ psuedo-api:
 # Consumer
 .PHONY: run-consumer
 run-consumer: gramine-consumer
-	@cd consumer && \
+	@cd $(CONSUMER_DIR_NAME) && \
 	SPID=$(SPID) \
 	IS_LINKABLE=$(IS_LINKABLE) \
 	PRIVATE_CA=$(PRIVATE_CA) \
@@ -122,11 +129,11 @@ run-consumer: gramine-consumer
 	COUNTRY=$(COUNTRY_CONSUMER) \
 	CNAME=$(CNAME_CONSUMER) \
 	CONSUMER_HOST_NAME=$(CNAME_CONSUMER) \
-	$(DOCKER_COMPOSE_CMD) up -d
+	$(ENV_EXPERIMENT) $(DOCKER_COMPOSE_CMD) up -d
 
 .PHONY: stop-consumer
 stop-consumer:
-	@cd consumer && \
+	@cd $(CONSUMER_DIR_NAME) && \
 	SPID=$(SPID) \
 	IS_LINKABLE=$(IS_LINKABLE) \
 	PRIVATE_CA=$(PRIVATE_CA) \
@@ -134,7 +141,7 @@ stop-consumer:
 	COUNTRY=$(COUNTRY_CONSUMER) \
 	CNAME=$(CNAME_CONSUMER) \
 	CONSUMER_HOST_NAME=$(CNAME_CONSUMER) \
-	$(DOCKER_COMPOSE_CMD) down
+	$(ENV_EXPERIMENT) $(DOCKER_COMPOSE_CMD) down
 
 # Provider
 .PHONY: run-provider
