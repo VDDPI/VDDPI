@@ -39,6 +39,10 @@ gramine-consumer: load-gramine-base
 		$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
 		--build-arg CODE=code_eval_02 \
 		-t gramine-consumer:latest; \
+	elif [ "$(MODE)" = "eval-03" ]; then \
+		$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
+		--build-arg CODE=code_eval_03 \
+		-t gramine-consumer:latest; \
 	else \
 		$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
 		-t gramine-consumer:latest; \

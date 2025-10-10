@@ -100,7 +100,7 @@ do
     consumer_dir="$VDDPI_DIR/$consumer_dir_name"
     manage_port=${i}8001
     app_port=${i}8002
-    rm -f "$consumer_dir"
+    rm -rf "$consumer_dir"
     cp -r $VDDPI_DIR/consumer "$consumer_dir"
     echo "MANAGE_PORT=${manage_port}" >> $consumer_dir/.env
     echo "APP_PORT=${app_port}" >> $consumer_dir/.env
