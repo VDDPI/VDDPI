@@ -1,4 +1,5 @@
 ARCH_LIBDIR ?= /lib/$(shell $(CC) -dumpmachine)
+ENCLAVE_SIZE ?= 2G
 
 ifeq ($(DEBUG),1)
 GRAMINE_LOG_LEVEL = debug
@@ -23,7 +24,8 @@ python.manifest: python.manifest.template
 		-Dentrypoint=/usr/bin/mypython \
 		-Dra_type=$(RA_TYPE) \
 		-Dra_client_spid=$(RA_CLIENT_SPID) \
-                -Dra_client_linkable=$(RA_CLIENT_LINKABLE) \
+		-Dra_client_linkable=$(RA_CLIENT_LINKABLE) \
+		-Denclave_size=$(ENCLAVE_SIZE)
 		$< >$@
 
 python.manifest.sgx python.sig &: python.manifest
