@@ -54,6 +54,9 @@ run-consumer-benchmark-nosgx: consumer-benchmark-nosgx
 	@echo "Running consumer-benchmark-nosgx:latest"
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) up
+
+.PHONY: stop-consumer-benchmark-nosgx
+stop-consumer-benchmark-nosgx:
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) down
 	
@@ -118,6 +121,7 @@ psuedo-api:
 .PHONY: run-consumer
 run-consumer: gramine-consumer
 	@cd consumer && \
+	CONTAINER_NAME=gramine-consumer \
 	SPID=$(SPID) \
 	IS_LINKABLE=$(IS_LINKABLE) \
 	PRIVATE_CA=$(PRIVATE_CA) \
@@ -130,6 +134,7 @@ run-consumer: gramine-consumer
 .PHONY: stop-consumer
 stop-consumer:
 	@cd consumer && \
+	CONTAINER_NAME=gramine-consumer \
 	SPID=$(SPID) \
 	IS_LINKABLE=$(IS_LINKABLE) \
 	PRIVATE_CA=$(PRIVATE_CA) \

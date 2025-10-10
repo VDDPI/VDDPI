@@ -13,7 +13,7 @@ services:
   gramine-consumer:
     <<: *svc_common
     image: gramine-consumer:latest
-    container_name: gramine-consumer
+    container_name: ${CONTAINER_NAME}
     environment:
       - SPID=${SPID}
       - IS_LINKABLE=${IS_LINKABLE}
