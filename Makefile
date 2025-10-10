@@ -8,11 +8,6 @@ COUNTRY_CONSUMER = JP
 CNAME_CONSUMER = consumer.example.com
 
 SERVER_PROVIDER_PORT = 443
-SERVER_PROVIDER_HOST_NAME = 172.24.30.207
-PRIVATE_CA = 172.24.30.207:8001
-
-REGISTRY_DOCKERCOMPOSE_TEMPLATE_FILE = registry/docker-compose_template.yml
-REGISTRY_DOCKERCOMPOSE_FILE = registry/docker-compose.yml
 SERVER_PROVIDER_HOST_NAME = provider01.vddpi
 PRIVATE_CA = registry01.vddpi:8001
 
@@ -54,6 +49,8 @@ run-consumer-benchmark-nosgx: consumer-benchmark-nosgx
 	@echo "Running consumer-benchmark-nosgx:latest"
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) up
+.PHONY: stop-consumer-benchmark-nosgx
+stop-consumer-benchmark-nosgx: consumer-benchmark-nosgx
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) down
 	
