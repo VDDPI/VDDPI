@@ -1,37 +1,5 @@
-export GRAMINE_BASE_IMAGE=gramine-base
-export GRAMINE_BASE_IMAGE_TAG=latest
-export GRAMINE_CONSUMER_IMAGE=gramine-consumer
-export GRAMINE_CONSUMER_IMAGE_TAG=latest
-export GRAMINE_REGISTRY_IMAGE=gramine-registry
-export GRAMINE_REGISTRY_IMAGE_TAG=latest
-export DB_PROVIDER_IMAGE=db-provider
-export DB_PROVIDER_IMAGE_TAG=latest
-export SERVER_PROVIDER_IMAGE=server-provider
-export SERVER_PROVIDER_IMAGE_TAG=latest
-export ANALYZER_REGISTRY_IMAGE=analyzer-registry
-export ANALYZER_REGISTRY_IMAGE_TAG=latest
-export CA_REGISTRY_IMAGE=ca-registry
-export CA_REGISTRY_IMAGE_TAG=latest
-export API_REGISTRY_IMAGE=api-registry
-export API_REGISTRY_IMAGE_TAG=latest
-export PSUEDO_IAS_IMAGE=psuedo-ias
-export PSUEDO_IAS_IMAGE_TAG=latest
-export PSUEDO_API_IMAGE=psuedo-api
-export PSUEDO_API_IMAGE_TAG=latest
-export DATATYPE_API_IMAGE=datatype-api
-export DATATYPE_API_IMAGE_TAG=latest
-
 export SPID=1234567890abcdef1234567890abcdef
 export IS_LINKABLE=0
 export IAS_SUBSCRIPTION_KEY=1234567890abcdef1234567890abcdef
 export COUNTRY_CONSUMER=JP
 export CNAME_CONSUMER=consumer.example.com
-
-export SERVER_PROVIDER_PORT=443
-export SERVER_PROVIDER_HOST_NAME=172.24.30.207
-export PRIVATE_CA=172.24.30.207:8001
-
-export REGISTRY_DOCKERCOMPOSE_TEMPLATE_FILE=registry/docker-compose_template.yml
-export REGISTRY_DOCKERCOMPOSE_FILE=registry/docker-compose.yml
-export SERVER_PROVIDER_HOST_NAME=provider01.vddpi
-export PRIVATE_CA=registry01.vddpi:8001
