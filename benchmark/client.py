@@ -129,14 +129,14 @@ def main():
     p_gencert = subparsers.add_parser("gencert", help="Generate/issue app certificate over TLS (port 8001).")
     p_gencert.add_argument("cache_dir", help="Path to the cache directory containing consumer.crt, consumer.key, and RootCA.pem.")
     p_gencert.add_argument("consumer", help="Host to use for the management interface.")
-    p_gencert.add_argument("port", help="Port to use for the management interface.")
+    p_gencert.add_argument("port", type=int, help="Port to use for the management interface.")
 
     # process: token-driven processing only
     p_process = subparsers.add_parser("process", help="Send tokens to trigger server-side processing (port 8002).")
     p_process.add_argument("path_token", help="Path to token file used by the server-side processing program.")
     p_process.add_argument("cache_dir", help="Path to the cache directory containing consumer.crt, consumer.key, and RootCA.pem.")
     p_process.add_argument("consumer", help="Host to use for the processing interface.")
-    p_process.add_argument("port", help="Port to use for the processing interface.")
+    p_process.add_argument("port", type=int, help="Port to use for the processing interface.")
 
     args = parser.parse_args()
 
