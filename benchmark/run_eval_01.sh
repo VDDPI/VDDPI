@@ -31,6 +31,10 @@ fetch_logs() {
 START_TIME=$(date +%y%m%d-%H%M%S)
 rm -f $VDDPI_EVAL_DIR/cache/*
 
+rm -f $VDDPI_DIR/consumer/cache/*
+rm -f $VDDPI_DIR/consumer/certs/*
+rm -f $VDDPI_DIR/consumer/logs/*
+
 ########################################
 # Main
 ########################################
