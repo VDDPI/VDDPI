@@ -25,7 +25,7 @@ python.manifest: python.manifest.template
 		-Dra_type=$(RA_TYPE) \
 		-Dra_client_spid=$(RA_CLIENT_SPID) \
 		-Dra_client_linkable=$(RA_CLIENT_LINKABLE) \
-		-Denclave_size=$(ENCLAVE_SIZE)
+		-Denclave_size=$(ENCLAVE_SIZE) \
 		$< >$@
 
 python.manifest.sgx python.sig &: python.manifest
