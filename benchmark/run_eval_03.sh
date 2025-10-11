@@ -4,7 +4,7 @@
 # Configuration
 ########################################
 TRIAL_COUNT=1
-PARALLEL_NUM=1
+PARALLEL_NUM=2
 SLEEP_TIME=20
 VDDPI_DIR=$HOME/VDDPI
 VDDPI_BENCH_DIR=$HOME/VDDPI/benchmark
@@ -30,7 +30,7 @@ fetch_logs() {
 
 write_log() {
     while IFS= read -r message; do
-        echo "[$(date '+%Y-%m-%d %H:%M:%S.%3N')] $message" | tee "$PATH_RUN_LOG"
+        echo "[$(date '+%Y-%m-%d %H:%M:%S.%3N')] $message" | tee -a "$PATH_RUN_LOG"
     done
 }
 
@@ -109,20 +109,18 @@ phase3_pids=()
 for i in $(seq 1 $PARALLEL_NUM)
 do
     consumer_dir_name="consumer_$i"
-    consumer_dir="$VDDPI_DIR/$consumer_dir_name"
-    manage_port=${i}8001
-    app_port=${i}8002
-    rm -rf "$consumer_dir"
-    cp -r $VDDPI_DIR/consumer "$consumer_dir"
-    echo "MANAGE_PORT=${manage_port}" >> $consumer_dir/.env
-    echo "APP_PORT=${app_port}" >> $consumer_dir/.env
+    (
+        cd $VDDPI_DIR
+        ./x_copy_consumer.sh "$i"
+        ls $consumer_dir_name/certs | write_log
+    )
     echo "Starting data processing in parallel (instance:$i, consumer_dir_name:$consumer_dir_name)" | write_log
-    ./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "$consumer_dir_name" "gramine-consumer-$i" "$VDDPI_EVAL_DIR/cache" "$manage_port" "$app_port" | write_log &
+    ./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "$consumer_dir_name" "$VDDPI_EVAL_DIR/cache" | write_log &
     phase3_pids+=($!)
 done
 
 echo "Starting data processing in parallel (consumer_dir_name:consumer)" | write_log
-./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "consumer" "gramine-consumer" "$VDDPI_EVAL_DIR/cache" 8001 8002 | write_log &
+./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "consumer" "$VDDPI_EVAL_DIR/cache" | write_log &
 phase3_pids+=($!)
 
 echo "Waiting for all data processing to complete..." | write_log

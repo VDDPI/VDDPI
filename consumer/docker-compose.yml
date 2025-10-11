@@ -12,20 +12,12 @@ services:
   gramine-consumer:
     <<: *svc_common
     image: gramine-consumer:latest
-    # Container name can be overridden for experimental runs using the environment variable below.
-    # This is useful when you want to launch multiple containers for testing without renaming the base one.
-    container_name: ${EXPERIMENT_CONTAINER_NAME:-gramine-consumer}
+    container_name: ${CONSUMER_NAME}
     environment:
-      - SPID=${SPID}
-      - IS_LINKABLE=${IS_LINKABLE}
-      - PRIVATE_CA=${PRIVATE_CA}
-      - IAS_SUBSCRIPTION_KEY=${IAS_SUBSCRIPTION_KEY}
-      - COUNTRY=${COUNTRY}
-      - CNAME=${CNAME}
-      - HOST_NAME=${CONSUMER_HOST_NAME}
+      - PRIVATE_CA=registry01.vddpi:8001
     ports:
-      - ${MANAGE_PORT}:8001
-      - ${APP_PORT}:8002
+      - ${CONSUMER_MANAGE_PORT}:8001
+      - ${CONSUMER_APP_PORT}:8002
     volumes:
       - ./logs:/logs
       - ./certs:/root/certs
