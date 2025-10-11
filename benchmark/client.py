@@ -15,7 +15,7 @@ SERVER_HOST = 'consumer01.vddpi'
 ISSUE_PORT  = 8001   # for certificate issuance
 TOKEN_PORT  = 8002   # for token-driven processing
 
-RETRY_MAX   = 5
+RETRY_MAX   = 20
 # =====================================
 
 def create_context(cache_dir: str) -> ssl.SSLContext:
@@ -40,17 +40,14 @@ def run_with_retry(attempt_fn, label: str):
     for attempt in range(RETRY_MAX):
         try:
             return attempt_fn()
-        except (OSError, ssl.SSLError) as e:
+        except Exception as e:
             if attempt + 1 < RETRY_MAX:
                 delay = 3
                 time.sleep(delay)
                 continue
             else:
-                print(f"{label} failed permanently: {e}", file=sys.stderr)
+                print(f"{label} failed permanently (No response from the server): {e}", file=sys.stderr)
                 sys.exit(1)
-        except Exception as e:
-            print(f"{label} unexpected error: {e}", file=sys.stderr)
-            sys.exit(1)
 
 def tls_gencert(cache_dir: str, consumer: str, port: int):
     """Trigger certificate issuance over TLS (port 8001)."""
@@ -68,14 +65,14 @@ def tls_gencert(cache_dir: str, consumer: str, port: int):
                     data = tls_socket.recv(1024)
                     if not data:
                         break
-                    print(f"Received Result: {data.decode()}")
             print("App certificate issued.")
         finally:
             try:
                 client_socket.close()
             except Exception:
                 pass
-    run_with_retry(_attempt, "gencert")
+    print(f"Connect {consumer}:{port} ...")
+    run_with_retry(_attempt, f"gencert ({consumer}:{port})")
 
 def tls_process(path_token: str, cache_dir: str, consumer: str, port: int):
     """
@@ -117,7 +114,8 @@ def tls_process(path_token: str, cache_dir: str, consumer: str, port: int):
                 client_socket.close()
             except Exception:
                 pass
-    run_with_retry(_attempt, "process")
+    print(f"Connect {consumer}:{port} ...")
+    run_with_retry(_attempt, f"process ({consumer}:{port})")
 
 def main():
     parser = argparse.ArgumentParser(
