@@ -12,7 +12,7 @@ ifeq ($(SGX),1)
 all: python.manifest.sgx python.sig
 endif
 
-ENCLAVE_SIZE ?= 2G
+ENCLAVE_SIZE ?= 512M
 RA_TYPE ?= dcap
 RA_CLIENT_SPID ?=
 RA_CLIENT_LINKABLE ?= 0
