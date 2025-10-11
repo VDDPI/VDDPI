@@ -25,6 +25,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+FONTSIZE=20
 
 # ---------- Parsing functions ----------
 
@@ -259,17 +260,19 @@ def create_cumulative_graph_with_memory(output_svg: str,
         ax1.plot(x_nosgx, df_nosgx["cumulative_ms"], marker="", markersize=4, linewidth=2,
                  label="No-SGX: Time (ms)", color="#28A745")
 
-    ax1.set_xlabel("Run #")
-    ax1.set_ylabel("Duration (ms)")
+    ax1.set_xlabel('Number of Providers', fontsize=FONTSIZE)
+    ax1.set_ylabel('Processing Time (ms)', fontsize=FONTSIZE)
     ax1.grid(True, axis="y", alpha=0.25)
 
     # X ticks thinning if >=100 runs
-    if max_runs >= 100:
-        # Start from 1, then 50, 100, 150, ...
+    if max_runs >= 500:
+        ticks = [1] + list(range(100, max_runs + 1, 100))
+    elif max_runs >= 100:
         ticks = [1] + list(range(50, max_runs + 1, 50))
     else:
         ticks = np.arange(1, max_runs + 1, 1)
     ax1.set_xticks(ticks)
+    ax1.tick_params(axis='both', which='major', labelsize=FONTSIZE*0.8)
 
     # Bars: Memory (MiB) on secondary axis (only cache and nocache)
     ax2 = ax1.twinx()
@@ -288,7 +291,7 @@ def create_cumulative_graph_with_memory(output_svg: str,
             x_nc, df_nocache["matched_mem_mib"], 0,
             color="#FFE5BF", zorder=1, alpha=alpha_mem
         )
-    ax2.set_ylabel("Memory (MiB)")
+    ax2.set_ylabel("Memory (MiB)", fontsize=FONTSIZE)
 
     # Combined legend
     h1, l1 = ax1.get_legend_handles_labels()
@@ -299,7 +302,8 @@ def create_cumulative_graph_with_memory(output_svg: str,
         facecolor='white',
         edgecolor='grey',
         frameon=True,
-        framealpha=1.0
+        framealpha=1.0,
+        fontsize=FONTSIZE*0.6
     )
 
     ax1.patch.set_alpha(0)
