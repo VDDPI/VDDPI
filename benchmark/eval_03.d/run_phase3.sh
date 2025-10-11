@@ -22,7 +22,6 @@ LOGFILE_TMP="result/tmp-${consumer_dir_name}.log"
 echo "Restart the container ($container_dir_name) on consumer01.vddpi" | tee -a $LOGFILE_TMP
 (
     cd $vddpi_dir
-    CONSUMER_DIR_NAME=$consumer_dir_name make stop-consumer > /dev/null 2>&1
     MODE=eval-03 CONSUMER_DIR_NAME=$consumer_dir_name make run-consumer
 )
 

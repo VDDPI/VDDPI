@@ -3,8 +3,8 @@
 ########################################
 # Configuration
 ########################################
-TRIAL_COUNT=1
-PARALLEL_NUM=2
+TRIAL_COUNT=10
+MAX_PARALLEL_NUM=6
 SLEEP_TIME=20
 VDDPI_DIR=$HOME/VDDPI
 VDDPI_BENCH_DIR=$HOME/VDDPI/benchmark
@@ -59,6 +59,12 @@ else
     echo "Skipping restart containers on registry01.vddpi" | write_log
 fi
 
+echo "Stop containers on consumer01.vddpi" | write_log
+(
+    cd $VDDPI_DIR
+    make stop-consumer
+)
+
 echo "Restart containers on provider01.vddpi" | write_log
 ssh provider01.vddpi "cd $VDDPI_DIR && \
     make stop-provider > /dev/null 2>&1; \
@@ -72,7 +78,7 @@ ssh -T registry01.vddpi "nohup bash $REMOTE_RECORD_STATS_SCRIPT registry-v1-anal
 
 bash $VDDPI_BENCH_DIR/record_stats.sh gramine-consumer > $VDDPI_EVAL_DIR/result/consumer_container_stats.csv 2>/dev/null &
 
-dool --time --cpu --mem --net --disk --nocolor --noheaders --ascii --output=$VDDPI_EVAL_DIR/result/consumer_host_stats.csv $INTERVAL 2>/dev/null &
+#dool --time --cpu --mem --net --disk --nocolor --noheaders --ascii --output=$VDDPI_EVAL_DIR/result/consumer_host_stats.csv $INTERVAL 2>/dev/null &
 
 echo "Measuring the baseline of stats of containers on registry01.vddpi (waiting for $SLEEP_TIME seconds)." | write_log
 sleep $SLEEP_TIME
@@ -100,41 +106,54 @@ fetch_logs "provider01.vddpi" "provider-server"  "result/eval_obtaining_processi
 
 echo "=================== Phase3: Data processing ===================" | write_log
 
-rm -f $VDDPI_DIR/consumer/cache/*
-rm -f $VDDPI_DIR/consumer/certs/*
-rm -f $VDDPI_DIR/consumer/logs/*
+echo "Run data processing with parallel_num from 1 to $MAX_PARALLEL_NUM" | write_log
 
-phase3_pids=()
-
-for i in $(seq 1 $PARALLEL_NUM)
+for parallel_num in $(seq 1 $MAX_PARALLEL_NUM)
 do
-    consumer_dir_name="consumer_$i"
+    echo "Starting data processing (parallel_num:$parallel_num)" | write_log
+
+    rm -f $VDDPI_DIR/consumer/cache/*
+    rm -f $VDDPI_DIR/consumer/certs/*
+    rm -f $VDDPI_DIR/consumer/logs/*
+
+    phase3_pids=()
+
+    for i in $(seq 1 $parallel_num)
+    do
+        consumer_dir_name="consumer_$i"
+        (
+            cd $VDDPI_DIR
+            ./x_copy_consumer.sh "$i"
+            ls $consumer_dir_name/certs | write_log
+        )
+        echo "Starting data processing in parallel (instance:$i, consumer_dir_name:$consumer_dir_name)" | write_log
+        ./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "$consumer_dir_name" "$VDDPI_EVAL_DIR/cache" | write_log &
+        phase3_pids+=($!)
+    done
+
+    echo "Starting data processing in parallel (consumer_dir_name:consumer)" | write_log
+    ./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "consumer" "$VDDPI_EVAL_DIR/cache" | write_log &
+    phase3_pids+=($!)
+
+    echo "Waiting for all data processing to complete..." | write_log
+    for pid in "${phase3_pids[@]}"; do
+        wait "$pid"
+    done
+
+    echo "All data processing completed." | write_log
+
     (
         cd $VDDPI_DIR
-        ./x_copy_consumer.sh "$i"
-        ls $consumer_dir_name/certs | write_log
+        make stop-consumer > /dev/null 2>&1
     )
-    echo "Starting data processing in parallel (instance:$i, consumer_dir_name:$consumer_dir_name)" | write_log
-    ./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "$consumer_dir_name" "$VDDPI_EVAL_DIR/cache" | write_log &
-    phase3_pids+=($!)
 done
-
-echo "Starting data processing in parallel (consumer_dir_name:consumer)" | write_log
-./run_phase3.sh "$VDDPI_DIR" "$VDDPI_BENCH_DIR" "consumer" "$VDDPI_EVAL_DIR/cache" | write_log &
-phase3_pids+=($!)
-
-echo "Waiting for all data processing to complete..." | write_log
-for pid in "${phase3_pids[@]}"; do
-    wait "$pid"
-done
-echo "All data processing completed." | write_log
 
 echo "=================== Finalization ===================" | write_log
 
 echo "Measuring the baseline of stats of containers on registry01.vddpi (waiting for $SLEEP_TIME seconds)." | write_log
 sleep $SLEEP_TIME
 
-pkill dool
+#pkill dool
 
 ssh registry01.vddpi "pkill -f $REMOTE_RECORD_STATS_SCRIPT"
 pkill -f $VDDPI_BENCH_DIR/record_stats.sh

@@ -124,7 +124,7 @@ psuedo-api:
 
 # Consumer
 .PHONY: run-consumer
-run-consumer: gramine-consumer
+run-consumer:
 	@cd $(CONSUMER_DIR_NAME) && \
 		$(DOCKER_COMPOSE_CMD) up -d
 
