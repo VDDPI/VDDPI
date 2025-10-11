@@ -12,6 +12,7 @@ ifeq ($(SGX),1)
 all: python.manifest.sgx python.sig
 endif
 
+ENCLAVE_SIZE ?= 2G
 RA_TYPE ?= dcap
 RA_CLIENT_SPID ?=
 RA_CLIENT_LINKABLE ?= 0
@@ -22,6 +23,7 @@ python.manifest: python.manifest.template
 		-Darch_libdir=$(ARCH_LIBDIR) \
 		-Dentrypoint=/usr/bin/mypython \
 		-Dra_type=$(RA_TYPE) \
+		-Denclave_size=$(ENCLAVE_SIZE) \
 		-Dra_client_spid=$(RA_CLIENT_SPID) \
                 -Dra_client_linkable=$(RA_CLIENT_LINKABLE) \
 		$< >$@
