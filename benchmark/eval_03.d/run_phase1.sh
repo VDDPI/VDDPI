@@ -46,5 +46,8 @@ for i in $(seq 1 "$trial_count"); do
     echo "$app_id" > "$app_id_file"
     echo "App ID: $app_id"
 
+    #TODO
+    #ssh registry01.vddpi "docker exec registry-v1-gramine-1 cat /usr/bin/mypython" > mypython
+
     echo "___BENCH___ App registration (Start:$start_ts, End:$end_ts, Duration_ms:$duration)" >> "$LOGFILE"
 done

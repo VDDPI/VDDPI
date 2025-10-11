@@ -15,7 +15,7 @@ consumer/code/__pycache__
 consumer/.env
 consumer/logs/*
 consumer/certs/*
-consumer-*
+consumer_*
 *gramine-base_latest.tar.gz
 docker/psuedo_api/server.*
 docker/psuedo_api/key.pem

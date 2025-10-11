@@ -8,15 +8,16 @@ COUNTRY_CONSUMER = JP
 CNAME_CONSUMER = consumer.example.com
 
 SERVER_PROVIDER_PORT = 443
-SERVER_PROVIDER_HOST_NAME = 172.24.30.207
-PRIVATE_CA = 172.24.30.207:8001
-
-REGISTRY_DOCKERCOMPOSE_TEMPLATE_FILE = registry/docker-compose_template.yml
-REGISTRY_DOCKERCOMPOSE_FILE = registry/docker-compose.yml
 SERVER_PROVIDER_HOST_NAME = provider01.vddpi
 PRIVATE_CA = registry01.vddpi:8001
 
+CONSUMER_DIR_NAME ?= consumer
+
 MODE ?= demo# eval-01
+
+ifneq ($(strip $(EXPERIMENT_CONTAINER_NAME)),)
+ENV_EXPERIMENT := EXPERIMENT_CONTAINER_NAME=$(EXPERIMENT_CONTAINER_NAME)
+endif
 
 .PHONY: gramine-base
 gramine-base:
@@ -38,9 +39,13 @@ gramine-consumer: load-gramine-base
 		$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
 		--build-arg CODE=code_eval_02 \
 		-t gramine-consumer:latest; \
-	else \
+	elif [ "$(MODE)" = "eval-03" ]; then \
 		$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
+		--build-arg CODE=code_eval_03 \
 		-t gramine-consumer:latest; \
+	else \
+		echo "ERROR: Unknown MODE ($(MODE)). Use eval-01, eval-02, or eval-03."; \
+		exit 1; \
 	fi
 
 .PHONY: consumer-benchmark-nosgx
@@ -56,10 +61,10 @@ run-consumer-benchmark-nosgx: consumer-benchmark-nosgx
 		$(DOCKER_COMPOSE_CMD) up
 
 .PHONY: stop-consumer-benchmark-nosgx
-stop-consumer-benchmark-nosgx:
+stop-consumer-benchmark-nosgx: consumer-benchmark-nosgx
 	@cd consumer_benchmark_nosgx && \
 		$(DOCKER_COMPOSE_CMD) down
-	
+
 gramine-consumer-mrenclave:
 	@$(DOCKER_CMD) run -it --rm --entrypoint gramine-sgx-sigstruct-view gramine-consumer:latest python.sig
 
@@ -119,30 +124,21 @@ psuedo-api:
 
 # Consumer
 .PHONY: run-consumer
-run-consumer: gramine-consumer
-	@cd consumer && \
-	CONTAINER_NAME=gramine-consumer \
-	SPID=$(SPID) \
-	IS_LINKABLE=$(IS_LINKABLE) \
-	PRIVATE_CA=$(PRIVATE_CA) \
-	IAS_SUBSCRIPTION_KEY=$(IAS_SUBSCRIPTION_KEY) \
-	COUNTRY=$(COUNTRY_CONSUMER) \
-	CNAME=$(CNAME_CONSUMER) \
-	CONSUMER_HOST_NAME=$(CNAME_CONSUMER) \
-	$(DOCKER_COMPOSE_CMD) up -d
+run-consumer:
+	@cd $(CONSUMER_DIR_NAME) && \
+		$(DOCKER_COMPOSE_CMD) up -d
 
 .PHONY: stop-consumer
 stop-consumer:
 	@cd consumer && \
-	CONTAINER_NAME=gramine-consumer \
-	SPID=$(SPID) \
-	IS_LINKABLE=$(IS_LINKABLE) \
-	PRIVATE_CA=$(PRIVATE_CA) \
-	IAS_SUBSCRIPTION_KEY=$(IAS_SUBSCRIPTION_KEY) \
-	COUNTRY=$(COUNTRY_CONSUMER) \
-	CNAME=$(CNAME_CONSUMER) \
-	CONSUMER_HOST_NAME=$(CNAME_CONSUMER) \
-	$(DOCKER_COMPOSE_CMD) down
+		$(DOCKER_COMPOSE_CMD) down
+	@for dir in consumer_*; do \
+		if [ -d "$$dir" ]; then \
+			echo ">>> Stopping containers in $$dir"; \
+			cd "$$dir" && $(DOCKER_COMPOSE_CMD) down; \
+			cd - >/dev/null; \
+		fi; \
+	done
 
 # Provider
 .PHONY: run-provider

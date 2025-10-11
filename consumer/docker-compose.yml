@@ -8,23 +8,16 @@ x-svc-common: &svc_common
   <<: *vddpi_hosts
   restart: unless-stopped
 
-
 services:
   gramine-consumer:
     <<: *svc_common
     image: gramine-consumer:latest
-    container_name: ${CONTAINER_NAME}
+    container_name: ${CONSUMER_NAME}
     environment:
-      - SPID=${SPID}
-      - IS_LINKABLE=${IS_LINKABLE}
-      - PRIVATE_CA=${PRIVATE_CA}
-      - IAS_SUBSCRIPTION_KEY=${IAS_SUBSCRIPTION_KEY}
-      - COUNTRY=${COUNTRY}
-      - CNAME=${CNAME}
-      - HOST_NAME=${CONSUMER_HOST_NAME}
+      - PRIVATE_CA=registry01.vddpi:8001
     ports:
-      - ${MANAGE_PORT}:8001
-      - ${APP_PORT}:8002
+      - ${CONSUMER_MANAGE_PORT}:8001
+      - ${CONSUMER_APP_PORT}:8002
     volumes:
       - ./logs:/logs
       - ./certs:/root/certs
