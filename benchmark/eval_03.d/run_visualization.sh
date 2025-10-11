@@ -1,19 +1,10 @@
 #!/bin/sh
 
-python3 lib/xxx.py \
-    result/graph_app_registration.svg \
-    result/eval_app_registration.log \
-    result/eval_obtaining_app_id.log \
-    result/eval_code_analysis.log
+python3 lib/gen-graph-data.py \
+    result/run.log \
+    result/consumer_host_stats.csv \
+    result/graph_data.json
 
-python3 lib/xxx.py \
-    result/graph_data_usage_application.svg \
-    result/eval_data_usage_application.log \
-    result/eval_obtaining_processing_spec.log
-
-python3 lib/yyy.py \
-    result/graph_data_processing.svg \
-    result/eval_data_processing_nocache.log \
-    result/eval_data_processing_cache.log \
-    result/eval_data_processing_nosgx.log \
-    result/consumer_stats.csv
+python3 lib/gen-graph.py \
+    result/graph_data.json \
+    result/graph_cpu_mem_multi_dc.svg
