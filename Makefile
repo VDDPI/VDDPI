@@ -44,8 +44,8 @@ gramine-consumer: load-gramine-base
 		--build-arg CODE=code_eval_03 \
 		-t gramine-consumer:latest; \
 	else \
-		$(DOCKER_CMD) build -f docker/Dockerfile.gramineconsumer docker \
-		-t gramine-consumer:latest; \
+		echo "ERROR: Unknown MODE ($(MODE)). Use eval-01, eval-02, or eval-03."; \
+		exit 1; \
 	fi
 
 .PHONY: consumer-benchmark-nosgx
