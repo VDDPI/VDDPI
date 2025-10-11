@@ -25,17 +25,16 @@ app_port="$7"
 # Main
 ########################################
 
-echo "Restart containers on consumer01.vddpi"
+echo "Restart the container ($container_name) on consumer01.vddpi"
 (
     cd $vddpi_dir
-    EXPERIMENT_CONTAINER_NAME=$container_name make stop-consumer > /dev/null 2>&1
-    echo "MODE=eval-03 CONSUMER_DIR_NAME=$consumer_dir_name EXPERIMENT_CONTAINER_NAME=$container_name make run-consumer"
+    CONSUMER_DIR_NAME=$consumer_dir_name EXPERIMENT_CONTAINER_NAME=$container_name make stop-consumer > /dev/null 2>&1
     MODE=eval-03 CONSUMER_DIR_NAME=$consumer_dir_name EXPERIMENT_CONTAINER_NAME=$container_name make run-consumer
 )
 
 # The first loop iteration retrieves data from the provider; the second iteration uses that data as cache.
 echo "Run gencert"
-python3 $vddpi_bench_dir/client.py gencert "$cache_dir" "consumer01.vddpi" 8001
+python3 $vddpi_bench_dir/client.py gencert "$cache_dir" "consumer01.vddpi" $manage_port
 
 echo "Run processing data"
 for token in $cache_dir/token-*
@@ -43,7 +42,7 @@ do
     start_ts=$(date +"%Y-%m-%d %H:%M:%S.%3N")
     start_epoch=$(date +%s%3N)
 
-    msg=$(python3 $vddpi_bench_dir/client.py process "$token" "$cache_dir" "consumer01.vddpi" 8002)
+    msg=$(python3 $vddpi_bench_dir/client.py process "$token" "$cache_dir" "consumer01.vddpi" $app_port)
 
     end_ts=$(date +"%Y-%m-%d %H:%M:%S.%3N")
     end_epoch=$(date +%s%3N)
