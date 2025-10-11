@@ -130,8 +130,15 @@ run-consumer: gramine-consumer
 
 .PHONY: stop-consumer
 stop-consumer:
-	@cd $(CONSUMER_DIR_NAME) && \
+	@cd consumer && \
 		$(DOCKER_COMPOSE_CMD) down
+	@for dir in consumer_*; do \
+		if [ -d "$$dir" ]; then \
+			echo ">>> Stopping containers in $$dir"; \
+			cd "$$dir" && $(DOCKER_COMPOSE_CMD) down; \
+			cd - >/dev/null; \
+		fi; \
+	done
 
 # Provider
 .PHONY: run-provider
