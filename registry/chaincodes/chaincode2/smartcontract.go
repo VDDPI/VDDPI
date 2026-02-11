@@ -142,7 +142,7 @@ func (s *SmartContract) UpdateLib(ctx contractapi.TransactionContextInterface) e
 	var acceptedFunc string
 	for _, funcInfo := range suggestedFunc {
 		if (funcInfo.Status == "Accepted") {
-			acceptedFunc += funcInfo.Func
+			acceptedFunc += funcInfo.Func + "\n"
 		}
 	}
 
@@ -178,19 +178,18 @@ func (s *SmartContract) UpdateLib(ctx contractapi.TransactionContextInterface) e
 	
 		contentType := writer.FormDataContentType()
 	
+		fmt.Println("Start updating " + addr)
 		res, err := http.Post(addr + "/update", contentType, reqBody)
-	
 		if err != nil {
+			fmt.Println(err)
 			return err
 		}
-		body, err := io.ReadAll(res.Body)
-		if err != nil {
-			return err
+		defer res.Body.Close()
+
+		if res.StatusCode != http.StatusOK {
+			return fmt.Errorf("Error: status code %d\n", res.StatusCode)
 		}
-		fmt.Println(string(body))
-		if ((string(body) != "Updated") && (string(body) != "\"Updated\"")) {
-			return fmt.Errorf("Error\n")
-		}
+		fmt.Println("Finish updating: " + res.Status)
 	}
 	return nil
 }
@@ -205,7 +204,7 @@ func (s *SmartContract) GetCurrentLib(ctx contractapi.TransactionContextInterfac
 	var acceptedFunc string
 	for _, funcInfo := range suggestedFunc {
 		if (funcInfo.Status == "Accepted") {
-			acceptedFunc += funcInfo.Func
+			acceptedFunc += funcInfo.Func + "\n"
 		}
 	}
 	return acceptedFunc, nil

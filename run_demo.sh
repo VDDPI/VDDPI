@@ -1,48 +1,62 @@
 #!/bin/bash
 
-cp /dev/null consumer/code/tokens
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <mode>"
+    echo ""
+    echo "Mode"
+    echo "  demo"
+    echo "  eval-01"
+    exit 1
+fi
+
+mode="$1"
+
+cp /dev/null consumer/cache/tokens
 
 # Phase1: register the data processing app
-echo "=================== Phase3: Register your data processing app ==================="
-echo "Please start the registry and provider (\$make run-registry; make run-provider)."
-echo "Press Enter when the startup is completed."
-while true;
-do
-    echo -n ">> "
-    read -r input
+echo "=================== Phase1: Register your data processing app ==================="
+echo "Please start the registry (\$make run-registry)."
+echo ""
+read -p "If the registry is running, press Enter to continue..."
 
-    if [[ -z "$input" ]];
-    then
-        break
-    fi
-done
+file="docker/gramine_consumer/code/main.py"
+if [ "$mode" = "eval-01" ]; then
+	file="docker/gramine_consumer/code_eval_01/main.py"
+fi
 
 echo "Registring..."
 curl -X 'POST' \
-  'http://133.68.18.15/register' \
+  'http://registry01.vddpi/register' \
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
-  -F 'program=@consumer/code/main.py;type=text/x-python' \
+  -F "program=@${file};type=text/x-python" \
   -F 'SPID=1234567890abcdef1234567890abcdef' \
-  -F 'isLinkable=0' | jq .
+  -F 'isLinkable=0' | tee /tmp/response.json | jq .
+
+APP_ID=$(cat /tmp/response.json | jq -r '.DataProcessingSpec.App_ID')
 
 # Phase2: Apply for data usage
 echo "========================== Phase2: Apply for data usage =========================="
+echo "Before starting the provider, make sure to set the App ID in \`docker/db/02_create_data.sql\`."
+echo ""
+echo "  App ID: $APP_ID"
+echo ""
+echo "After that, start the provider (\$make run-provider)."
+echo ""
+read -p "Press Enter to continue once everything is ready..."
 
-curl 133.68.18.15:8001/root-crt > consumer/code/RootCA.pem
-cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py 133.68.18.15:8001
+curl registry01.vddpi:8001/root-crt > consumer/cache/RootCA.pem
+(
+	cd consumer && echo -e "JP\n\n\n\n\nconsumer.example.com\n\n\n\n" | python3 get_cert.py registry01.vddpi:8001
+)
 
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://133.68.18.15:443/data/person/personal-001\n1\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://133.68.18.15:443/data/person/personal-002\n2\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://133.68.18.15:443/data/person/personal-003\n3\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://133.68.18.15:443/data/person/personal-004\n4\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
-echo -e "consumer.example.com\n803bfe1abeceaa7521a0ca61ffa70a14a80f4c836172b9e80a39643c64608512\nhttps://133.68.18.15:443/data/person/personal-005\n5\n5\nJP\n30\n2024-12-31\n" | python3 create_declaration.py
+./run.d/run_data_usage_application.sh $APP_ID $mode
 
 # Phase3: process data
 echo "============================== Phase3: Process data =============================="
-cd .. && make run-consumer
+make MODE=$mode run-consumer
 
 echo "Waiting for 20 seconds to start consumer..."
 sleep 20
 
-cd consumer && python3 client.py
+./run.d/run_phase3.sh $mode

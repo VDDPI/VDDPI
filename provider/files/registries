@@ -1,5 +1,3 @@
-http://192.168.11.1:80/spec
-http://192.168.11.1:81/spec
-http://192.168.11.1:82/spec
-http://192.168.11.1:83/spec
-http://192.168.11.1:84/spec
+http://registry01.vddpi:80/spec
+http://registry01.vddpi:81/spec
+http://registry01.vddpi:82/spec

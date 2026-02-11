@@ -1,4 +1,5 @@
 ARCH_LIBDIR ?= /lib/$(shell $(CC) -dumpmachine)
+ENCLAVE_SIZE ?= 2G
 
 ifeq ($(DEBUG),1)
 GRAMINE_LOG_LEVEL = debug
@@ -9,10 +10,11 @@ endif
 .PHONY: all
 all: python.manifest
 ifeq ($(SGX),1)
-all: python.manifest.sgx python.sig python.token
+all: python.manifest.sgx python.sig
 endif
 
-RA_TYPE ?= none
+ENCLAVE_SIZE ?= 512M
+RA_TYPE ?= dcap
 RA_CLIENT_SPID ?=
 RA_CLIENT_LINKABLE ?= 0
 
@@ -22,23 +24,16 @@ python.manifest: python.manifest.template
 		-Darch_libdir=$(ARCH_LIBDIR) \
 		-Dentrypoint=/usr/bin/mypython \
 		-Dra_type=$(RA_TYPE) \
+		-Denclave_size=$(ENCLAVE_SIZE) \
 		-Dra_client_spid=$(RA_CLIENT_SPID) \
 		-Dra_client_linkable=$(RA_CLIENT_LINKABLE) \
+		-Denclave_size=$(ENCLAVE_SIZE) \
 		$< >$@
 
-# Make on Ubuntu <= 20.04 doesn't support "Rules with Grouped Targets" (`&:`),
-# see the helloworld example for details on this workaround.
-python.manifest.sgx python.sig: sgx_sign
-	@:
-
-.INTERMEDIATE: sgx_sign
-sgx_sign: python.manifest
+python.manifest.sgx python.sig &: python.manifest
 	gramine-sgx-sign \
 		--manifest $< \
 		--output $<.sgx
-
-python.token: python.sig
-	gramine-sgx-get-token --output $@ --sig $<
 
 .PHONY: check
 check: all
@@ -48,12 +43,13 @@ check: all
 	@grep -q "Success 3/4" TEST_STDOUT
 	@grep -q "Success 4/4" TEST_STDOUT
 ifeq ($(SGX),1)
+	@grep -q "Success SGX report" TEST_STDOUT
 	@grep -q "Success SGX quote" TEST_STDOUT
 endif
 
 .PHONY: clean
 clean:
-	$(RM) *.manifest *.manifest.sgx *.token *.sig OUTPUT* *.PID TEST_STDOUT TEST_STDERR
+	$(RM) *.manifest *.manifest.sgx *.sig OUTPUT* *.PID TEST_STDOUT TEST_STDERR
 	$(RM) -r scripts/__pycache__
 
 .PHONY: distclean

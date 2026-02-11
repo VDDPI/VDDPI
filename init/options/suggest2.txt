@@ -1,0 +1,1 @@
+channel2 chaincode2 SuggestFunc func2 functions/func2.py

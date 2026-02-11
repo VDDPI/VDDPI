@@ -1,4 +1,3 @@
-loader.entrypoint = "file:{{ gramine.libos }}"
 libos.entrypoint = "{{ entrypoint }}"
 
 loader.log_level = "{{ log_level }}"
@@ -17,19 +16,18 @@ fs.mounts = [
   { path = "{{ python.distlib }}", uri = "file:{{ python.distlib }}" },
   { path = "/etc", uri = "file:/etc" },
   { type = "tmpfs", path = "/tmp" },
+  { path = "/logs", uri = "file:/logs", type = "chroot" },
   { path = "/certs/", uri = "file:certs/", type = "encrypted", key_name = "_sgx_mrenclave"},
   { path = "/data/", uri = "file:data/", type = "encrypted", key_name = "_sgx_mrenclave"},
 ]
 
 sgx.debug = true
-sgx.nonpie_binary = true
-sgx.enclave_size = "2G"
+sgx.enclave_size = "{{ enclave_size }}"
 sys.stack.size = "2M"
-sgx.thread_num = 64
 
 sgx.remote_attestation = "{{ ra_type }}"
-sgx.ra_client_spid = "{{ ra_client_spid }}"
-sgx.ra_client_linkable = {{ 'true' if ra_client_linkable == '1' else 'false' }}
+#sgx.ra_client_spid = "{{ ra_client_spid }}"
+#sgx.ra_client_linkable = {{ 'true' if ra_client_linkable == '1' else 'false' }}
 
 sgx.trusted_files = [
   "file:{{ gramine.libos }}",
@@ -54,5 +52,6 @@ sgx.allowed_files = [
   "file:/usr/local/lib/", # Python lib path
   "file:{{ python.distlib }}/",
   "file:./code",
+  "file:/logs/",
   "file:./datauserRootCA.pem"
 ]

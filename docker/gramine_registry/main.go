@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strings"
+	"time"
 	"log"
 	"io"
 )
@@ -37,10 +39,13 @@ func upload(web http.ResponseWriter, req *http.Request) {
 				fmt.Fprint(web, "isLinkable not specified")
 				return
 			}
-			
-			log.Printf("Start building")
-			MRENCLAVE, err := exec.Command("./../build.sh", SPID, isLinkable).Output()
-			log.Printf("Finish buiding")
+
+			log.Printf("Start building (SPID:%s, isLinkable:%s)", string(SPID), string(isLinkable))
+			start := time.Now()
+			mrenclave_bytes, err := exec.Command("./../build.sh", SPID, isLinkable).Output()
+			end := time.Now()
+			mrenclave := strings.TrimRight(string(mrenclave_bytes), "\r\n")
+			log.Printf("Finish building (MRENCLAVE:%s)", mrenclave)
 
 			if err != nil {
 				web.WriteHeader(http.StatusBadRequest)
@@ -48,8 +53,14 @@ func upload(web http.ResponseWriter, req *http.Request) {
 				return
 			}
 
+			duration := end.Sub(start)
+
+			fmt.Printf("___BENCH___ MRENCLAVE retrieval (Start:%s, End:%s, Duration_ms:%d)\n", start.Format("2006-01-02 15:04:05"), end.Format("2006-01-02 15:04:05"), duration.Milliseconds())
+
+			log.Printf("MRENCLAVE: %s", mrenclave)
+
 			web.WriteHeader(http.StatusOK)
-			fmt.Fprint(web, string(MRENCLAVE))
+			fmt.Fprint(web, mrenclave)
 
 		default:
 			web.WriteHeader(http.StatusMethodNotAllowed)
@@ -79,7 +90,7 @@ func update(web http.ResponseWriter, req *http.Request) {
 			io.Copy(lib, file)
 
 			web.WriteHeader(http.StatusOK)
-			fmt.Fprint(web, "Updated")
+			fmt.Fprint(web, "Updated lib file of gramine-registry")
 		default:
 			web.WriteHeader(http.StatusMethodNotAllowed)
 			fmt.Fprint(web, "Method not allowed.\n")
@@ -108,7 +119,7 @@ func updateFilters(web http.ResponseWriter, req *http.Request) {
 			io.Copy(lib, file)
 
 			web.WriteHeader(http.StatusOK)
-			fmt.Fprint(web, "Updated")
+			fmt.Fprint(web, "Updated filters file of gramine-registry")
 		default:
 			web.WriteHeader(http.StatusMethodNotAllowed)
 			fmt.Fprint(web, "Method not allowed.\n")
@@ -116,7 +127,7 @@ func updateFilters(web http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	log.Printf("Started gramine server prosess\n")
+	log.Printf("Started gramine server process\n")
 	http.HandleFunc("/upload", upload)
 	http.HandleFunc("/update", update)
 	http.HandleFunc("/updateFilters", updateFilters)

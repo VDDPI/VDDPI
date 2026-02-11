@@ -1,23 +1,27 @@
-version: "3"
+x-extra-hosts: &vddpi_hosts
+  extra_hosts:
+    - "registry01.vddpi:${REGISTRY_IP}"
+    - "consumer01.vddpi:${CONSUMER_IP}"
+    - "provider01.vddpi:${PROVIDER_IP}"
+
+x-svc-common: &svc_common
+  <<: *vddpi_hosts
+  restart: unless-stopped
 
 services:
   gramine-consumer:
-    image: ${GRAMINE_CONSUMER_IMAGE}:${GRAMINE_CONSUMER_IMAGE_TAG}
-    container_name: gramine-consumer
+    <<: *svc_common
+    image: gramine-consumer:latest
+    container_name: ${CONSUMER_NAME}
     environment:
-      - SPID=${SPID}
-      - IS_LINKABLE=${IS_LINKABLE}
-      - PRIVATE_CA=${PRIVATE_CA}
-      - IAS_SUBSCRIPTION_KEY=${IAS_SUBSCRIPTION_KEY}
-      - COUNTRY=${COUNTRY}
-      - CNAME=${CNAME}
-      - HOST_NAME=${CONSUMER_HOST_NAME}
-    volumes:
-      - ./code:/root/code
+      - PRIVATE_CA=registry01.vddpi:8001
     ports:
-      - 443:443
-      - 8001:8001
-      - 8002:8002
+      - ${CONSUMER_MANAGE_PORT}:8001
+      - ${CONSUMER_APP_PORT}:8002
+    volumes:
+      - ./logs:/logs
+      - ./certs:/root/certs
     tty: true
     devices:
-      - "/dev/isgx:/dev/isgx"
+      - "/dev/sgx_enclave:/dev/sgx_enclave"
+      - "/dev/sgx_provision:/dev/sgx_provision"

@@ -205,7 +205,7 @@ func GetMRENCLAVE(filepath string, SPID string, isLinkable string) (string, erro
 		return "", err
 	}
 	MRENCLAVE := string(body)
-	return MRENCLAVE[:len(MRENCLAVE)-1], nil
+	return MRENCLAVE, nil
 }
 
 func VerifyProgram(filepath string) (string, string, string, string, error) {

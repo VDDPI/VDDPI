@@ -16,7 +16,7 @@ TAINT_CONFIG_FILE = "/root/pysa/stubs/taint/taint.config"
 
 LEAKAGE_CODE = 5001
 
-DATATYPE_API_ENDPOINT = "http://192.168.11.1:8003"
+DATATYPE_API_ENDPOINT = "http://registry01.vddpi:8003"
 
 def analyzer(source_code):
 
@@ -24,11 +24,12 @@ def analyzer(source_code):
 
     ret, args, = check_format(source_code)
     if (ret == 1):
-        return 1, None
+        return 10, None
 
     ret, func = check_func(spec_dist, TARGET_FILE, "process_data")
-    if (ret == 1):
-        return 1, None
+    if (ret != 0):
+        print(f"Error check_func (result:{ret})")
+        return 11, None
 
     config_source_text = ""
     
@@ -37,7 +38,7 @@ def analyzer(source_code):
         try:
             res = get_schema(arg)
         except RuntimeError:
-            return 1, None
+            return 12, None
         
         taint_name_arr, returnpath_arr = get_taint_name(arg, i, res, "")
         all_taint_name_arr += taint_name_arr
@@ -90,13 +91,12 @@ def analyzer(source_code):
     
     ret = modeling_app(spec_dist, args)
     if (ret == 1):
-        return 1, None
+        return 13, None
     
     # pysa
     result = subprocess.run(["cd pysa && source ~/.venvs/venv/bin/activate && pyre analyze --save-results-to ./"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, executable="/bin/bash")
     if (result.returncode != 0):
-        print("AA")
-        return 1, None
+        return 14, None
     
     issue_info_arr = []
     with open(RESULT_FILE, "r") as f:
@@ -151,9 +151,12 @@ def check_format(source_code):
                     # check argument format
                     try:
                         for arg in args:
-                            if (not arg.split("_")[1].isdigit()):
+                            arg_parts = arg.split("_")
+                            if (not arg_parts[1].isdigit()):
+                                print(f"ERROR: Arg format invalid - '{arg_parts[1]}' not digit")
                                 return 1, args
                     except IndexError:
+                        print("ERROR: IndexError in arg format check")
                         return 1, args
                 elif (re.match(r"\treturn.*", line) or re.match(r"    return.*", line)):
                     current = current + 2
@@ -161,13 +164,18 @@ def check_format(source_code):
 
             # check the validity of the source code
             if (line != template_program[current]):
+                print(f"ERROR: Mismatch at line {current}")
+                print(f"  Expected: '{template_program[current]}'")
+                print(f"  Got:      '{line}'")
                 return 1, args
             else:
                 if (current == END_LINE_NUM):
                     return 0, args
                 current += 1
         except IndexError:
+            print(f"ERROR: IndexError at current={current}, total_template_lines={len(template_program)}")
             return 1, args
+    print("ERROR: End of function reached without success")
     return 1, args
 
 def read_programfile(source_code=None, file_path=None):
@@ -205,13 +213,14 @@ def check_func(spec_dist, target_file, specified_func_name):
                 if ('plib.' in func_name):
                     func_name = func_name.replace('plib.', '')
                 else:
-                    return 1, []
+                    print(f"func_name = {func_name}")
+                    return 21, []
                 for spec_func in spec_dist:
                     if (func_name == spec_func):
                         functions.append(func_name)
                         break
                 else:
-                    return 1, []
+                    return 22, []
     else:
         return 0, functions
 

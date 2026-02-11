@@ -41,4 +41,4 @@ async def get_location(addr: Address):
     })
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=443, log_level="debug", ssl_certfile="/app/server.pem", ssl_keyfile="/app/key.pem")
+    uvicorn.run(app, host="0.0.0.0", port=80, log_level="debug")

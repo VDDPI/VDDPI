@@ -1,0 +1,7 @@
+{
+    "dataType": "svm",
+    "parent": "",
+    "schema": {
+        "data": "string"
+    }
+}

@@ -1,0 +1,5 @@
+export SPID=1234567890abcdef1234567890abcdef
+export IS_LINKABLE=0
+export IAS_SUBSCRIPTION_KEY=1234567890abcdef1234567890abcdef
+export COUNTRY_CONSUMER=JP
+export CNAME_CONSUMER=consumer.example.com

@@ -1,7 +1,6 @@
 import requests
 import json
 import urllib3
-import datetime
 import os
 import jwt
 import copy
@@ -12,6 +11,7 @@ from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
+from datetime import datetime
 import plib
 CA_CERT = "./code/RootCA.pem"
 TRUSTED_CA_CERT = "./certs/RootCA.pem"
@@ -73,7 +73,7 @@ krEL2VWGrv3IkBKvGUaSVu4rbwxqealC6vid1yi0TA==
 -----END CERTIFICATE-----
 """
     CERT_PATH = "./certs/api_ca_cert.pem"
-    TRUSTED_TIME_API_URL = "https://192.168.11.1:8005/time"
+    TRUSTED_TIME_API_URL = "http://registry01.vddpi:8005/time"
     expiration_date_cond = condition["expirationDate"]
     if (expiration_date_cond == ""):
         return True, 1
@@ -81,8 +81,8 @@ krEL2VWGrv3IkBKvGUaSVu4rbwxqealC6vid1yi0TA==
         f.write(API_CA_CERT)
     res_time = json.loads(requests.get(TRUSTED_TIME_API_URL, verify=CERT_PATH).text)["datetime"]
     os.remove(CERT_PATH)
-    now = datetime.datetime.strptime(res_time[:19], "%Y-%m-%dT%H:%M:%S")
-    datetime_expiration_date_cond = datetime.datetime.strptime(expiration_date_cond, "%Y-%m-%d")
+    now = datetime.strptime(res_time[:19], "%Y-%m-%dT%H:%M:%S")
+    datetime_expiration_date_cond = datetime.strptime(expiration_date_cond, "%Y-%m-%d")
     if (now <= datetime_expiration_date_cond):
         return True, 1
     else:
@@ -111,7 +111,7 @@ krEL2VWGrv3IkBKvGUaSVu4rbwxqealC6vid1yi0TA==
 -----END CERTIFICATE-----
 """
     CERT_PATH = "./certs/api_ca_cert.pem"
-    TRUSTED_GEOLOCATION_API_URL = "https://192.168.11.1:8005/location"
+    TRUSTED_GEOLOCATION_API_URL = "http://registry01.vddpi:8005/location"
     location_cond = condition["location"]
     if (location_cond == ""):
         return True, 1
@@ -220,8 +220,11 @@ def store_data(data):
         f.write(json.dumps(data))
 
 def request(client_cn, tokens):
-    with open(CA_CERT, "r") as cert:
-        with open(TRUSTED_CA_CERT, "w") as trusted_cert:
+
+    cached = False
+
+    with open(CA_CERT, "rb") as cert:
+        with open(TRUSTED_CA_CERT, "wb") as trusted_cert:
             trusted_cert.write(cert.read())
         
     providers = []
@@ -230,20 +233,35 @@ def request(client_cn, tokens):
             payload = verify_token(line.split(",")[0], line.split(",")[1])
             providers.append(payload)
         except jwt.exceptions.InvalidSignatureError as e:
-            print("Invalid Signature: " + line)
+            print(f"JWT Invalid Signature: {e}")
+            print(f"Problematic line: {line}")
+
+            import traceback
+            traceback.print_exc()
+
             tls_socket.send("Invalid Signature".encode())
         except Exception as e:
             print("Invalid Certificate")
+            print(f"Error: {e}")
+            print(f"Exception type: {type(e).__name__}")
+
+            import traceback
+            traceback.print_exc()
+
             tls_socket.send("Invalid Certificate".encode())
+
     provided_data_uc = []
     provided_data = []
     is_met_condition = True
+
+    start = datetime.now()
     for usage_statement in providers:
         # is data cached?
         file_path = "./data/" + usage_statement["data_ID"].replace("/", "-")
         if (os.path.isfile(file_path)):
             # cache acquisition phase
             provided_data_uc.append(read_data_from_cache("./data/" + usage_statement["data_ID"].replace("/", "-"), client_cn))
+            cached = True
         else:
             # data acquisition phase
             is_succeeded, data = data_acquisition(usage_statement["data_ID"], client_cn)
@@ -269,6 +287,7 @@ def request(client_cn, tokens):
                 tls_socket.send("Invalid argument number".encode())
                 continue
     
+    start_process_data = datetime.now()
     if (is_met_condition):
         processed_data = process_data(*provided_data)
         
@@ -281,43 +300,74 @@ def request(client_cn, tokens):
         tls_socket.send(processed_data.encode())
     
     # data storing
+    start_store_data = datetime.now()
     for data in provided_data_uc:
         expired = data_saving(data)
         if (expired):
             remove_data(data)
 
+    end = datetime.now()
+
+    elapsed_check_policy_ms = round((start_process_data - start).total_seconds() * 1000)
+    elapsed_process_data_ms = round((start_store_data - start_process_data).total_seconds() * 1000)
+    elapsed_store_data_ms   = round((end - start_store_data).total_seconds() * 1000)
+    elapsed_ms              = round((end - start).total_seconds() * 1000)
+
+    return start, end, elapsed_check_policy_ms, elapsed_process_data_ms, elapsed_store_data_ms, elapsed_ms, is_met_condition, cached
+
+def log_message(f, message):
+    """
+    Write a timestamped message to the file object f.
+    """
+    # Get the current time in "YYYY-MM-DD HH:MM:SS" format
+    timestamp = datetime.now().isoformat(sep=' ', timespec="milliseconds")
+    # Write a log line
+    f.write(f"[{timestamp}] {message}\n")
+    # Flush the buffer to ensure the message is written immediately
+    f.flush()
+
 if __name__ == "__main__":
-    urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
-    
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    context.load_cert_chain(certfile=DUMMY_CERT, keyfile=DUMMY_KEY)
-    context.load_verify_locations(cafile=CA_CERT)
-    context.verify_mode = ssl.CERT_REQUIRED
-    
-    bind_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    bind_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    bind_socket.bind(('0.0.0.0', 8002))
-    bind_socket.listen(1)
-    
-    client_socket, fromaddr = bind_socket.accept()
-    with context.wrap_socket(client_socket, server_side=True) as tls_socket:
-        print(f"Client connected: {fromaddr} ")
+    with open('/logs/app.log', mode='a', encoding='utf-8') as f:
+        urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
         
-        client_cert = tls_socket.getpeercert()
-        if client_cert:
-            subject = dict(x[0] for x in client_cert['subject'])
-            client_cn = subject['commonName']
-            print(f"Common Name: {client_cn}")
-        else:
-            print("Client certificate not found.")
-            exit(1)
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        context.load_cert_chain(certfile=DUMMY_CERT, keyfile=DUMMY_KEY)
+        context.load_verify_locations(cafile=CA_CERT)
+        context.verify_mode = ssl.CERT_REQUIRED
         
-        msg1 = tls_socket.recv(1024).decode()
-        msg2 = ""
-        for _ in range(int(msg1)):
-            msg2 += tls_socket.recv(2048).decode()
-    
-        request(client_cn, msg2)
+        bind_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        bind_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        port = 8002
+        bind_socket.bind(('0.0.0.0', port))
+        bind_socket.listen(1)
         
-        tls_socket.send(b'Session completed.')
-    client_socket.close()
+        log_message(f, f"Start server (port:{port})")
+        while True:
+            log_message(f, f"Waiting for a connection...")
+            client_socket, fromaddr = bind_socket.accept()
+            with context.wrap_socket(client_socket, server_side=True) as tls_socket:
+                log_message(f, f"Client connected: {fromaddr}")
+
+                client_cert = tls_socket.getpeercert()
+                if not client_cert:
+                    log_message(f, "Client certificate not found.")
+                    exit(1)
+
+                subject = dict(x[0] for x in client_cert['subject'])
+                client_cn = subject['commonName']
+                log_message(f, f"Common Name: {client_cn}")
+
+                msg1 = tls_socket.recv(1024).decode()
+                msg2 = ""
+                for _ in range(int(msg1)):
+                    msg2 += tls_socket.recv(2048).decode()
+
+                start, end, elapsed_check_policy_ms, elapsed_process_data_ms, elapsed_store_data_ms, elapsed_ms, is_met_condition, cached = request(client_cn, msg2)
+
+                msg = f"Session completed (start:{start.isoformat(sep=' ', timespec='milliseconds')}, end:{end.isoformat(sep=' ', timespec='milliseconds')}, elapsed_check_policy_ms:{elapsed_check_policy_ms}, elapsed_process_data_ms:{elapsed_process_data_ms}, elapsed_store_data_ms:{elapsed_store_data_ms}, elapsed_ms:{elapsed_ms}, is_met_condition:{is_met_condition}, cached:{cached})"
+                log_message(f, msg)
+
+                tls_socket.send(msg.encode('utf-8'))
+
+    bind_socket.close()

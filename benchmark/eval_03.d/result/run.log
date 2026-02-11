@@ -1,0 +1,762 @@
+[2025-10-11 09:05:13.382] Starting benchmark for eval_03 at 251011-090513
+[2025-10-11 09:05:13.384] =================== Initialization ===================
+[2025-10-11 09:05:13.387] Skipping restart containers on registry01.vddpi
+[2025-10-11 09:05:13.389] Stop containers on consumer01.vddpi
+[2025-10-11 09:05:13.518] Restart containers on provider01.vddpi
+[2025-10-11 09:05:29.619] Setup provider for eval-03
+[2025-10-11 09:05:30.530] Measuring the baseline of stats of containers on registry01.vddpi (waiting for 20 seconds).
+[2025-10-11 09:05:50.536] =================== Phase1: Register your data processing app ===================
+[2025-10-11 09:05:50.539] Run App Registration
+[2025-10-11 09:06:02.705] App ID: 71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81
+[2025-10-11 09:06:03.098] =================== Phase2: Apply for data usage ===================
+[2025-10-11 09:06:03.107] Checking My SQL connection...
+[2025-10-11 09:06:03.129] mysqld is alive
+[2025-10-11 09:06:03.132] Get root CA certificate
+[2025-10-11 09:06:03.142] Get consumer certificate
+[2025-10-11 09:06:03.401] Preparing data provision policy -- provider preparation (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0001)
+[2025-10-11 09:06:03.435] Applying for data usage (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0001)
+[2025-10-11 09:06:10.571] Preparing data provision policy -- provider preparation (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0002)
+[2025-10-11 09:06:10.598] Applying for data usage (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0002)
+[2025-10-11 09:06:17.459] Preparing data provision policy -- provider preparation (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0003)
+[2025-10-11 09:06:17.490] Applying for data usage (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0003)
+[2025-10-11 09:06:24.386] Preparing data provision policy -- provider preparation (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0004)
+[2025-10-11 09:06:24.430] Applying for data usage (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0004)
+[2025-10-11 09:06:31.646] Preparing data provision policy -- provider preparation (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0005)
+[2025-10-11 09:06:31.676] Applying for data usage (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0005)
+[2025-10-11 09:06:38.555] Preparing data provision policy -- provider preparation (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0006)
+[2025-10-11 09:06:38.588] Applying for data usage (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0006)
+[2025-10-11 09:06:45.454] Preparing data provision policy -- provider preparation (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0007)
+[2025-10-11 09:06:45.479] Applying for data usage (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0007)
+[2025-10-11 09:06:52.368] Preparing data provision policy -- provider preparation (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0008)
+[2025-10-11 09:06:52.394] Applying for data usage (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0008)
+[2025-10-11 09:06:59.242] Preparing data provision policy -- provider preparation (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0009)
+[2025-10-11 09:06:59.272] Applying for data usage (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0009)
+[2025-10-11 09:07:06.145] Preparing data provision policy -- provider preparation (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0010)
+[2025-10-11 09:07:06.169] Applying for data usage (app_id:71bd787a1b2c1d2636e0d1514cd60ca6923a3a4bff3d391de375a72002ee9e81, data_id:https://provider01.vddpi:443/data/person/personal-0010)
+[2025-10-11 09:07:13.432] =================== Phase3: Data processing ===================
+[2025-10-11 09:07:13.434] Run data processing with parallel_num from 1 to 6
+[2025-10-11 09:07:13.437] Starting data processing (parallel_num:1)
+[2025-10-11 09:07:13.453] Starting data processing in parallel (instance:1, consumer_dir_name:consumer_1)
+[2025-10-11 09:07:13.457] Starting data processing in parallel (consumer_dir_name:consumer)
+[2025-10-11 09:07:13.464] Restart the container () on consumer01.vddpi
+[2025-10-11 09:07:13.463] Waiting for all data processing to complete...
+[2025-10-11 09:07:13.471] Restart the container () on consumer01.vddpi
+[2025-10-11 09:07:14.626] Run gencert (port:8001)
+[2025-10-11 09:07:14.707] Run gencert (port:18001)
+[2025-10-11 09:07:20.738] Connect consumer01.vddpi:8001 ...
+[2025-10-11 09:07:20.744] App certificate issued.
+[2025-10-11 09:07:20.761] Run processing data (port:8002)
+[2025-10-11 09:07:20.818] Connect consumer01.vddpi:18001 ...
+[2025-10-11 09:07:20.827] App certificate issued.
+[2025-10-11 09:07:20.848] Run processing data (port:18002)
+[2025-10-11 09:07:27.401] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:07:27.409] Received: Session completed (start:2025-10-11 09:07:26.993, end:2025-10-11 09:07:27.390, elapsed_check_policy_ms:397, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:398, is_met_condition:True, cached:False)
+[2025-10-11 09:07:27.504] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:07:27.507] Received: Session completed (start:2025-10-11 09:07:27.049, end:2025-10-11 09:07:27.492, elapsed_check_policy_ms:443, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:444, is_met_condition:True, cached:False)
+[2025-10-11 09:07:27.810] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:07:27.812] Received: Session completed (start:2025-10-11 09:07:27.449, end:2025-10-11 09:07:27.796, elapsed_check_policy_ms:347, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:347, is_met_condition:True, cached:False)
+[2025-10-11 09:07:27.908] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:07:27.913] Received: Session completed (start:2025-10-11 09:07:27.548, end:2025-10-11 09:07:27.898, elapsed_check_policy_ms:349, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:350, is_met_condition:True, cached:False)
+[2025-10-11 09:07:28.214] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:07:28.217] Received: Session completed (start:2025-10-11 09:07:27.852, end:2025-10-11 09:07:28.202, elapsed_check_policy_ms:349, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:349, is_met_condition:True, cached:False)
+[2025-10-11 09:07:28.319] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:07:28.321] Received: Session completed (start:2025-10-11 09:07:27.954, end:2025-10-11 09:07:28.304, elapsed_check_policy_ms:350, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:351, is_met_condition:True, cached:False)
+[2025-10-11 09:07:28.630] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:07:28.633] Received: Session completed (start:2025-10-11 09:07:28.265, end:2025-10-11 09:07:28.617, elapsed_check_policy_ms:351, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:352, is_met_condition:True, cached:False)
+[2025-10-11 09:07:28.730] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:07:28.735] Received: Session completed (start:2025-10-11 09:07:28.362, end:2025-10-11 09:07:28.718, elapsed_check_policy_ms:355, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:356, is_met_condition:True, cached:False)
+[2025-10-11 09:07:29.033] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:07:29.037] Received: Session completed (start:2025-10-11 09:07:28.672, end:2025-10-11 09:07:29.021, elapsed_check_policy_ms:349, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:349, is_met_condition:True, cached:False)
+[2025-10-11 09:07:29.133] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:07:29.138] Received: Session completed (start:2025-10-11 09:07:28.773, end:2025-10-11 09:07:29.122, elapsed_check_policy_ms:349, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:349, is_met_condition:True, cached:False)
+[2025-10-11 09:07:29.437] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:07:29.442] Received: Session completed (start:2025-10-11 09:07:29.077, end:2025-10-11 09:07:29.425, elapsed_check_policy_ms:348, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:348, is_met_condition:True, cached:False)
+[2025-10-11 09:07:29.537] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:07:29.542] Received: Session completed (start:2025-10-11 09:07:29.178, end:2025-10-11 09:07:29.526, elapsed_check_policy_ms:348, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:348, is_met_condition:True, cached:False)
+[2025-10-11 09:07:29.846] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:07:29.850] Received: Session completed (start:2025-10-11 09:07:29.480, end:2025-10-11 09:07:29.835, elapsed_check_policy_ms:354, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:355, is_met_condition:True, cached:False)
+[2025-10-11 09:07:29.948] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:07:29.951] Received: Session completed (start:2025-10-11 09:07:29.589, end:2025-10-11 09:07:29.936, elapsed_check_policy_ms:347, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:347, is_met_condition:True, cached:False)
+[2025-10-11 09:07:30.266] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:07:30.269] Received: Session completed (start:2025-10-11 09:07:29.893, end:2025-10-11 09:07:30.252, elapsed_check_policy_ms:359, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:359, is_met_condition:True, cached:False)
+[2025-10-11 09:07:30.365] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:07:30.368] Received: Session completed (start:2025-10-11 09:07:29.992, end:2025-10-11 09:07:30.354, elapsed_check_policy_ms:361, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:361, is_met_condition:True, cached:False)
+[2025-10-11 09:07:30.673] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:07:30.676] Received: Session completed (start:2025-10-11 09:07:30.309, end:2025-10-11 09:07:30.659, elapsed_check_policy_ms:350, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:351, is_met_condition:True, cached:False)
+[2025-10-11 09:07:30.772] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:07:30.777] Received: Session completed (start:2025-10-11 09:07:30.412, end:2025-10-11 09:07:30.760, elapsed_check_policy_ms:348, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:349, is_met_condition:True, cached:False)
+[2025-10-11 09:07:31.076] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:07:31.080] Received: Session completed (start:2025-10-11 09:07:30.715, end:2025-10-11 09:07:31.065, elapsed_check_policy_ms:349, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:350, is_met_condition:True, cached:False)
+[2025-10-11 09:07:31.176] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:07:31.181] Received: Session completed (start:2025-10-11 09:07:30.817, end:2025-10-11 09:07:31.166, elapsed_check_policy_ms:348, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:349, is_met_condition:True, cached:False)
+[2025-10-11 09:07:31.184] All data processing completed.
+[2025-10-11 09:07:53.433] Starting data processing (parallel_num:2)
+[2025-10-11 09:07:53.449] Starting data processing in parallel (instance:1, consumer_dir_name:consumer_1)
+[2025-10-11 09:07:53.457] Restart the container () on consumer01.vddpi
+[2025-10-11 09:07:53.478] Starting data processing in parallel (instance:2, consumer_dir_name:consumer_2)
+[2025-10-11 09:07:53.484] Starting data processing in parallel (consumer_dir_name:consumer)
+[2025-10-11 09:07:53.490] Waiting for all data processing to complete...
+[2025-10-11 09:07:53.493] Restart the container () on consumer01.vddpi
+[2025-10-11 09:07:53.500] Restart the container () on consumer01.vddpi
+[2025-10-11 09:07:55.257] Run gencert (port:18001)
+[2025-10-11 09:07:55.603] Run gencert (port:8001)
+[2025-10-11 09:07:55.740] Run gencert (port:18003)
+[2025-10-11 09:08:04.352] Connect consumer01.vddpi:18001 ...
+[2025-10-11 09:08:04.360] App certificate issued.
+[2025-10-11 09:08:04.370] Run processing data (port:18002)
+[2025-10-11 09:08:04.703] Connect consumer01.vddpi:8001 ...
+[2025-10-11 09:08:04.718] App certificate issued.
+[2025-10-11 09:08:04.725] Run processing data (port:8002)
+[2025-10-11 09:08:04.851] Connect consumer01.vddpi:18003 ...
+[2025-10-11 09:08:04.859] App certificate issued.
+[2025-10-11 09:08:04.871] Run processing data (port:18004)
+[2025-10-11 09:08:10.804] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:08:10.812] Received: Session completed (start:2025-10-11 09:08:10.528, end:2025-10-11 09:08:10.791, elapsed_check_policy_ms:263, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:263, is_met_condition:True, cached:False)
+[2025-10-11 09:08:11.244] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:08:11.249] Received: Session completed (start:2025-10-11 09:08:10.885, end:2025-10-11 09:08:11.234, elapsed_check_policy_ms:348, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:349, is_met_condition:True, cached:False)
+[2025-10-11 09:08:11.447] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:08:11.451] Received: Session completed (start:2025-10-11 09:08:10.934, end:2025-10-11 09:08:11.436, elapsed_check_policy_ms:502, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:503, is_met_condition:True, cached:False)
+[2025-10-11 09:08:11.650] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:08:11.653] Received: Session completed (start:2025-10-11 09:08:11.034, end:2025-10-11 09:08:11.638, elapsed_check_policy_ms:604, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:604, is_met_condition:True, cached:False)
+[2025-10-11 09:08:11.852] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:08:11.857] Received: Session completed (start:2025-10-11 09:08:11.288, end:2025-10-11 09:08:11.841, elapsed_check_policy_ms:552, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:552, is_met_condition:True, cached:False)
+[2025-10-11 09:08:12.053] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:08:12.059] Received: Session completed (start:2025-10-11 09:08:11.491, end:2025-10-11 09:08:12.043, elapsed_check_policy_ms:551, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:552, is_met_condition:True, cached:False)
+[2025-10-11 09:08:12.257] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:08:12.261] Received: Session completed (start:2025-10-11 09:08:11.694, end:2025-10-11 09:08:12.245, elapsed_check_policy_ms:550, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:551, is_met_condition:True, cached:False)
+[2025-10-11 09:08:12.458] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:08:12.462] Received: Session completed (start:2025-10-11 09:08:11.896, end:2025-10-11 09:08:12.447, elapsed_check_policy_ms:550, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:551, is_met_condition:True, cached:False)
+[2025-10-11 09:08:12.662] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:08:12.665] Received: Session completed (start:2025-10-11 09:08:12.098, end:2025-10-11 09:08:12.649, elapsed_check_policy_ms:550, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:551, is_met_condition:True, cached:False)
+[2025-10-11 09:08:12.863] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:08:12.866] Received: Session completed (start:2025-10-11 09:08:12.302, end:2025-10-11 09:08:12.851, elapsed_check_policy_ms:548, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:549, is_met_condition:True, cached:False)
+[2025-10-11 09:08:13.064] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:08:13.069] Received: Session completed (start:2025-10-11 09:08:12.502, end:2025-10-11 09:08:13.054, elapsed_check_policy_ms:551, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:552, is_met_condition:True, cached:False)
+[2025-10-11 09:08:13.268] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:08:13.272] Received: Session completed (start:2025-10-11 09:08:12.705, end:2025-10-11 09:08:13.256, elapsed_check_policy_ms:551, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:551, is_met_condition:True, cached:False)
+[2025-10-11 09:08:13.469] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:08:13.473] Received: Session completed (start:2025-10-11 09:08:12.915, end:2025-10-11 09:08:13.458, elapsed_check_policy_ms:543, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:543, is_met_condition:True, cached:False)
+[2025-10-11 09:08:13.671] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:08:13.676] Received: Session completed (start:2025-10-11 09:08:13.109, end:2025-10-11 09:08:13.661, elapsed_check_policy_ms:551, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:552, is_met_condition:True, cached:False)
+[2025-10-11 09:08:13.874] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:08:13.879] Received: Session completed (start:2025-10-11 09:08:13.312, end:2025-10-11 09:08:13.863, elapsed_check_policy_ms:551, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:552, is_met_condition:True, cached:False)
+[2025-10-11 09:08:14.085] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:08:14.089] Received: Session completed (start:2025-10-11 09:08:13.513, end:2025-10-11 09:08:14.066, elapsed_check_policy_ms:552, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:553, is_met_condition:True, cached:False)
+[2025-10-11 09:08:14.279] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:08:14.284] Received: Session completed (start:2025-10-11 09:08:13.715, end:2025-10-11 09:08:14.268, elapsed_check_policy_ms:552, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:553, is_met_condition:True, cached:False)
+[2025-10-11 09:08:14.484] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:08:14.487] Received: Session completed (start:2025-10-11 09:08:13.926, end:2025-10-11 09:08:14.471, elapsed_check_policy_ms:545, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:545, is_met_condition:True, cached:False)
+[2025-10-11 09:08:14.684] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:08:14.689] Received: Session completed (start:2025-10-11 09:08:14.127, end:2025-10-11 09:08:14.673, elapsed_check_policy_ms:546, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:546, is_met_condition:True, cached:False)
+[2025-10-11 09:08:14.887] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:08:14.892] Received: Session completed (start:2025-10-11 09:08:14.323, end:2025-10-11 09:08:14.876, elapsed_check_policy_ms:553, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:553, is_met_condition:True, cached:False)
+[2025-10-11 09:08:15.097] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:08:15.103] Received: Session completed (start:2025-10-11 09:08:14.525, end:2025-10-11 09:08:15.079, elapsed_check_policy_ms:553, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:554, is_met_condition:True, cached:False)
+[2025-10-11 09:08:15.292] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:08:15.296] Received: Session completed (start:2025-10-11 09:08:14.729, end:2025-10-11 09:08:15.281, elapsed_check_policy_ms:552, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:552, is_met_condition:True, cached:False)
+[2025-10-11 09:08:15.497] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:08:15.501] Received: Session completed (start:2025-10-11 09:08:14.931, end:2025-10-11 09:08:15.484, elapsed_check_policy_ms:552, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:553, is_met_condition:True, cached:False)
+[2025-10-11 09:08:15.700] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:08:15.704] Received: Session completed (start:2025-10-11 09:08:15.142, end:2025-10-11 09:08:15.686, elapsed_check_policy_ms:544, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:544, is_met_condition:True, cached:False)
+[2025-10-11 09:08:15.900] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:08:15.903] Received: Session completed (start:2025-10-11 09:08:15.337, end:2025-10-11 09:08:15.888, elapsed_check_policy_ms:551, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:552, is_met_condition:True, cached:False)
+[2025-10-11 09:08:16.104] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:08:16.108] Received: Session completed (start:2025-10-11 09:08:15.539, end:2025-10-11 09:08:16.091, elapsed_check_policy_ms:551, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:552, is_met_condition:True, cached:False)
+[2025-10-11 09:08:16.305] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:08:16.309] Received: Session completed (start:2025-10-11 09:08:15.742, end:2025-10-11 09:08:16.293, elapsed_check_policy_ms:550, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:551, is_met_condition:True, cached:False)
+[2025-10-11 09:08:16.405] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:08:16.409] Received: Session completed (start:2025-10-11 09:08:15.944, end:2025-10-11 09:08:16.394, elapsed_check_policy_ms:450, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:450, is_met_condition:True, cached:False)
+[2025-10-11 09:08:16.709] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:08:16.713] Received: Session completed (start:2025-10-11 09:08:16.348, end:2025-10-11 09:08:16.698, elapsed_check_policy_ms:349, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:350, is_met_condition:True, cached:False)
+[2025-10-11 09:08:16.811] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:08:16.815] Received: Session completed (start:2025-10-11 09:08:16.458, end:2025-10-11 09:08:16.800, elapsed_check_policy_ms:341, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:342, is_met_condition:True, cached:False)
+[2025-10-11 09:08:16.817] All data processing completed.
+[2025-10-11 09:08:50.285] Starting data processing (parallel_num:3)
+[2025-10-11 09:08:50.302] Starting data processing in parallel (instance:1, consumer_dir_name:consumer_1)
+[2025-10-11 09:08:50.310] Restart the container () on consumer01.vddpi
+[2025-10-11 09:08:50.330] Starting data processing in parallel (instance:2, consumer_dir_name:consumer_2)
+[2025-10-11 09:08:50.341] Restart the container () on consumer01.vddpi
+[2025-10-11 09:08:50.373] Starting data processing in parallel (instance:3, consumer_dir_name:consumer_3)
+[2025-10-11 09:08:50.386] Starting data processing in parallel (consumer_dir_name:consumer)
+[2025-10-11 09:08:50.390] Restart the container () on consumer01.vddpi
+[2025-10-11 09:08:50.400] Waiting for all data processing to complete...
+[2025-10-11 09:08:50.409] Restart the container () on consumer01.vddpi
+[2025-10-11 09:08:52.759] Run gencert (port:18001)
+[2025-10-11 09:08:52.873] Run gencert (port:18003)
+[2025-10-11 09:08:53.015] Run gencert (port:8001)
+[2025-10-11 09:08:53.181] Run gencert (port:18005)
+[2025-10-11 09:09:01.856] Connect consumer01.vddpi:18001 ...
+[2025-10-11 09:09:01.862] App certificate issued.
+[2025-10-11 09:09:01.883] Run processing data (port:18002)
+[2025-10-11 09:09:01.977] Connect consumer01.vddpi:18003 ...
+[2025-10-11 09:09:01.983] App certificate issued.
+[2025-10-11 09:09:02.008] Run processing data (port:18004)
+[2025-10-11 09:09:02.099] Connect consumer01.vddpi:8001 ...
+[2025-10-11 09:09:02.107] App certificate issued.
+[2025-10-11 09:09:02.121] Run processing data (port:8002)
+[2025-10-11 09:09:02.289] Connect consumer01.vddpi:18005 ...
+[2025-10-11 09:09:02.297] App certificate issued.
+[2025-10-11 09:09:02.310] Run processing data (port:18006)
+[2025-10-11 09:09:11.342] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:09:11.347] Received: Session completed (start:2025-10-11 09:09:11.058, end:2025-10-11 09:09:11.331, elapsed_check_policy_ms:272, elapsed_process_data_ms:1, elapsed_store_data_ms:0, elapsed_ms:273, is_met_condition:True, cached:False)
+[2025-10-11 09:09:11.747] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:09:11.752] Received: Session completed (start:2025-10-11 09:09:11.181, end:2025-10-11 09:09:11.737, elapsed_check_policy_ms:555, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:556, is_met_condition:True, cached:False)
+[2025-10-11 09:09:11.950] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:09:11.954] Received: Session completed (start:2025-10-11 09:09:11.288, end:2025-10-11 09:09:11.940, elapsed_check_policy_ms:651, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:652, is_met_condition:True, cached:False)
+[2025-10-11 09:09:12.054] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:09:12.057] Received: Session completed (start:2025-10-11 09:09:11.392, end:2025-10-11 09:09:12.041, elapsed_check_policy_ms:648, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:649, is_met_condition:True, cached:False)
+[2025-10-11 09:09:12.256] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:09:12.260] Received: Session completed (start:2025-10-11 09:09:11.495, end:2025-10-11 09:09:12.243, elapsed_check_policy_ms:748, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:749, is_met_condition:True, cached:False)
+[2025-10-11 09:09:12.560] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:09:12.563] Received: Session completed (start:2025-10-11 09:09:11.793, end:2025-10-11 09:09:12.547, elapsed_check_policy_ms:754, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:09:12.760] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:09:12.765] Received: Session completed (start:2025-10-11 09:09:11.995, end:2025-10-11 09:09:12.750, elapsed_check_policy_ms:754, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:09:12.861] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:09:12.865] Received: Session completed (start:2025-10-11 09:09:12.097, end:2025-10-11 09:09:12.850, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:12.965] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:09:12.967] Received: Session completed (start:2025-10-11 09:09:12.299, end:2025-10-11 09:09:12.952, elapsed_check_policy_ms:652, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:653, is_met_condition:True, cached:False)
+[2025-10-11 09:09:13.468] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:09:13.472] Received: Session completed (start:2025-10-11 09:09:12.603, end:2025-10-11 09:09:13.457, elapsed_check_policy_ms:854, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:855, is_met_condition:True, cached:False)
+[2025-10-11 09:09:13.571] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:09:13.576] Received: Session completed (start:2025-10-11 09:09:12.805, end:2025-10-11 09:09:13.559, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:09:13.671] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:09:13.677] Received: Session completed (start:2025-10-11 09:09:12.906, end:2025-10-11 09:09:13.660, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:13.771] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:09:13.775] Received: Session completed (start:2025-10-11 09:09:13.007, end:2025-10-11 09:09:13.760, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:14.278] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:09:14.282] Received: Session completed (start:2025-10-11 09:09:13.512, end:2025-10-11 09:09:14.266, elapsed_check_policy_ms:754, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:09:14.378] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:09:14.382] Received: Session completed (start:2025-10-11 09:09:13.614, end:2025-10-11 09:09:14.367, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:14.480] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:09:14.485] Received: Session completed (start:2025-10-11 09:09:13.715, end:2025-10-11 09:09:14.468, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:09:14.581] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:09:14.586] Received: Session completed (start:2025-10-11 09:09:13.824, end:2025-10-11 09:09:14.569, elapsed_check_policy_ms:745, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:746, is_met_condition:True, cached:False)
+[2025-10-11 09:09:15.087] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:09:15.092] Received: Session completed (start:2025-10-11 09:09:14.321, end:2025-10-11 09:09:15.075, elapsed_check_policy_ms:754, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:09:15.186] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:09:15.191] Received: Session completed (start:2025-10-11 09:09:14.422, end:2025-10-11 09:09:15.175, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:09:15.289] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:09:15.294] Received: Session completed (start:2025-10-11 09:09:14.523, end:2025-10-11 09:09:15.277, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:15.389] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:09:15.393] Received: Session completed (start:2025-10-11 09:09:14.625, end:2025-10-11 09:09:15.378, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:09:15.893] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:09:15.898] Received: Session completed (start:2025-10-11 09:09:15.142, end:2025-10-11 09:09:15.883, elapsed_check_policy_ms:740, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:741, is_met_condition:True, cached:False)
+[2025-10-11 09:09:16.005] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:09:16.009] Received: Session completed (start:2025-10-11 09:09:15.231, end:2025-10-11 09:09:15.984, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:16.101] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:09:16.104] Received: Session completed (start:2025-10-11 09:09:15.333, end:2025-10-11 09:09:16.085, elapsed_check_policy_ms:752, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:752, is_met_condition:True, cached:False)
+[2025-10-11 09:09:16.201] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:09:16.205] Received: Session completed (start:2025-10-11 09:09:15.434, end:2025-10-11 09:09:16.187, elapsed_check_policy_ms:752, elapsed_process_data_ms:1, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:16.704] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:09:16.708] Received: Session completed (start:2025-10-11 09:09:15.939, end:2025-10-11 09:09:16.691, elapsed_check_policy_ms:752, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:752, is_met_condition:True, cached:False)
+[2025-10-11 09:09:16.805] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:09:16.809] Received: Session completed (start:2025-10-11 09:09:16.048, end:2025-10-11 09:09:16.793, elapsed_check_policy_ms:744, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:744, is_met_condition:True, cached:False)
+[2025-10-11 09:09:16.906] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:09:16.910] Received: Session completed (start:2025-10-11 09:09:16.147, end:2025-10-11 09:09:16.893, elapsed_check_policy_ms:746, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:746, is_met_condition:True, cached:False)
+[2025-10-11 09:09:17.006] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:09:17.012] Received: Session completed (start:2025-10-11 09:09:16.244, end:2025-10-11 09:09:16.994, elapsed_check_policy_ms:750, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:750, is_met_condition:True, cached:False)
+[2025-10-11 09:09:17.512] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:09:17.514] Received: Session completed (start:2025-10-11 09:09:16.746, end:2025-10-11 09:09:17.500, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:17.611] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:09:17.615] Received: Session completed (start:2025-10-11 09:09:16.848, end:2025-10-11 09:09:17.601, elapsed_check_policy_ms:751, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:752, is_met_condition:True, cached:False)
+[2025-10-11 09:09:17.714] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:09:17.717] Received: Session completed (start:2025-10-11 09:09:16.949, end:2025-10-11 09:09:17.702, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:17.820] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:09:17.823] Received: Session completed (start:2025-10-11 09:09:17.055, end:2025-10-11 09:09:17.804, elapsed_check_policy_ms:749, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:750, is_met_condition:True, cached:False)
+[2025-10-11 09:09:18.319] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:09:18.323] Received: Session completed (start:2025-10-11 09:09:17.555, end:2025-10-11 09:09:18.308, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:18.420] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:09:18.425] Received: Session completed (start:2025-10-11 09:09:17.656, end:2025-10-11 09:09:18.409, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:09:18.522] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:09:18.526] Received: Session completed (start:2025-10-11 09:09:17.757, end:2025-10-11 09:09:18.511, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:09:18.623] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:09:18.628] Received: Session completed (start:2025-10-11 09:09:17.862, end:2025-10-11 09:09:18.611, elapsed_check_policy_ms:749, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:749, is_met_condition:True, cached:False)
+[2025-10-11 09:09:19.027] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:09:19.031] Received: Session completed (start:2025-10-11 09:09:18.372, end:2025-10-11 09:09:19.016, elapsed_check_policy_ms:644, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:644, is_met_condition:True, cached:False)
+[2025-10-11 09:09:19.130] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:09:19.133] Received: Session completed (start:2025-10-11 09:09:18.466, end:2025-10-11 09:09:19.118, elapsed_check_policy_ms:651, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:652, is_met_condition:True, cached:False)
+[2025-10-11 09:09:19.229] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:09:19.233] Received: Session completed (start:2025-10-11 09:09:18.668, end:2025-10-11 09:09:19.218, elapsed_check_policy_ms:550, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:550, is_met_condition:True, cached:False)
+[2025-10-11 09:09:19.236] All data processing completed.
+[2025-10-11 09:10:03.807] Starting data processing (parallel_num:4)
+[2025-10-11 09:10:03.828] Starting data processing in parallel (instance:1, consumer_dir_name:consumer_1)
+[2025-10-11 09:10:03.838] Restart the container () on consumer01.vddpi
+[2025-10-11 09:10:03.857] Starting data processing in parallel (instance:2, consumer_dir_name:consumer_2)
+[2025-10-11 09:10:03.870] Restart the container () on consumer01.vddpi
+[2025-10-11 09:10:03.898] Starting data processing in parallel (instance:3, consumer_dir_name:consumer_3)
+[2025-10-11 09:10:03.914] Restart the container () on consumer01.vddpi
+[2025-10-11 09:10:03.950] Starting data processing in parallel (instance:4, consumer_dir_name:consumer_4)
+[2025-10-11 09:10:03.961] Starting data processing in parallel (consumer_dir_name:consumer)
+[2025-10-11 09:10:03.972] Restart the container () on consumer01.vddpi
+[2025-10-11 09:10:03.978] Waiting for all data processing to complete...
+[2025-10-11 09:10:03.985] Restart the container () on consumer01.vddpi
+[2025-10-11 09:10:06.531] Run gencert (port:18001)
+[2025-10-11 09:10:07.172] Run gencert (port:18003)
+[2025-10-11 09:10:07.527] Run gencert (port:18005)
+[2025-10-11 09:10:07.753] Run gencert (port:18007)
+[2025-10-11 09:10:07.935] Run gencert (port:8001)
+[2025-10-11 09:10:18.625] Connect consumer01.vddpi:18001 ...
+[2025-10-11 09:10:18.631] App certificate issued.
+[2025-10-11 09:10:18.645] Run processing data (port:18002)
+[2025-10-11 09:10:19.269] Connect consumer01.vddpi:18003 ...
+[2025-10-11 09:10:19.277] App certificate issued.
+[2025-10-11 09:10:19.289] Run processing data (port:18004)
+[2025-10-11 09:10:19.647] Connect consumer01.vddpi:18005 ...
+[2025-10-11 09:10:19.652] App certificate issued.
+[2025-10-11 09:10:19.662] Run processing data (port:18006)
+[2025-10-11 09:10:19.868] Connect consumer01.vddpi:18007 ...
+[2025-10-11 09:10:19.878] App certificate issued.
+[2025-10-11 09:10:19.887] Run processing data (port:18008)
+[2025-10-11 09:10:20.050] Connect consumer01.vddpi:8001 ...
+[2025-10-11 09:10:20.056] App certificate issued.
+[2025-10-11 09:10:20.070] Run processing data (port:8002)
+[2025-10-11 09:10:25.513] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:10:25.526] Received: Session completed (start:2025-10-11 09:10:25.093, end:2025-10-11 09:10:25.489, elapsed_check_policy_ms:395, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:395, is_met_condition:True, cached:False)
+[2025-10-11 09:10:25.961] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:10:25.971] Received: Session completed (start:2025-10-11 09:10:25.626, end:2025-10-11 09:10:25.940, elapsed_check_policy_ms:314, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:314, is_met_condition:True, cached:False)
+[2025-10-11 09:10:26.440] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:10:26.446] Received: Session completed (start:2025-10-11 09:10:26.077, end:2025-10-11 09:10:26.411, elapsed_check_policy_ms:333, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:334, is_met_condition:True, cached:False)
+[2025-10-11 09:10:26.897] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:10:26.905] Received: Session completed (start:2025-10-11 09:10:26.560, end:2025-10-11 09:10:26.873, elapsed_check_policy_ms:313, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:314, is_met_condition:True, cached:False)
+[2025-10-11 09:10:27.357] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:10:27.364] Received: Session completed (start:2025-10-11 09:10:27.009, end:2025-10-11 09:10:27.329, elapsed_check_policy_ms:320, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:320, is_met_condition:True, cached:False)
+[2025-10-11 09:10:27.773] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:10:27.782] Received: Session completed (start:2025-10-11 09:10:27.457, end:2025-10-11 09:10:27.749, elapsed_check_policy_ms:292, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:292, is_met_condition:True, cached:False)
+[2025-10-11 09:10:28.141] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:10:28.144] Received: Session completed (start:2025-10-11 09:10:27.868, end:2025-10-11 09:10:28.127, elapsed_check_policy_ms:258, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:259, is_met_condition:True, cached:False)
+[2025-10-11 09:10:28.445] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:10:28.450] Received: Session completed (start:2025-10-11 09:10:28.183, end:2025-10-11 09:10:28.433, elapsed_check_policy_ms:249, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:250, is_met_condition:True, cached:False)
+[2025-10-11 09:10:28.853] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:10:28.858] Received: Session completed (start:2025-10-11 09:10:28.466, end:2025-10-11 09:10:28.832, elapsed_check_policy_ms:365, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:366, is_met_condition:True, cached:False)
+[2025-10-11 09:10:28.949] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:10:28.953] Received: Session completed (start:2025-10-11 09:10:28.512, end:2025-10-11 09:10:28.935, elapsed_check_policy_ms:423, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:423, is_met_condition:True, cached:False)
+[2025-10-11 09:10:29.353] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:10:29.357] Received: Session completed (start:2025-10-11 09:10:28.817, end:2025-10-11 09:10:29.338, elapsed_check_policy_ms:521, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:521, is_met_condition:True, cached:False)
+[2025-10-11 09:10:29.552] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:10:29.556] Received: Session completed (start:2025-10-11 09:10:28.900, end:2025-10-11 09:10:29.541, elapsed_check_policy_ms:640, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:641, is_met_condition:True, cached:False)
+[2025-10-11 09:10:29.653] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:10:29.656] Received: Session completed (start:2025-10-11 09:10:29.006, end:2025-10-11 09:10:29.641, elapsed_check_policy_ms:635, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:635, is_met_condition:True, cached:False)
+[2025-10-11 09:10:29.955] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:10:29.961] Received: Session completed (start:2025-10-11 09:10:29.086, end:2025-10-11 09:10:29.945, elapsed_check_policy_ms:858, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:859, is_met_condition:True, cached:False)
+[2025-10-11 09:10:30.157] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:10:30.162] Received: Session completed (start:2025-10-11 09:10:29.228, end:2025-10-11 09:10:30.147, elapsed_check_policy_ms:919, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:919, is_met_condition:True, cached:False)
+[2025-10-11 09:10:30.258] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:10:30.263] Received: Session completed (start:2025-10-11 09:10:29.411, end:2025-10-11 09:10:30.248, elapsed_check_policy_ms:836, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:837, is_met_condition:True, cached:False)
+[2025-10-11 09:10:30.461] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:10:30.465] Received: Session completed (start:2025-10-11 09:10:29.596, end:2025-10-11 09:10:30.450, elapsed_check_policy_ms:853, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:854, is_met_condition:True, cached:False)
+[2025-10-11 09:10:30.766] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:10:30.770] Received: Session completed (start:2025-10-11 09:10:30.000, end:2025-10-11 09:10:30.753, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:10:30.967] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:10:30.971] Received: Session completed (start:2025-10-11 09:10:30.202, end:2025-10-11 09:10:30.955, elapsed_check_policy_ms:752, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:10:31.070] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:10:31.072] Received: Session completed (start:2025-10-11 09:10:30.303, end:2025-10-11 09:10:31.056, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:10:31.270] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:10:31.274] Received: Session completed (start:2025-10-11 09:10:30.505, end:2025-10-11 09:10:31.258, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:10:31.573] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:10:31.577] Received: Session completed (start:2025-10-11 09:10:30.808, end:2025-10-11 09:10:31.562, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:10:31.776] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:10:31.779] Received: Session completed (start:2025-10-11 09:10:31.009, end:2025-10-11 09:10:31.764, elapsed_check_policy_ms:754, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:755, is_met_condition:True, cached:False)
+[2025-10-11 09:10:31.876] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:10:31.880] Received: Session completed (start:2025-10-11 09:10:31.112, end:2025-10-11 09:10:31.865, elapsed_check_policy_ms:752, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:752, is_met_condition:True, cached:False)
+[2025-10-11 09:10:32.079] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:10:32.082] Received: Session completed (start:2025-10-11 09:10:31.314, end:2025-10-11 09:10:32.067, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:754, is_met_condition:True, cached:False)
+[2025-10-11 09:10:32.283] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:10:32.287] Received: Session completed (start:2025-10-11 09:10:31.618, end:2025-10-11 09:10:32.269, elapsed_check_policy_ms:651, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:652, is_met_condition:True, cached:False)
+[2025-10-11 09:10:32.584] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:10:32.588] Received: Session completed (start:2025-10-11 09:10:31.821, end:2025-10-11 09:10:32.572, elapsed_check_policy_ms:751, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:751, is_met_condition:True, cached:False)
+[2025-10-11 09:10:32.785] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:10:32.790] Received: Session completed (start:2025-10-11 09:10:31.932, end:2025-10-11 09:10:32.774, elapsed_check_policy_ms:841, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:842, is_met_condition:True, cached:False)
+[2025-10-11 09:10:32.888] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:10:32.894] Received: Session completed (start:2025-10-11 09:10:32.125, end:2025-10-11 09:10:32.876, elapsed_check_policy_ms:750, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:751, is_met_condition:True, cached:False)
+[2025-10-11 09:10:33.088] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:10:33.093] Received: Session completed (start:2025-10-11 09:10:32.328, end:2025-10-11 09:10:33.077, elapsed_check_policy_ms:749, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:750, is_met_condition:True, cached:False)
+[2025-10-11 09:10:33.394] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:10:33.398] Received: Session completed (start:2025-10-11 09:10:32.631, end:2025-10-11 09:10:33.381, elapsed_check_policy_ms:749, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:750, is_met_condition:True, cached:False)
+[2025-10-11 09:10:33.597] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:10:33.601] Received: Session completed (start:2025-10-11 09:10:32.833, end:2025-10-11 09:10:33.583, elapsed_check_policy_ms:750, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:750, is_met_condition:True, cached:False)
+[2025-10-11 09:10:33.697] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:10:33.702] Received: Session completed (start:2025-10-11 09:10:32.936, end:2025-10-11 09:10:33.684, elapsed_check_policy_ms:747, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:748, is_met_condition:True, cached:False)
+[2025-10-11 09:10:33.900] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:10:33.904] Received: Session completed (start:2025-10-11 09:10:33.138, end:2025-10-11 09:10:33.886, elapsed_check_policy_ms:747, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:748, is_met_condition:True, cached:False)
+[2025-10-11 09:10:34.204] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:10:34.208] Received: Session completed (start:2025-10-11 09:10:33.442, end:2025-10-11 09:10:34.189, elapsed_check_policy_ms:747, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:748, is_met_condition:True, cached:False)
+[2025-10-11 09:10:34.403] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:10:34.408] Received: Session completed (start:2025-10-11 09:10:33.644, end:2025-10-11 09:10:34.391, elapsed_check_policy_ms:747, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:747, is_met_condition:True, cached:False)
+[2025-10-11 09:10:34.505] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:10:34.509] Received: Session completed (start:2025-10-11 09:10:33.744, end:2025-10-11 09:10:34.491, elapsed_check_policy_ms:747, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:748, is_met_condition:True, cached:False)
+[2025-10-11 09:10:34.715] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:10:34.720] Received: Session completed (start:2025-10-11 09:10:33.946, end:2025-10-11 09:10:34.696, elapsed_check_policy_ms:749, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:749, is_met_condition:True, cached:False)
+[2025-10-11 09:10:34.909] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:10:34.912] Received: Session completed (start:2025-10-11 09:10:34.249, end:2025-10-11 09:10:34.896, elapsed_check_policy_ms:647, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:647, is_met_condition:True, cached:False)
+[2025-10-11 09:10:35.110] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:10:35.116] Received: Session completed (start:2025-10-11 09:10:34.450, end:2025-10-11 09:10:35.098, elapsed_check_policy_ms:648, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:648, is_met_condition:True, cached:False)
+[2025-10-11 09:10:35.415] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:10:35.418] Received: Session completed (start:2025-10-11 09:10:34.561, end:2025-10-11 09:10:35.402, elapsed_check_policy_ms:840, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:841, is_met_condition:True, cached:False)
+[2025-10-11 09:10:35.617] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:10:35.621] Received: Session completed (start:2025-10-11 09:10:34.761, end:2025-10-11 09:10:35.604, elapsed_check_policy_ms:843, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:843, is_met_condition:True, cached:False)
+[2025-10-11 09:10:35.727] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:10:35.733] Received: Session completed (start:2025-10-11 09:10:34.955, end:2025-10-11 09:10:35.705, elapsed_check_policy_ms:749, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:750, is_met_condition:True, cached:False)
+[2025-10-11 09:10:35.920] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:10:35.924] Received: Session completed (start:2025-10-11 09:10:35.158, end:2025-10-11 09:10:35.907, elapsed_check_policy_ms:749, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:749, is_met_condition:True, cached:False)
+[2025-10-11 09:10:36.123] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:10:36.128] Received: Session completed (start:2025-10-11 09:10:35.462, end:2025-10-11 09:10:36.110, elapsed_check_policy_ms:647, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:648, is_met_condition:True, cached:False)
+[2025-10-11 09:10:36.323] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:10:36.329] Received: Session completed (start:2025-10-11 09:10:35.663, end:2025-10-11 09:10:36.312, elapsed_check_policy_ms:649, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:649, is_met_condition:True, cached:False)
+[2025-10-11 09:10:36.527] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:10:36.531] Received: Session completed (start:2025-10-11 09:10:35.775, end:2025-10-11 09:10:36.514, elapsed_check_policy_ms:739, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:740, is_met_condition:True, cached:False)
+[2025-10-11 09:10:36.731] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:10:36.733] Received: Session completed (start:2025-10-11 09:10:35.966, end:2025-10-11 09:10:36.717, elapsed_check_policy_ms:750, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:751, is_met_condition:True, cached:False)
+[2025-10-11 09:10:36.931] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:10:36.936] Received: Session completed (start:2025-10-11 09:10:36.372, end:2025-10-11 09:10:36.919, elapsed_check_policy_ms:547, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:548, is_met_condition:True, cached:False)
+[2025-10-11 09:10:37.033] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:10:37.037] Received: Session completed (start:2025-10-11 09:10:36.582, end:2025-10-11 09:10:37.021, elapsed_check_policy_ms:438, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:439, is_met_condition:True, cached:False)
+[2025-10-11 09:10:37.040] All data processing completed.
+[2025-10-11 09:11:33.178] Starting data processing (parallel_num:5)
+[2025-10-11 09:11:33.194] Starting data processing in parallel (instance:1, consumer_dir_name:consumer_1)
+[2025-10-11 09:11:33.202] Restart the container () on consumer01.vddpi
+[2025-10-11 09:11:33.224] Starting data processing in parallel (instance:2, consumer_dir_name:consumer_2)
+[2025-10-11 09:11:33.235] Restart the container () on consumer01.vddpi
+[2025-10-11 09:11:33.264] Starting data processing in parallel (instance:3, consumer_dir_name:consumer_3)
+[2025-10-11 09:11:33.280] Restart the container () on consumer01.vddpi
+[2025-10-11 09:11:33.317] Starting data processing in parallel (instance:4, consumer_dir_name:consumer_4)
+[2025-10-11 09:11:33.352] Restart the container () on consumer01.vddpi
+[2025-10-11 09:11:33.410] Starting data processing in parallel (instance:5, consumer_dir_name:consumer_5)
+[2025-10-11 09:11:33.428] Starting data processing in parallel (consumer_dir_name:consumer)
+[2025-10-11 09:11:33.443] Restart the container () on consumer01.vddpi
+[2025-10-11 09:11:33.444] Waiting for all data processing to complete...
+[2025-10-11 09:11:33.463] Restart the container () on consumer01.vddpi
+[2025-10-11 09:11:36.002] Run gencert (port:18001)
+[2025-10-11 09:11:36.863] Run gencert (port:18003)
+[2025-10-11 09:11:37.225] Run gencert (port:18005)
+[2025-10-11 09:11:37.375] Run gencert (port:18007)
+[2025-10-11 09:11:37.613] Run gencert (port:18009)
+[2025-10-11 09:11:37.835] Run gencert (port:8001)
+[2025-10-11 09:11:51.098] Connect consumer01.vddpi:18001 ...
+[2025-10-11 09:11:51.106] App certificate issued.
+[2025-10-11 09:11:51.118] Run processing data (port:18002)
+[2025-10-11 09:11:51.959] Connect consumer01.vddpi:18003 ...
+[2025-10-11 09:11:51.966] App certificate issued.
+[2025-10-11 09:11:51.977] Run processing data (port:18004)
+[2025-10-11 09:11:52.336] Connect consumer01.vddpi:18005 ...
+[2025-10-11 09:11:52.351] App certificate issued.
+[2025-10-11 09:11:52.362] Run processing data (port:18006)
+[2025-10-11 09:11:52.497] Connect consumer01.vddpi:18007 ...
+[2025-10-11 09:11:52.501] App certificate issued.
+[2025-10-11 09:11:52.511] Run processing data (port:18008)
+[2025-10-11 09:11:52.735] Connect consumer01.vddpi:18009 ...
+[2025-10-11 09:11:52.751] App certificate issued.
+[2025-10-11 09:11:52.759] Run processing data (port:18010)
+[2025-10-11 09:11:52.969] Connect consumer01.vddpi:8001 ...
+[2025-10-11 09:11:52.975] App certificate issued.
+[2025-10-11 09:11:52.991] Run processing data (port:8002)
+[2025-10-11 09:12:01.098] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:01.108] Received: Session completed (start:2025-10-11 09:12:00.658, end:2025-10-11 09:12:01.071, elapsed_check_policy_ms:412, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:412, is_met_condition:True, cached:False)
+[2025-10-11 09:12:01.577] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:12:01.585] Received: Session completed (start:2025-10-11 09:12:01.214, end:2025-10-11 09:12:01.552, elapsed_check_policy_ms:337, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:337, is_met_condition:True, cached:False)
+[2025-10-11 09:12:02.023] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:02.032] Received: Session completed (start:2025-10-11 09:12:01.683, end:2025-10-11 09:12:01.999, elapsed_check_policy_ms:315, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:316, is_met_condition:True, cached:False)
+[2025-10-11 09:12:02.457] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:02.463] Received: Session completed (start:2025-10-11 09:12:02.143, end:2025-10-11 09:12:02.446, elapsed_check_policy_ms:302, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:302, is_met_condition:True, cached:False)
+[2025-10-11 09:12:02.761] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:02.765] Received: Session completed (start:2025-10-11 09:12:02.502, end:2025-10-11 09:12:02.750, elapsed_check_policy_ms:248, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:248, is_met_condition:True, cached:False)
+[2025-10-11 09:12:03.068] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:12:03.072] Received: Session completed (start:2025-10-11 09:12:02.806, end:2025-10-11 09:12:03.057, elapsed_check_policy_ms:251, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:252, is_met_condition:True, cached:False)
+[2025-10-11 09:12:03.382] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:12:03.388] Received: Session completed (start:2025-10-11 09:12:03.112, end:2025-10-11 09:12:03.369, elapsed_check_policy_ms:256, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:257, is_met_condition:True, cached:False)
+[2025-10-11 09:12:03.702] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:03.706] Received: Session completed (start:2025-10-11 09:12:03.432, end:2025-10-11 09:12:03.689, elapsed_check_policy_ms:257, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:257, is_met_condition:True, cached:False)
+[2025-10-11 09:12:04.009] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:04.014] Received: Session completed (start:2025-10-11 09:12:03.744, end:2025-10-11 09:12:03.997, elapsed_check_policy_ms:252, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:253, is_met_condition:True, cached:False)
+[2025-10-11 09:12:04.427] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:12:04.433] Received: Session completed (start:2025-10-11 09:12:04.060, end:2025-10-11 09:12:04.414, elapsed_check_policy_ms:353, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:354, is_met_condition:True, cached:False)
+[2025-10-11 09:12:04.538] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:04.546] Received: Session completed (start:2025-10-11 09:12:04.153, end:2025-10-11 09:12:04.517, elapsed_check_policy_ms:362, elapsed_process_data_ms:0, elapsed_store_data_ms:2, elapsed_ms:364, is_met_condition:True, cached:False)
+[2025-10-11 09:12:04.969] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:04.975] Received: Session completed (start:2025-10-11 09:12:04.555, end:2025-10-11 09:12:04.936, elapsed_check_policy_ms:380, elapsed_process_data_ms:1, elapsed_store_data_ms:0, elapsed_ms:382, is_met_condition:True, cached:False)
+[2025-10-11 09:12:05.160] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:12:05.172] Received: Session completed (start:2025-10-11 09:12:04.620, end:2025-10-11 09:12:05.133, elapsed_check_policy_ms:512, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:513, is_met_condition:True, cached:False)
+[2025-10-11 09:12:05.344] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:05.348] Received: Session completed (start:2025-10-11 09:12:04.702, end:2025-10-11 09:12:05.333, elapsed_check_policy_ms:631, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:632, is_met_condition:True, cached:False)
+[2025-10-11 09:12:05.548] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:05.551] Received: Session completed (start:2025-10-11 09:12:04.933, end:2025-10-11 09:12:05.536, elapsed_check_policy_ms:602, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:603, is_met_condition:True, cached:False)
+[2025-10-11 09:12:05.962] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:12:05.964] Received: Session completed (start:2025-10-11 09:12:05.043, end:2025-10-11 09:12:05.940, elapsed_check_policy_ms:897, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:898, is_met_condition:True, cached:False)
+[2025-10-11 09:12:06.157] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:06.162] Received: Session completed (start:2025-10-11 09:12:05.201, end:2025-10-11 09:12:06.142, elapsed_check_policy_ms:941, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:941, is_met_condition:True, cached:False)
+[2025-10-11 09:12:06.254] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:06.260] Received: Session completed (start:2025-10-11 09:12:05.264, end:2025-10-11 09:12:06.243, elapsed_check_policy_ms:978, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:979, is_met_condition:True, cached:False)
+[2025-10-11 09:12:06.356] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:12:06.361] Received: Session completed (start:2025-10-11 09:12:05.389, end:2025-10-11 09:12:06.345, elapsed_check_policy_ms:956, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:957, is_met_condition:True, cached:False)
+[2025-10-11 09:12:06.557] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:12:06.562] Received: Session completed (start:2025-10-11 09:12:05.592, end:2025-10-11 09:12:06.547, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:12:06.962] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:06.967] Received: Session completed (start:2025-10-11 09:12:06.004, end:2025-10-11 09:12:06.951, elapsed_check_policy_ms:946, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:947, is_met_condition:True, cached:False)
+[2025-10-11 09:12:07.165] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:12:07.169] Received: Session completed (start:2025-10-11 09:12:06.201, end:2025-10-11 09:12:07.154, elapsed_check_policy_ms:952, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:953, is_met_condition:True, cached:False)
+[2025-10-11 09:12:07.266] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:07.270] Received: Session completed (start:2025-10-11 09:12:06.299, end:2025-10-11 09:12:07.255, elapsed_check_policy_ms:955, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:12:07.368] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:07.371] Received: Session completed (start:2025-10-11 09:12:06.408, end:2025-10-11 09:12:07.355, elapsed_check_policy_ms:947, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:948, is_met_condition:True, cached:False)
+[2025-10-11 09:12:07.570] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:07.574] Received: Session completed (start:2025-10-11 09:12:06.602, end:2025-10-11 09:12:07.558, elapsed_check_policy_ms:955, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:12:07.973] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:07.978] Received: Session completed (start:2025-10-11 09:12:07.006, end:2025-10-11 09:12:07.962, elapsed_check_policy_ms:956, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:957, is_met_condition:True, cached:False)
+[2025-10-11 09:12:08.175] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:08.180] Received: Session completed (start:2025-10-11 09:12:07.213, end:2025-10-11 09:12:08.165, elapsed_check_policy_ms:951, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:952, is_met_condition:True, cached:False)
+[2025-10-11 09:12:08.280] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:08.282] Received: Session completed (start:2025-10-11 09:12:07.318, end:2025-10-11 09:12:08.266, elapsed_check_policy_ms:948, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:948, is_met_condition:True, cached:False)
+[2025-10-11 09:12:08.381] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:08.384] Received: Session completed (start:2025-10-11 09:12:07.410, end:2025-10-11 09:12:08.367, elapsed_check_policy_ms:957, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:957, is_met_condition:True, cached:False)
+[2025-10-11 09:12:08.580] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:08.584] Received: Session completed (start:2025-10-11 09:12:07.613, end:2025-10-11 09:12:08.569, elapsed_check_policy_ms:956, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:956, is_met_condition:True, cached:False)
+[2025-10-11 09:12:08.987] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:08.990] Received: Session completed (start:2025-10-11 09:12:08.019, end:2025-10-11 09:12:08.974, elapsed_check_policy_ms:955, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:12:09.190] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:09.192] Received: Session completed (start:2025-10-11 09:12:08.220, end:2025-10-11 09:12:09.176, elapsed_check_policy_ms:956, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:956, is_met_condition:True, cached:False)
+[2025-10-11 09:12:09.291] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:12:09.295] Received: Session completed (start:2025-10-11 09:12:08.331, end:2025-10-11 09:12:09.277, elapsed_check_policy_ms:946, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:946, is_met_condition:True, cached:False)
+[2025-10-11 09:12:09.392] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:09.394] Received: Session completed (start:2025-10-11 09:12:08.424, end:2025-10-11 09:12:09.378, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:954, is_met_condition:True, cached:False)
+[2025-10-11 09:12:09.593] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:09.596] Received: Session completed (start:2025-10-11 09:12:08.624, end:2025-10-11 09:12:09.581, elapsed_check_policy_ms:956, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:957, is_met_condition:True, cached:False)
+[2025-10-11 09:12:09.999] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:12:10.002] Received: Session completed (start:2025-10-11 09:12:09.029, end:2025-10-11 09:12:09.985, elapsed_check_policy_ms:956, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:956, is_met_condition:True, cached:False)
+[2025-10-11 09:12:10.197] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:12:10.202] Received: Session completed (start:2025-10-11 09:12:09.232, end:2025-10-11 09:12:10.187, elapsed_check_policy_ms:955, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:12:10.299] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:12:10.304] Received: Session completed (start:2025-10-11 09:12:09.333, end:2025-10-11 09:12:10.289, elapsed_check_policy_ms:955, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:956, is_met_condition:True, cached:False)
+[2025-10-11 09:12:10.400] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:12:10.405] Received: Session completed (start:2025-10-11 09:12:09.435, end:2025-10-11 09:12:10.390, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:954, is_met_condition:True, cached:False)
+[2025-10-11 09:12:10.602] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:12:10.607] Received: Session completed (start:2025-10-11 09:12:09.645, end:2025-10-11 09:12:10.591, elapsed_check_policy_ms:945, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:946, is_met_condition:True, cached:False)
+[2025-10-11 09:12:11.011] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:12:11.015] Received: Session completed (start:2025-10-11 09:12:10.041, end:2025-10-11 09:12:10.998, elapsed_check_policy_ms:956, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:957, is_met_condition:True, cached:False)
+[2025-10-11 09:12:11.211] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:12:11.215] Received: Session completed (start:2025-10-11 09:12:10.242, end:2025-10-11 09:12:11.198, elapsed_check_policy_ms:955, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:956, is_met_condition:True, cached:False)
+[2025-10-11 09:12:11.312] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:11.315] Received: Session completed (start:2025-10-11 09:12:10.344, end:2025-10-11 09:12:11.298, elapsed_check_policy_ms:953, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:954, is_met_condition:True, cached:False)
+[2025-10-11 09:12:11.410] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:12:11.414] Received: Session completed (start:2025-10-11 09:12:10.445, end:2025-10-11 09:12:11.399, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:954, is_met_condition:True, cached:False)
+[2025-10-11 09:12:11.614] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:12:11.619] Received: Session completed (start:2025-10-11 09:12:10.652, end:2025-10-11 09:12:11.602, elapsed_check_policy_ms:949, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:950, is_met_condition:True, cached:False)
+[2025-10-11 09:12:12.015] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:12.020] Received: Session completed (start:2025-10-11 09:12:11.053, end:2025-10-11 09:12:12.005, elapsed_check_policy_ms:952, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:952, is_met_condition:True, cached:False)
+[2025-10-11 09:12:12.217] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:12:12.223] Received: Session completed (start:2025-10-11 09:12:11.255, end:2025-10-11 09:12:12.207, elapsed_check_policy_ms:951, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:952, is_met_condition:True, cached:False)
+[2025-10-11 09:12:12.322] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:12.325] Received: Session completed (start:2025-10-11 09:12:11.354, end:2025-10-11 09:12:12.309, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:12:12.419] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:12.424] Received: Session completed (start:2025-10-11 09:12:11.455, end:2025-10-11 09:12:12.409, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:12:12.623] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:12.626] Received: Session completed (start:2025-10-11 09:12:11.657, end:2025-10-11 09:12:12.611, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:954, is_met_condition:True, cached:False)
+[2025-10-11 09:12:13.026] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:13.031] Received: Session completed (start:2025-10-11 09:12:12.060, end:2025-10-11 09:12:13.015, elapsed_check_policy_ms:955, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:12:13.229] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:12:13.233] Received: Session completed (start:2025-10-11 09:12:12.262, end:2025-10-11 09:12:13.218, elapsed_check_policy_ms:956, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:956, is_met_condition:True, cached:False)
+[2025-10-11 09:12:13.332] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:12:13.334] Received: Session completed (start:2025-10-11 09:12:12.364, end:2025-10-11 09:12:13.319, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:12:13.432] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:13.437] Received: Session completed (start:2025-10-11 09:12:12.465, end:2025-10-11 09:12:13.420, elapsed_check_policy_ms:955, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:12:13.635] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:13.639] Received: Session completed (start:2025-10-11 09:12:12.666, end:2025-10-11 09:12:13.622, elapsed_check_policy_ms:956, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:956, is_met_condition:True, cached:False)
+[2025-10-11 09:12:13.937] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:12:13.940] Received: Session completed (start:2025-10-11 09:12:13.071, end:2025-10-11 09:12:13.925, elapsed_check_policy_ms:853, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:854, is_met_condition:True, cached:False)
+[2025-10-11 09:12:14.141] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:12:14.144] Received: Session completed (start:2025-10-11 09:12:13.276, end:2025-10-11 09:12:14.127, elapsed_check_policy_ms:851, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:852, is_met_condition:True, cached:False)
+[2025-10-11 09:12:14.242] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:12:14.244] Received: Session completed (start:2025-10-11 09:12:13.475, end:2025-10-11 09:12:14.228, elapsed_check_policy_ms:753, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:753, is_met_condition:True, cached:False)
+[2025-10-11 09:12:14.342] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:12:14.345] Received: Session completed (start:2025-10-11 09:12:13.678, end:2025-10-11 09:12:14.330, elapsed_check_policy_ms:651, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:652, is_met_condition:True, cached:False)
+[2025-10-11 09:12:14.552] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:12:14.555] Received: Session completed (start:2025-10-11 09:12:14.191, end:2025-10-11 09:12:14.541, elapsed_check_policy_ms:349, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:350, is_met_condition:True, cached:False)
+[2025-10-11 09:12:14.558] All data processing completed.
+[2025-10-11 09:13:20.923] Starting data processing (parallel_num:6)
+[2025-10-11 09:13:20.939] Starting data processing in parallel (instance:1, consumer_dir_name:consumer_1)
+[2025-10-11 09:13:20.948] Restart the container () on consumer01.vddpi
+[2025-10-11 09:13:20.967] Starting data processing in parallel (instance:2, consumer_dir_name:consumer_2)
+[2025-10-11 09:13:20.981] Restart the container () on consumer01.vddpi
+[2025-10-11 09:13:21.012] Starting data processing in parallel (instance:3, consumer_dir_name:consumer_3)
+[2025-10-11 09:13:21.028] Restart the container () on consumer01.vddpi
+[2025-10-11 09:13:21.069] Starting data processing in parallel (instance:4, consumer_dir_name:consumer_4)
+[2025-10-11 09:13:21.088] Restart the container () on consumer01.vddpi
+[2025-10-11 09:13:21.144] Starting data processing in parallel (instance:5, consumer_dir_name:consumer_5)
+[2025-10-11 09:13:21.176] Restart the container () on consumer01.vddpi
+[2025-10-11 09:13:21.246] Starting data processing in parallel (instance:6, consumer_dir_name:consumer_6)
+[2025-10-11 09:13:21.268] Starting data processing in parallel (consumer_dir_name:consumer)
+[2025-10-11 09:13:21.291] Waiting for all data processing to complete...
+[2025-10-11 09:13:21.304] Restart the container () on consumer01.vddpi
+[2025-10-11 09:13:21.317] Restart the container () on consumer01.vddpi
+[2025-10-11 09:13:24.143] Run gencert (port:18001)
+[2025-10-11 09:13:25.299] Run gencert (port:18003)
+[2025-10-11 09:13:26.069] Run gencert (port:18007)
+[2025-10-11 09:13:26.593] Run gencert (port:18005)
+[2025-10-11 09:13:26.911] Run gencert (port:8001)
+[2025-10-11 09:13:27.193] Run gencert (port:18009)
+[2025-10-11 09:13:27.548] Run gencert (port:18011)
+[2025-10-11 09:13:39.300] Connect consumer01.vddpi:18001 ...
+[2025-10-11 09:13:39.313] App certificate issued.
+[2025-10-11 09:13:39.327] Run processing data (port:18002)
+[2025-10-11 09:13:43.423] Connect consumer01.vddpi:18003 ...
+[2025-10-11 09:13:43.432] App certificate issued.
+[2025-10-11 09:13:43.446] Run processing data (port:18004)
+[2025-10-11 09:13:44.196] Connect consumer01.vddpi:18007 ...
+[2025-10-11 09:13:44.204] App certificate issued.
+[2025-10-11 09:13:44.218] Run processing data (port:18008)
+[2025-10-11 09:13:44.733] Connect consumer01.vddpi:18005 ...
+[2025-10-11 09:13:44.742] App certificate issued.
+[2025-10-11 09:13:44.753] Run processing data (port:18006)
+[2025-10-11 09:13:45.034] Connect consumer01.vddpi:8001 ...
+[2025-10-11 09:13:45.047] App certificate issued.
+[2025-10-11 09:13:45.053] Run processing data (port:8002)
+[2025-10-11 09:13:45.356] Connect consumer01.vddpi:18009 ...
+[2025-10-11 09:13:45.374] App certificate issued.
+[2025-10-11 09:13:45.384] Run processing data (port:18010)
+[2025-10-11 09:13:45.700] Connect consumer01.vddpi:18011 ...
+[2025-10-11 09:13:45.717] App certificate issued.
+[2025-10-11 09:13:45.737] Run processing data (port:18012)
+[2025-10-11 09:13:46.597] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:13:46.609] Received: Session completed (start:2025-10-11 09:13:46.102, end:2025-10-11 09:13:46.576, elapsed_check_policy_ms:474, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:474, is_met_condition:True, cached:False)
+[2025-10-11 09:13:47.213] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:13:47.227] Received: Session completed (start:2025-10-11 09:13:46.771, end:2025-10-11 09:13:47.194, elapsed_check_policy_ms:420, elapsed_process_data_ms:0, elapsed_store_data_ms:2, elapsed_ms:422, is_met_condition:True, cached:False)
+[2025-10-11 09:13:47.765] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:13:47.778] Received: Session completed (start:2025-10-11 09:13:47.359, end:2025-10-11 09:13:47.740, elapsed_check_policy_ms:380, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:380, is_met_condition:True, cached:False)
+[2025-10-11 09:13:48.297] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:13:48.302] Received: Session completed (start:2025-10-11 09:13:47.898, end:2025-10-11 09:13:48.269, elapsed_check_policy_ms:371, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:371, is_met_condition:True, cached:False)
+[2025-10-11 09:13:48.810] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:13:48.817] Received: Session completed (start:2025-10-11 09:13:48.422, end:2025-10-11 09:13:48.779, elapsed_check_policy_ms:356, elapsed_process_data_ms:1, elapsed_store_data_ms:0, elapsed_ms:357, is_met_condition:True, cached:False)
+[2025-10-11 09:13:49.310] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:13:49.318] Received: Session completed (start:2025-10-11 09:13:48.934, end:2025-10-11 09:13:49.282, elapsed_check_policy_ms:347, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:347, is_met_condition:True, cached:False)
+[2025-10-11 09:13:49.833] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:13:49.841] Received: Session completed (start:2025-10-11 09:13:49.450, end:2025-10-11 09:13:49.805, elapsed_check_policy_ms:354, elapsed_process_data_ms:2, elapsed_store_data_ms:0, elapsed_ms:356, is_met_condition:True, cached:False)
+[2025-10-11 09:13:50.377] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:13:50.383] Received: Session completed (start:2025-10-11 09:13:49.962, end:2025-10-11 09:13:50.345, elapsed_check_policy_ms:382, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:382, is_met_condition:True, cached:False)
+[2025-10-11 09:13:50.933] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:13:50.943] Received: Session completed (start:2025-10-11 09:13:50.521, end:2025-10-11 09:13:50.904, elapsed_check_policy_ms:382, elapsed_process_data_ms:1, elapsed_store_data_ms:0, elapsed_ms:383, is_met_condition:True, cached:False)
+[2025-10-11 09:13:51.462] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:13:51.471] Received: Session completed (start:2025-10-11 09:13:51.063, end:2025-10-11 09:13:51.439, elapsed_check_policy_ms:370, elapsed_process_data_ms:0, elapsed_store_data_ms:6, elapsed_ms:375, is_met_condition:True, cached:False)
+[2025-10-11 09:13:56.395] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:13:56.402] Received: Session completed (start:2025-10-11 09:13:56.086, end:2025-10-11 09:13:56.377, elapsed_check_policy_ms:290, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:291, is_met_condition:True, cached:False)
+[2025-10-11 09:13:56.748] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:13:56.757] Received: Session completed (start:2025-10-11 09:13:56.441, end:2025-10-11 09:13:56.726, elapsed_check_policy_ms:285, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:285, is_met_condition:True, cached:False)
+[2025-10-11 09:13:57.218] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:13:57.223] Received: Session completed (start:2025-10-11 09:13:56.831, end:2025-10-11 09:13:57.208, elapsed_check_policy_ms:376, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:377, is_met_condition:True, cached:False)
+[2025-10-11 09:13:57.422] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:13:57.425] Received: Session completed (start:2025-10-11 09:13:56.860, end:2025-10-11 09:13:57.410, elapsed_check_policy_ms:549, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:550, is_met_condition:True, cached:False)
+[2025-10-11 09:13:57.627] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:13:57.631] Received: Session completed (start:2025-10-11 09:13:56.943, end:2025-10-11 09:13:57.613, elapsed_check_policy_ms:669, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:670, is_met_condition:True, cached:False)
+[2025-10-11 09:13:57.927] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:13:57.938] Received: Session completed (start:2025-10-11 09:13:57.244, end:2025-10-11 09:13:57.916, elapsed_check_policy_ms:671, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:672, is_met_condition:True, cached:False)
+[2025-10-11 09:13:58.231] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:13:58.233] Received: Session completed (start:2025-10-11 09:13:57.290, end:2025-10-11 09:13:58.217, elapsed_check_policy_ms:927, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:927, is_met_condition:True, cached:False)
+[2025-10-11 09:13:58.329] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:13:58.334] Received: Session completed (start:2025-10-11 09:13:57.467, end:2025-10-11 09:13:58.319, elapsed_check_policy_ms:852, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:852, is_met_condition:True, cached:False)
+[2025-10-11 09:13:58.532] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:13:58.535] Received: Session completed (start:2025-10-11 09:13:57.579, end:2025-10-11 09:13:58.520, elapsed_check_policy_ms:940, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:941, is_met_condition:True, cached:False)
+[2025-10-11 09:13:58.735] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:13:58.742] Received: Session completed (start:2025-10-11 09:13:57.671, end:2025-10-11 09:13:58.722, elapsed_check_policy_ms:1050, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:1051, is_met_condition:True, cached:False)
+[2025-10-11 09:13:59.037] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:13:59.041] Received: Session completed (start:2025-10-11 09:13:57.949, end:2025-10-11 09:13:59.026, elapsed_check_policy_ms:1076, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1077, is_met_condition:True, cached:False)
+[2025-10-11 09:13:59.239] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:13:59.243] Received: Session completed (start:2025-10-11 09:13:57.997, end:2025-10-11 09:13:59.227, elapsed_check_policy_ms:1229, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1230, is_met_condition:True, cached:False)
+[2025-10-11 09:13:59.442] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:13:59.446] Received: Session completed (start:2025-10-11 09:13:58.273, end:2025-10-11 09:13:59.429, elapsed_check_policy_ms:1156, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:13:59.542] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:13:59.546] Received: Session completed (start:2025-10-11 09:13:58.376, end:2025-10-11 09:13:59.530, elapsed_check_policy_ms:1154, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1155, is_met_condition:True, cached:False)
+[2025-10-11 09:13:59.743] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:13:59.748] Received: Session completed (start:2025-10-11 09:13:58.576, end:2025-10-11 09:13:59.732, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:13:59.947] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:13:59.952] Received: Session completed (start:2025-10-11 09:13:58.786, end:2025-10-11 09:13:59.935, elapsed_check_policy_ms:1148, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1149, is_met_condition:True, cached:False)
+[2025-10-11 09:14:00.248] Received: barrier:['none'],position:3F,generation:senior
+[2025-10-11 09:14:00.253] Received: Session completed (start:2025-10-11 09:13:59.082, end:2025-10-11 09:14:00.237, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1155, is_met_condition:True, cached:False)
+[2025-10-11 09:14:00.456] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:14:00.459] Received: Session completed (start:2025-10-11 09:13:59.284, end:2025-10-11 09:14:00.441, elapsed_check_policy_ms:1156, elapsed_process_data_ms:1, elapsed_store_data_ms:0, elapsed_ms:1158, is_met_condition:True, cached:False)
+[2025-10-11 09:14:00.652] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:14:00.657] Received: Session completed (start:2025-10-11 09:13:59.486, end:2025-10-11 09:14:00.642, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:14:00.756] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:14:00.759] Received: Session completed (start:2025-10-11 09:13:59.596, end:2025-10-11 09:14:00.742, elapsed_check_policy_ms:1146, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1146, is_met_condition:True, cached:False)
+[2025-10-11 09:14:00.957] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:14:00.962] Received: Session completed (start:2025-10-11 09:13:59.788, end:2025-10-11 09:14:00.946, elapsed_check_policy_ms:1157, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1157, is_met_condition:True, cached:False)
+[2025-10-11 09:14:01.157] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:14:01.161] Received: Session completed (start:2025-10-11 09:13:59.991, end:2025-10-11 09:14:01.147, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:14:01.463] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:14:01.465] Received: Session completed (start:2025-10-11 09:14:00.294, end:2025-10-11 09:14:01.450, elapsed_check_policy_ms:1156, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1157, is_met_condition:True, cached:False)
+[2025-10-11 09:14:01.663] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:14:01.667] Received: Session completed (start:2025-10-11 09:14:00.499, end:2025-10-11 09:14:01.652, elapsed_check_policy_ms:1153, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1153, is_met_condition:True, cached:False)
+[2025-10-11 09:14:01.868] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:14:01.871] Received: Session completed (start:2025-10-11 09:14:00.698, end:2025-10-11 09:14:01.854, elapsed_check_policy_ms:1156, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:14:01.966] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:14:01.971] Received: Session completed (start:2025-10-11 09:14:00.799, end:2025-10-11 09:14:01.955, elapsed_check_policy_ms:1156, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:14:02.169] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:14:02.172] Received: Session completed (start:2025-10-11 09:14:01.001, end:2025-10-11 09:14:02.157, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:14:02.370] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:14:02.375] Received: Session completed (start:2025-10-11 09:14:01.201, end:2025-10-11 09:14:02.359, elapsed_check_policy_ms:1158, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1158, is_met_condition:True, cached:False)
+[2025-10-11 09:14:02.672] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:14:02.677] Received: Session completed (start:2025-10-11 09:14:01.506, end:2025-10-11 09:14:02.661, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:14:02.877] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:14:02.881] Received: Session completed (start:2025-10-11 09:14:01.708, end:2025-10-11 09:14:02.864, elapsed_check_policy_ms:1156, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1157, is_met_condition:True, cached:False)
+[2025-10-11 09:14:03.078] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:14:03.082] Received: Session completed (start:2025-10-11 09:14:01.910, end:2025-10-11 09:14:03.066, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:14:03.178] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:14:03.183] Received: Session completed (start:2025-10-11 09:14:02.011, end:2025-10-11 09:14:03.166, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1155, is_met_condition:True, cached:False)
+[2025-10-11 09:14:03.380] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:14:03.385] Received: Session completed (start:2025-10-11 09:14:02.213, end:2025-10-11 09:14:03.369, elapsed_check_policy_ms:1156, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:14:03.583] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:14:03.587] Received: Session completed (start:2025-10-11 09:14:02.415, end:2025-10-11 09:14:03.571, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:14:03.885] Received: barrier:['none'],position:1F,generation:senior
+[2025-10-11 09:14:03.890] Received: Session completed (start:2025-10-11 09:14:02.717, end:2025-10-11 09:14:03.875, elapsed_check_policy_ms:1157, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1158, is_met_condition:True, cached:False)
+[2025-10-11 09:14:04.088] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:14:04.092] Received: Session completed (start:2025-10-11 09:14:02.921, end:2025-10-11 09:14:04.077, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1155, is_met_condition:True, cached:False)
+[2025-10-11 09:14:04.191] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:14:04.195] Received: Session completed (start:2025-10-11 09:14:03.123, end:2025-10-11 09:14:04.179, elapsed_check_policy_ms:1055, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1056, is_met_condition:True, cached:False)
+[2025-10-11 09:14:04.391] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:14:04.396] Received: Session completed (start:2025-10-11 09:14:03.222, end:2025-10-11 09:14:04.381, elapsed_check_policy_ms:1158, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1159, is_met_condition:True, cached:False)
+[2025-10-11 09:14:04.593] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:14:04.598] Received: Session completed (start:2025-10-11 09:14:03.427, end:2025-10-11 09:14:04.583, elapsed_check_policy_ms:1155, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1156, is_met_condition:True, cached:False)
+[2025-10-11 09:14:04.900] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:14:04.902] Received: Session completed (start:2025-10-11 09:14:03.638, end:2025-10-11 09:14:04.886, elapsed_check_policy_ms:1248, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1249, is_met_condition:True, cached:False)
+[2025-10-11 09:14:05.099] Received: barrier:['move', 'info'],position:3F,generation:adult
+[2025-10-11 09:14:05.104] Received: Session completed (start:2025-10-11 09:14:03.931, end:2025-10-11 09:14:05.088, elapsed_check_policy_ms:1156, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1157, is_met_condition:True, cached:False)
+[2025-10-11 09:14:05.201] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:14:05.206] Received: Session completed (start:2025-10-11 09:14:04.134, end:2025-10-11 09:14:05.190, elapsed_check_policy_ms:1056, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1057, is_met_condition:True, cached:False)
+[2025-10-11 09:14:05.404] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:14:05.407] Received: Session completed (start:2025-10-11 09:14:04.236, end:2025-10-11 09:14:05.392, elapsed_check_policy_ms:1156, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1157, is_met_condition:True, cached:False)
+[2025-10-11 09:14:05.607] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:14:05.610] Received: Session completed (start:2025-10-11 09:14:04.437, end:2025-10-11 09:14:05.594, elapsed_check_policy_ms:1156, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1157, is_met_condition:True, cached:False)
+[2025-10-11 09:14:05.911] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:14:05.914] Received: Session completed (start:2025-10-11 09:14:04.647, end:2025-10-11 09:14:05.897, elapsed_check_policy_ms:1249, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1250, is_met_condition:True, cached:False)
+[2025-10-11 09:14:06.009] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:14:06.014] Received: Session completed (start:2025-10-11 09:14:04.942, end:2025-10-11 09:14:05.999, elapsed_check_policy_ms:1056, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1057, is_met_condition:True, cached:False)
+[2025-10-11 09:14:06.213] Received: barrier:['move', 'info'],position:1F,generation:adult
+[2025-10-11 09:14:06.218] Received: Session completed (start:2025-10-11 09:14:05.145, end:2025-10-11 09:14:06.201, elapsed_check_policy_ms:1055, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1056, is_met_condition:True, cached:False)
+[2025-10-11 09:14:06.312] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:14:06.317] Received: Session completed (start:2025-10-11 09:14:05.245, end:2025-10-11 09:14:06.302, elapsed_check_policy_ms:1056, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:1056, is_met_condition:True, cached:False)
+[2025-10-11 09:14:06.615] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:14:06.619] Received: Session completed (start:2025-10-11 09:14:05.649, end:2025-10-11 09:14:06.604, elapsed_check_policy_ms:955, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:14:06.921] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:14:06.924] Received: Session completed (start:2025-10-11 09:14:05.954, end:2025-10-11 09:14:06.908, elapsed_check_policy_ms:953, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:954, is_met_condition:True, cached:False)
+[2025-10-11 09:14:07.022] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:14:07.025] Received: Session completed (start:2025-10-11 09:14:06.055, end:2025-10-11 09:14:07.008, elapsed_check_policy_ms:953, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:954, is_met_condition:True, cached:False)
+[2025-10-11 09:14:07.223] Received: barrier:['none'],position:3F,generation:adult
+[2025-10-11 09:14:07.227] Received: Session completed (start:2025-10-11 09:14:06.256, end:2025-10-11 09:14:07.211, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:14:07.324] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:14:07.328] Received: Session completed (start:2025-10-11 09:14:06.357, end:2025-10-11 09:14:07.312, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:14:07.628] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:14:07.633] Received: Session completed (start:2025-10-11 09:14:06.660, end:2025-10-11 09:14:07.615, elapsed_check_policy_ms:954, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:955, is_met_condition:True, cached:False)
+[2025-10-11 09:14:07.928] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:14:07.933] Received: Session completed (start:2025-10-11 09:14:06.968, end:2025-10-11 09:14:07.918, elapsed_check_policy_ms:950, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:950, is_met_condition:True, cached:False)
+[2025-10-11 09:14:08.033] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:14:08.035] Received: Session completed (start:2025-10-11 09:14:07.064, end:2025-10-11 09:14:08.020, elapsed_check_policy_ms:955, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:956, is_met_condition:True, cached:False)
+[2025-10-11 09:14:08.133] Received: barrier:['move', 'info'],position:2F,generation:senior
+[2025-10-11 09:14:08.138] Received: Session completed (start:2025-10-11 09:14:07.267, end:2025-10-11 09:14:08.121, elapsed_check_policy_ms:854, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:854, is_met_condition:True, cached:False)
+[2025-10-11 09:14:08.234] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:14:08.238] Received: Session completed (start:2025-10-11 09:14:07.368, end:2025-10-11 09:14:08.223, elapsed_check_policy_ms:854, elapsed_process_data_ms:0, elapsed_store_data_ms:1, elapsed_ms:855, is_met_condition:True, cached:False)
+[2025-10-11 09:14:08.540] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:14:08.542] Received: Session completed (start:2025-10-11 09:14:07.974, end:2025-10-11 09:14:08.526, elapsed_check_policy_ms:552, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:553, is_met_condition:True, cached:False)
+[2025-10-11 09:14:08.638] Received: barrier:['info'],position:3F,generation:adult
+[2025-10-11 09:14:08.643] Received: Session completed (start:2025-10-11 09:14:08.186, end:2025-10-11 09:14:08.627, elapsed_check_policy_ms:441, elapsed_process_data_ms:0, elapsed_store_data_ms:0, elapsed_ms:442, is_met_condition:True, cached:False)
+[2025-10-11 09:14:08.646] All data processing completed.
+[2025-10-11 09:15:27.043] =================== Finalization ===================
+[2025-10-11 09:15:27.046] Measuring the baseline of stats of containers on registry01.vddpi (waiting for 20 seconds).
+[2025-10-11 09:15:47.478] Fetch stats result from registry01.vddpi
+[2025-10-11 09:15:47.844] Benchmark finished.
+[2025-10-11 09:15:47.848] Finish ./run_eval_03.sh: (start:251011-090513, end:251011-091547)

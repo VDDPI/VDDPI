@@ -20,7 +20,7 @@ from Cryptodome.Hash import SHA256
 import requests
 import os
 import MySQLdb
-import datetime
+from datetime import datetime, timedelta
 import subprocess
 import jwt
 
@@ -154,7 +154,10 @@ def provide_data(data_type, data):
     if (num != 1):
         cur.close()
         conn.close()
-        return "Failed to load data usage policy", 400
+        msg =  f"Failed to load data usage policy (query:{query})"
+        print(msg)
+        print(f"Error query: {query}")
+        return msg, 400
     else:
         res = cur.fetchone()
         cur.close()
@@ -177,26 +180,26 @@ def provide_data(data_type, data):
                 ret["condition"]["location"] = ""
             
             strtimefmt = "%Y-%m-%d"
-            today = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
             if (res[5] != None and res[6] != None):
-                if (today + datetime.timedelta(days=res[5]) < datetime.datetime.strptime(res[6], strtimefmt)):
-                    ret["condition"]["expirationDate"] = (today + datetime.timedelta(days=res[5])).strftime("%Y-%m-%d")
+                if (today + timedelta(days=res[5]) < datetime.strptime(res[6], strtimefmt)):
+                    ret["condition"]["expirationDate"] = (today + timedelta(days=res[5])).strftime("%Y-%m-%d")
                 else:
                     ret["condition"]["expirationDate"] = res[6]
             else:
                 if (res[5] != None):
-                    ret["condition"]["expirationDate"] = (today + datetime.timedelta(days=res[5])).strftime("%Y-%m-%d")
+                    ret["condition"]["expirationDate"] = (today + timedelta(days=res[5])).strftime("%Y-%m-%d")
                 if (res[6] != None):
                     ret["condition"]["expirationDate"] = res[6]
                 else:
                     ret["condition"]["expirationDate"] = ""
-            print("="*10 + "Data and Condition" + "=" * 10)
-            print(ret)
+            print("="*10 + "Condition" + "=" * 10)
+            print(ret["condition"])
             print("="*38)
             
             return jsonify(ret), 200
-        except:
-            return "Failed to get requested data", 500
+        except Exception as e:
+            return f"Failed to get requested data ({str(e)})", 500
 
 app_res_doc = {
     200: "Success",
@@ -235,19 +238,25 @@ class apply(Resource):
         subject = cert.subject
         
         # obtain the data processing spec
+        print(f"Start processing spec retrieval (app_id:{usage_declaration.app_ID})")
+        start = datetime.now()
         processing_spec = get_processing_spec(usage_declaration.app_ID)
         if (processing_spec is None):
             return make_response(jsonify({
                         "status": "failed",
                         "description": "Failed to get data processing specification"
                     }), 400)
+        end = datetime.now()
+        print(f"Finish processing spec retrieval")
+        elapsed_ms = round((end - start).total_seconds() * 1000)
+        print(f"___BENCH___ Processing spec retrieval (Start:{start.strftime('%Y-%m-%d %H:%M:%S')}, End:{end.strftime('%Y-%m-%d %H:%M:%S')}, Duration_ms:{elapsed_ms})")
         
         # obtain the data providing policy
         providing_policy = get_providing_policy(usage_declaration.data_ID)
         if (providing_policy is None):
             return make_response(jsonify({
                         "status": "failed",
-                        "description": "Failed to get data providing policy"
+                        "description": f"Failed to get data providing policy (data_id:{usage_declaration.data_ID})"
                     }), 400)
         
         # determine whether or not to provide data
@@ -274,7 +283,10 @@ class apply(Resource):
                     }), 400)
         
         if (usage_declaration.app_ID not in providing_policy.app_ID):
-            return "Failed to apply (Not Allowed to provide for this application)"
+            return make_response(jsonify({
+                        "status": "failed",
+                        "description": "Failed to apply (Not Allowed to provide for this application)"
+                    }), 400)
         
         try:
             for output in processing_spec.output:
@@ -358,8 +370,8 @@ class apply(Resource):
         
         # Expiration Date
         if (providing_policy.expiration_date != None and usage_declaration.expiration_date != None):
-            pp_date = datetime.datetime.strptime(providing_policy.expiration_date, strtimefmt)
-            ud_date = datetime.datetime.strptime(usage_declaration.expiration_date, strtimefmt)
+            pp_date = datetime.strptime(providing_policy.expiration_date, strtimefmt)
+            ud_date = datetime.strptime(usage_declaration.expiration_date, strtimefmt)
             if (pp_date < ud_date):
                 return make_response(jsonify({
                             "status": "failed",
@@ -549,6 +561,7 @@ def get_processing_spec(MRENCLAVE):
                     print("Verification Failed")
                     return None
         except Exception as e:
+            print("--- Exception!! ---")
             print(e)
             return None
     

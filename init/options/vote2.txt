@@ -1,0 +1,1 @@
+channel2 chaincode2 Vote func2 1

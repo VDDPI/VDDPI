@@ -1,8 +1,17 @@
-version: "3"
+x-extra-hosts: &vddpi_hosts
+  extra_hosts:
+    - "registry01.vddpi:${REGISTRY_IP}"
+    - "consumer01.vddpi:${CONSUMER_IP}"
+    - "provider01.vddpi:${PROVIDER_IP}"
+
+x-svc-common: &svc_common
+  <<: *vddpi_hosts
+  restart: unless-stopped
 
 services:
   server:
-    image: ${SERVER_PROVIDER_IMAGE}:${SERVER_PROVIDER_IMAGE_TAG}
+    <<: *svc_common
+    image: server-provider:latest
     container_name: provider-server
     tty: true
     depends_on:
@@ -16,15 +25,18 @@ services:
       - ./data:/root/data
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
-    command: "python3 main.py"
     networks:
       provider-net:
   db:
-    image: ${DB_PROVIDER_IMAGE}:${DB_PROVIDER_IMAGE_TAG}
+    <<: *svc_common
+    image: db-provider:latest
     container_name: provider-db
     command: --default-authentication-plugin=mysql_native_password
     networks:
       provider-net:
+    ports:
+      - 3306:3306
+
 networks:
   provider-net:
 

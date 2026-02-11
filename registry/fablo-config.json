@@ -63,32 +63,6 @@
             "tools": {
                 "fabloRest": true
             }
-        },
-        {
-            "organization": {
-                "name": "Registry4",
-                "domain": "registry4.example.com"
-            },
-            "peer": {
-                "instances": 1,
-                "db": "LevelDb"
-            },
-            "tools": {
-                "fabloRest": true
-            }
-        },
-        {
-            "organization": {
-                "name": "Registry5",
-                "domain": "registry5.example.com"
-            },
-            "peer": {
-                "instances": 1,
-                "db": "LevelDb"
-            },
-            "tools": {
-                "fabloRest": true
-            }
         }
     ],
     "channels": [
@@ -109,18 +83,6 @@
                 },
                 {
                     "name": "Registry3",
-                    "peers": [
-                        "peer0"
-                    ]
-                },
-                {
-                    "name": "Registry4",
-                    "peers": [
-                        "peer0"
-                    ]
-                },
-                {
-                    "name": "Registry5",
                     "peers": [
                         "peer0"
                     ]
@@ -147,18 +109,6 @@
                     "peers": [
                         "peer0"
                     ]
-                },
-                {
-                    "name": "Registry4",
-                    "peers": [
-                        "peer0"
-                    ]
-                },
-                {
-                    "name": "Registry5",
-                    "peers": [
-                        "peer0"
-                    ]
                 }
             ]
         }
@@ -169,7 +119,7 @@
             "version": "1.0",
             "lang": "golang",
             "channel": "channel1",
-            "endorsement": "AND('Registry1MSP.member', 'Registry2MSP.member', 'Registry3MSP.member', 'Registry4MSP.member', 'Registry5MSP.member')",
+            "endorsement": "AND('Registry1MSP.member', 'Registry2MSP.member', 'Registry3MSP.member')",
             "directory": "./chaincodes/chaincode1"
         },
         {
@@ -177,7 +127,7 @@
             "version": "1.0",
             "lang": "golang",
             "channel": "channel2",
-            "endorsement": "AND('Registry1MSP.member', 'Registry2MSP.member', 'Registry3MSP.member', 'Registry4MSP.member', 'Registry5MSP.member')",
+            "endorsement": "AND('Registry1MSP.member', 'Registry2MSP.member', 'Registry3MSP.member')",
             "directory": "./chaincodes/chaincode2"
         }
     ]

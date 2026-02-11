@@ -6,7 +6,7 @@ import re
 ADMINID = "admin"
 ADMINPW = "adminpw"
 
-URL = ["http://localhost:8801", "http://localhost:8802", "http://localhost:8803", "http://localhost:8804", "http://localhost:8805"]
+URL = ["http://localhost:8801", "http://localhost:8802", "http://localhost:8803"]
 
 CHANNEL_CC = {"channel1": "chaincode1", "channel2": "chaincode2"}
 
